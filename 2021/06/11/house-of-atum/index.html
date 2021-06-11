@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="ABf1ag&#39;s blog">
 <meta property="og:description" content="house of atum 学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210611211956567.png">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210611212307188.png">
+<meta property="og:image" content="http://example.com/2021/06/11/house-of-atum/ABf1ag-blog/source_posts/house-of-atum/image-20210611211956567.png">
+<meta property="og:image" content="http://example.com/2021/06/11/house-of-atum/ABf1ag-blog/source_posts/house-of-atum/image-20210611212307188.png">
 <meta property="article:published_time" content="2021-06-11T10:08:36.000Z">
-<meta property="article:modified_time" content="2021-06-11T13:40:03.881Z">
+<meta property="article:modified_time" content="2021-06-11T13:52:56.724Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210611211956567.png">
+<meta name="twitter:image" content="http://example.com/2021/06/11/house-of-atum/ABf1ag-blog/source_posts/house-of-atum/image-20210611211956567.png">
 
 <link rel="canonical" href="http://example.com/2021/06/11/house-of-atum/">
 
@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-11 18:08:36 / Modified: 21:40:03" itemprop="dateCreated datePublished" datetime="2021-06-11T18:08:36+08:00">2021-06-11</time>
+              <time title="Created: 2021-06-11 18:08:36 / Modified: 21:52:56" itemprop="dateCreated datePublished" datetime="2021-06-11T18:08:36+08:00">2021-06-11</time>
             </span>
 
           
@@ -205,9 +205,9 @@
 <h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>释放8个相同的chunk（大小满足fastbins），这样第8个freechunk将会被放入fastbins中，且fd指针会被置为0，又因为释放的是相同的chunk，所以tcache中也只有一个freechunk。申请一个chunk（将会从tcahe中获得）将获得的chunk中的fd指针改为chunk-0x20，这时，在fastbins中的chunk的fd指针会变为chunk-0x10，再申请一个chunk，将会从fastbins中获取，但tcache的counts是6，所以在fastbins中剩余的一个freechunk（chunk-0x10）被放入tcache中，这样就能控制chunk的prev_size和size了。</p>
 <h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p>House of Atum</p>
 <p>保护全开，libc-2.27</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210611211956567.png" alt="image-20210611211956567"></p>
+<p><img src="/2021/06/11/house-of-atum/ABf1ag-blog\source_posts\house-of-atum\image-20210611211956567.png" alt="image-20210611211956567"></p>
 <p>正常的菜单题，只允许申请两个chunk，有edit，show函数，漏洞在dele函数中</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210611212307188.png" alt="image-20210611212307188"></p>
+<p><img src="/2021/06/11/house-of-atum/ABf1ag-blog\source_posts\house-of-atum\image-20210611212307188.png" alt="image-20210611212307188"></p>
 <p>先申请两个chunk，记为chunk0、chunk1。**chunk1需要写入<code>p64(0)*7+p64(0x11)</code>**，这一步是为了防止后面修改chunk的size后对其进行释放时报错。先连续释放6次chunk1，可以泄露heap_base。</p>
 <p>再连续释放2次chunk0，使tcache和fastbins中都只有一个freechunk0.接着申请一个chunk，并写入chunk0-0x20，再申请一个chunk1。释放chunk1，再次申请，此时写入<code>p64(0)+p64(0x91)</code>，就相当于修改了chunk0的size域，再释放8次chunk0，泄露得到libcbase。再修改free_hook为 system函数，拿到shell。</p>
 <p>完整exp：</p>
