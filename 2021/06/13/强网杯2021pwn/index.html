@@ -28,11 +28,11 @@
 <meta property="og:description" content="强网杯2021pwn">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210613203304850.png">
-<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/ABf1ag-blog/source_posts/强网杯2021pwn/image-20210614214525726.png">
+<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614214525726.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614220431762.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614222018971.png">
 <meta property="article:published_time" content="2021-06-13T12:25:57.000Z">
-<meta property="article:modified_time" content="2021-06-14T14:36:53.655Z">
+<meta property="article:modified_time" content="2021-06-14T14:44:16.246Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210613203304850.png">
@@ -190,7 +190,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-14 22:36:53" itemprop="dateModified" datetime="2021-06-14T22:36:53+08:00">2021-06-14</time>
+                <time title="Modified: 2021-06-14 22:44:16" itemprop="dateModified" datetime="2021-06-14T22:44:16+08:00">2021-06-14</time>
               </span>
 
           
@@ -211,7 +211,7 @@
 <p>程序主函数如下：</p>
 <p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210613203304850.png" alt="image-20210614175149635"></p>
 <p>在begin函数中，发现打开了real_flag.txt,但是是以只写权限打开(所以后文中的read(fd,src,0x10)就无法从real_flag.txt文件中读取内容到src中)，并且将文件描述符存入到bss段中。</p>
-<p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/ABf1ag-blog\source_posts\强网杯2021pwn\image-20210614214525726.png" alt="image-20210614214525726"></p>
+<p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614214525726.png" alt="image-20210614214525726"></p>
 <p><code>sub_80493EC</code>是将我们输入的name的第3到第8个字节改为\x02~\x07。接着因为dest和fd在bss段上是相邻的且dest大小位0x20，如果我们输入0x20个字节，那么strcpy函数就会将第0x21个字节改为\x00，因此就可以改fd的值为0，就可以输入”hello_boy“来绕过compare函数进入func函数。func函数如下所示：</p>
 <p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614220431762.png" alt="image-20210614220431762"></p>
 <p>signal函数是处理信号用的，signal(8,vuln)函数的意思是如果捕捉到了8信号，就会对其进行中断，执行vuln函数。当发生除法错误时会有8信号产生（一般是除0或者是除完后有溢出），因此我们可以用变量v2对应的类型所能表示的最小负数除以-1，就可以产生溢出，从而执行vuln函数。vuln函数如下：</p>
