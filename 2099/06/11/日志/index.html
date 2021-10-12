@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2099/06/11/%E6%97%A5%E5%BF%97/image-20210627213500222.png">
 <meta property="article:published_time" content="2099-06-11T14:34:06.000Z">
-<meta property="article:modified_time" content="2021-09-25T12:24:09.539Z">
+<meta property="article:modified_time" content="2021-10-12T12:46:51.673Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2099/06/11/%E6%97%A5%E5%BF%97/image-20210627213500222.png">
@@ -187,7 +187,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-25 20:24:09" itemprop="dateModified" datetime="2021-09-25T20:24:09+08:00">2021-09-25</time>
+                <time title="Modified: 2021-10-12 20:46:51" itemprop="dateModified" datetime="2021-10-12T20:46:51+08:00">2021-10-12</time>
               </span>
 
           
@@ -239,6 +239,9 @@
 <h3 id="2021-9-24"><a href="#2021-9-24" class="headerlink" title="2021-9-24"></a>2021-9-24</h3><p>做了个wireshark抓包实验，晚上下了暴雨，直接回宿舍躺倒。。。又是不想学习的一天。</p>
 <h3 id="2021-9-25"><a href="#2021-9-25" class="headerlink" title="2021-9-25"></a>2021-9-25</h3><p>晚上接到电话说进了长城杯决赛，原因是前面的大佬们都不愿意去，给的奖金太少了。那么10.10第五空间在天津打完就得跑去北京打长城杯（<del>去给大佬们当沙袋</del>）。</p>
 <p>学到了readelf -S libc可以看libc的各个段的偏移，<del>emmmm一直以为所有libc的段间距都是一样的</del>。</p>
+<h3 id="2021-10-1"><a href="#2021-10-1" class="headerlink" title="2021-10-1"></a>2021-10-1</h3><p>今天出去捣了会台球有点上瘾，虽然有点菜。今天学了一个tcache_stashing_unlink_attack,他就是当tcache没有满时，从fastbin或smallbin中取chunk时，如果fastbin或smallbin中还有剩余chunk，就会将这些chunk放入tcahe中直至tcache被插满，利用这个过程中的漏洞来修改任意地址的值（main_arena的值），如果修改了global_max_fast，且可以free的chunk的大小很大时，我们就可以计算目标地址到fastbin基地址的偏移来进行任意地址的写操作。</p>
+<h3 id="2021-10-5"><a href="#2021-10-5" class="headerlink" title="2021-10-5"></a>2021-10-5</h3><p>也许只有一个人的时候，才会真正思考一些东西吧。我在想为什么我的状态越来越差，为什么和爸妈的关系有点僵，甚至是为什么一直单身（<del>emmmm</del>）。</p>
+<p>我一直用今年3月-五月那个时候的状态去和现在比较，因为那个阶段是我感觉我进步最快的阶段，每天都能学到很多新的东西，而现在感觉自己学什么都很慢，学的慢了我就会产生不好情绪。所以我到底在恐慌什么，那个时候学到新东西很快是因为学的都很简单加上自己什么也不懂，肯定学的快，现在没什么提升是因为很多东西很难需要慢慢的消化吸收。自己到底在焦虑什么了，是感觉到自己的平庸了吗，还是觉得离自己的目标越来越远？不管了，还是静下心来慢慢的学，慢慢的积累，慢慢的质变！</p>
 
     </div>
 
@@ -254,8 +257,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/09/19/%E9%95%BF%E5%9F%8E%E6%9D%AF/" rel="prev" title="长城杯">
-      <i class="fa fa-chevron-left"></i> 长城杯
+    <a href="/2021/10/01/tcache-stashing-unlink-attack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="tcache_stashing_unlink_attack学习笔记">
+      <i class="fa fa-chevron-left"></i> tcache_stashing_unlink_attack学习笔记
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -316,7 +319,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">1.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-06-11"><span class="nav-number">1.0.1.</span> <span class="nav-text">2021-06-11</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-06-14"><span class="nav-number">1.0.2.</span> <span class="nav-text">2021-06-14</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-21"><span class="nav-number">1.0.3.</span> <span class="nav-text">2021-6-21</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-24"><span class="nav-number">1.0.4.</span> <span class="nav-text">2021-6-24</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-26"><span class="nav-number">1.0.5.</span> <span class="nav-text">2021-6-26</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-27"><span class="nav-number">1.0.6.</span> <span class="nav-text">2021-6-27</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-1"><span class="nav-number">1.0.7.</span> <span class="nav-text">2021-8-1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-4"><span class="nav-number">1.0.8.</span> <span class="nav-text">2021-8-4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-6"><span class="nav-number">1.0.9.</span> <span class="nav-text">2021-8-6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-7"><span class="nav-number">1.0.10.</span> <span class="nav-text">2021-8-7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-13"><span class="nav-number">1.0.11.</span> <span class="nav-text">2021-8-13</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-21"><span class="nav-number">1.0.12.</span> <span class="nav-text">2021-9-21</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-22"><span class="nav-number">1.0.13.</span> <span class="nav-text">2021-9-22</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-23"><span class="nav-number">1.0.14.</span> <span class="nav-text">2021-9-23</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-24"><span class="nav-number">1.0.15.</span> <span class="nav-text">2021-9-24</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-25"><span class="nav-number">1.0.16.</span> <span class="nav-text">2021-9-25</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">1.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-06-11"><span class="nav-number">1.0.1.</span> <span class="nav-text">2021-06-11</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-06-14"><span class="nav-number">1.0.2.</span> <span class="nav-text">2021-06-14</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-21"><span class="nav-number">1.0.3.</span> <span class="nav-text">2021-6-21</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-24"><span class="nav-number">1.0.4.</span> <span class="nav-text">2021-6-24</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-26"><span class="nav-number">1.0.5.</span> <span class="nav-text">2021-6-26</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-6-27"><span class="nav-number">1.0.6.</span> <span class="nav-text">2021-6-27</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-1"><span class="nav-number">1.0.7.</span> <span class="nav-text">2021-8-1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-4"><span class="nav-number">1.0.8.</span> <span class="nav-text">2021-8-4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-6"><span class="nav-number">1.0.9.</span> <span class="nav-text">2021-8-6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-7"><span class="nav-number">1.0.10.</span> <span class="nav-text">2021-8-7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-8-13"><span class="nav-number">1.0.11.</span> <span class="nav-text">2021-8-13</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-21"><span class="nav-number">1.0.12.</span> <span class="nav-text">2021-9-21</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-22"><span class="nav-number">1.0.13.</span> <span class="nav-text">2021-9-22</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-23"><span class="nav-number">1.0.14.</span> <span class="nav-text">2021-9-23</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-24"><span class="nav-number">1.0.15.</span> <span class="nav-text">2021-9-24</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-9-25"><span class="nav-number">1.0.16.</span> <span class="nav-text">2021-9-25</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-10-1"><span class="nav-number">1.0.17.</span> <span class="nav-text">2021-10-1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2021-10-5"><span class="nav-number">1.0.18.</span> <span class="nav-text">2021-10-5</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -330,7 +333,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
