@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="glibc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="glibc源码分析">
+<meta property="og:url" content="http://example.com/2021/12/02/glibc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="ABf1ag&#39;s blog">
+<meta property="og:description" content="glibc">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-02T13:34:11.000Z">
+<meta property="article:modified_time" content="2021-12-04T09:12:21.334Z">
+<meta property="article:author" content="ABf1ag">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/12/02/glibc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>glibc源码分析 | ABf1ag's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ABf1ag's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section">links</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/02/glibc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ABf1ag">
+      <meta itemprop="description" content="CTF to learn,not learn to CTF">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ABf1ag's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          glibc源码分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-02 21:34:11" itemprop="dateCreated datePublished" datetime="2021-12-02T21:34:11+08:00">2021-12-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-04 17:12:21" itemprop="dateModified" datetime="2021-12-04T17:12:21+08:00">2021-12-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="glibc"><a href="#glibc" class="headerlink" title="glibc"></a>glibc</h3><span id="more"></span>
+
+<p>最近在看malloc的源码，因此记录一下各主流版本之间的差别。</p>
+<h3 id="glibc-2-27"><a href="#glibc-2-27" class="headerlink" title="glibc-2.27"></a>glibc-2.27</h3><ul>
+<li><p>2.27增加了tcache</p>
+</li>
+<li><p>在malloc_consolidate中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/*新增：检查从fastbin中取出的chunk的大小是否满足fastbin的索引，house-of-rabbit无法使用  */</span><br><span class="line">unsigned int idx = fastbin_index (chunksize (p));</span><br></pre></td></tr></table></figure></li>
+<li><p>在unlink中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/*新增：检查其下一个chunk的prev_size是否和size相等，即使用house-of-einherjar时第一个chunk应该被放入到unsortedbin中*/</span><br><span class="line">if (__builtin_expect (chunksize(P) != prev_size (next_chunk(P)), 0)) </span><br><span class="line">	malloc_printerr (&quot;corrupted size vs. prev_size&quot;);		</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="glibc-2-29"><a href="#glibc-2-29" class="headerlink" title="glibc-2.29"></a>glibc-2.29</h3><ul>
+<li><p>tcache_entry结构体中增加了key，防止doublefree</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tcache_entry</span><br><span class="line">&#123;</span><br><span class="line">  struct tcache_entry *next;</span><br><span class="line">  /* This field exists to detect double frees.  */</span><br><span class="line">  struct tcache_perthread_struct *key;</span><br><span class="line">&#125; tcache_entry;</span><br></pre></td></tr></table></figure></li>
+<li><p>对在unsortedbin中即将取出的chunk和其nextchunk做检查</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/*新增*/</span><br><span class="line">if (__glibc_unlikely (size &lt;= 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (size &gt; av-&gt;system_mem))</span><br><span class="line">	malloc_printerr (&quot;malloc(): invalid size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (chunksize_nomask (next) &lt; 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (chunksize_nomask (next) &gt; av-&gt;system_mem))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely ((prev_size (next) &amp; ~(SIZE_BITS)) != size))</span><br><span class="line">    malloc_printerr (&quot;malloc(): mismatching next-&gt;prev_size(unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (bck-&gt;fd != victim)</span><br><span class="line">       || __glibc_unlikely (victim-&gt;fd != unsorted_chunks (av)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): unsorted double linked list corrupted&quot;);</span><br><span class="line">if (__glibc_unlikely (prev_inuse (next)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next-&gt;prev_inuse (unsorted)&quot;);</span><br></pre></td></tr></table></figure></li>
+<li><p>在unlink前增加了对prev_size和size的判断</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/*新增：检查了prev_size和上一个chunk的size是否相等,house-of-einherjar不能使用*/</span><br><span class="line">if (__glibc_unlikely (chunksize(p) != prevsize))</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="glibc-2-30-amp-glibc-2-31"><a href="#glibc-2-30-amp-glibc-2-31" class="headerlink" title="glibc-2.30&amp;glibc-2.31"></a>glibc-2.30&amp;glibc-2.31</h3><ul>
+<li><p>tcache_perthread_struct中的counts类型变为uint16_t类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  uint16_t counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br></pre></td></tr></table></figure></li>
+<li><p>如果tcache-&gt;counts[tc_idx]&lt;=0则不会从tcache中取chunk</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (tc_idx &lt; mp_.tcache_bins</span><br><span class="line">    &amp;&amp; tcache</span><br><span class="line">    &amp;&amp; tcache-&gt;counts[tc_idx] &gt; 0)</span><br><span class="line">&#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>将chunk从unsortedbin中取出放入到largebin时做了检查，增大了largebin attack的难度。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))</span><br><span class="line">	malloc_printerr (&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;);</span><br><span class="line">if (bck-&gt;fd != fwd)</span><br><span class="line">    malloc_printerr (&quot;malloc(): largebin double linked list corrupted (bk)&quot;);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="glibc-2-32"><a href="#glibc-2-32" class="headerlink" title="glibc-2.32"></a>glibc-2.32</h3><ul>
+<li><p>tcache中对e-&gt;next也就是fd指针做了加密，(&amp;e-&gt;next&gt;&gt;12)&lt;&lt;12即为heap_base</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">e-&gt;next = PROTECT_PTR (&amp;e-&gt;next, tcache-&gt;entries[tc_idx]);</span><br><span class="line">#define PROTECT_PTR(pos, ptr) </span><br><span class="line">  ((__typeof (ptr)) ((((size_t) pos) &gt;&gt; 12) ^ ((size_t) ptr)))</span><br></pre></td></tr></table></figure></li>
+<li><p>对fastbin的fd指针也做了相同的加密。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/*新增：fastbin的fd指针被加密*/</span><br><span class="line">p-&gt;fd = PROTECT_PTR (&amp;p-&gt;fd, old);</span><br></pre></td></tr></table></figure></li>
+<li><p>增加了很多指针是否对齐的检查</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/28/%E7%AC%AC%E5%9B%9B%E5%B1%8A%E5%AE%89%E6%B4%B5%E6%9D%AF/" rel="prev" title="第四届安洵杯">
+      <i class="fa fa-chevron-left"></i> 第四届安洵杯
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2099/06/11/%E6%97%A5%E5%BF%97/" rel="next" title="日志">
+      日志 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#glibc"><span class="nav-number">1.</span> <span class="nav-text">glibc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#glibc-2-27"><span class="nav-number">2.</span> <span class="nav-text">glibc-2.27</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#glibc-2-29"><span class="nav-number">3.</span> <span class="nav-text">glibc-2.29</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#glibc-2-30-amp-glibc-2-31"><span class="nav-number">4.</span> <span class="nav-text">glibc-2.30&amp;glibc-2.31</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#glibc-2-32"><span class="nav-number">5.</span> <span class="nav-text">glibc-2.32</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ABf1ag</p>
+  <div class="site-description" itemprop="description">CTF to learn,not learn to CTF</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ABf1ag</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
