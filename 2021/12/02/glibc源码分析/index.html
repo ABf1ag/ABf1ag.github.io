@@ -28,7 +28,7 @@
 <meta property="og:description" content="glibc">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-02T13:34:11.000Z">
-<meta property="article:modified_time" content="2021-12-04T09:12:21.334Z">
+<meta property="article:modified_time" content="2021-12-04T11:00:17.239Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
 
@@ -185,7 +185,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-04 17:12:21" itemprop="dateModified" datetime="2021-12-04T17:12:21+08:00">2021-12-04</time>
+                <time title="Modified: 2021-12-04 19:00:17" itemprop="dateModified" datetime="2021-12-04T19:00:17+08:00">2021-12-04</time>
               </span>
 
           
@@ -214,7 +214,7 @@
 <li><p>tcache_entry结构体中增加了key，防止doublefree</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tcache_entry</span><br><span class="line">&#123;</span><br><span class="line">  struct tcache_entry *next;</span><br><span class="line">  /* This field exists to detect double frees.  */</span><br><span class="line">  struct tcache_perthread_struct *key;</span><br><span class="line">&#125; tcache_entry;</span><br></pre></td></tr></table></figure></li>
 <li><p>对在unsortedbin中即将取出的chunk和其nextchunk做检查</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/*新增*/</span><br><span class="line">if (__glibc_unlikely (size &lt;= 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (size &gt; av-&gt;system_mem))</span><br><span class="line">	malloc_printerr (&quot;malloc(): invalid size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (chunksize_nomask (next) &lt; 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (chunksize_nomask (next) &gt; av-&gt;system_mem))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely ((prev_size (next) &amp; ~(SIZE_BITS)) != size))</span><br><span class="line">    malloc_printerr (&quot;malloc(): mismatching next-&gt;prev_size(unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (bck-&gt;fd != victim)</span><br><span class="line">       || __glibc_unlikely (victim-&gt;fd != unsorted_chunks (av)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): unsorted double linked list corrupted&quot;);</span><br><span class="line">if (__glibc_unlikely (prev_inuse (next)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next-&gt;prev_inuse (unsorted)&quot;);</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/*新增：unsortedbin attack失效，house-of-storm无法使用*/</span><br><span class="line">if (__glibc_unlikely (size &lt;= 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (size &gt; av-&gt;system_mem))</span><br><span class="line">	malloc_printerr (&quot;malloc(): invalid size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (chunksize_nomask (next) &lt; 2 * SIZE_SZ)</span><br><span class="line">       || __glibc_unlikely (chunksize_nomask (next) &gt; av-&gt;system_mem))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next size (unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely ((prev_size (next) &amp; ~(SIZE_BITS)) != size))</span><br><span class="line">    malloc_printerr (&quot;malloc(): mismatching next-&gt;prev_size(unsorted)&quot;);</span><br><span class="line">if (__glibc_unlikely (bck-&gt;fd != victim)</span><br><span class="line">       || __glibc_unlikely (victim-&gt;fd != unsorted_chunks (av)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): unsorted double linked list corrupted&quot;);</span><br><span class="line">if (__glibc_unlikely (prev_inuse (next)))</span><br><span class="line">    malloc_printerr (&quot;malloc(): invalid next-&gt;prev_inuse (unsorted)&quot;);</span><br></pre></td></tr></table></figure></li>
 <li><p>在unlink前增加了对prev_size和size的判断</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/*新增：检查了prev_size和上一个chunk的size是否相等,house-of-einherjar不能使用*/</span><br><span class="line">if (__glibc_unlikely (chunksize(p) != prevsize))</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -253,8 +253,8 @@
       <i class="fa fa-chevron-left"></i> 第四届安洵杯
     </a></div>
       <div class="post-nav-item">
-    <a href="/2099/06/11/%E6%97%A5%E5%BF%97/" rel="next" title="日志">
-      日志 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/12/06/house-of-banana/" rel="next" title="house-of-banana">
+      house-of-banana <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -328,7 +328,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
