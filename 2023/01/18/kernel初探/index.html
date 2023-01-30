@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="ABf1ag&#39;s blog">
 <meta property="og:description" content="kernel初探">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/ABf1ag-blog/source_posts/kernel初探/image-20230129173119928.png">
-<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20230130162722386.png">
-<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20230130170107355.png">
-<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20230130170219834.png">
-<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20230130170344639.png">
+<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230129173119928.png">
+<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130162722386.png">
+<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170107355.png">
+<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170219834.png">
+<meta property="og:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170344639.png">
 <meta property="article:published_time" content="2023-01-18T10:02:33.000Z">
-<meta property="article:modified_time" content="2023-01-30T09:19:52.439Z">
+<meta property="article:modified_time" content="2023-01-30T09:42:47.073Z">
 <meta property="article:author" content="ABf1ag">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/ABf1ag-blog/source_posts/kernel初探/image-20230129173119928.png">
+<meta name="twitter:image" content="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230129173119928.png">
 
 <link rel="canonical" href="http://example.com/2023/01/18/kernel%E5%88%9D%E6%8E%A2/">
 
@@ -191,7 +191,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-30 17:19:52" itemprop="dateModified" datetime="2023-01-30T17:19:52+08:00">2023-01-30</time>
+                <time title="Modified: 2023-01-30 17:42:47" itemprop="dateModified" datetime="2023-01-30T17:42:47+08:00">2023-01-30</time>
               </span>
 
           
@@ -224,7 +224,7 @@
 <p>安装libelf-devel、dwarves </p>
 </blockquote>
 <p>接着在linux-5.4.98目录下使用<code>make -j3 bzImage</code>命令编译内核镜像。见到下图所示的提示即为编译成功。</p>
-<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/ABf1ag-blog\source_posts\kernel初探\image-20230129173119928.png" alt="image-20230129173119928"></p>
+<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230129173119928.png" alt="image-20230129173119928"></p>
 <h3 id="构建文件系统"><a href="#构建文件系统" class="headerlink" title="构建文件系统"></a>构建文件系统</h3><p>下载并解压busybox</p>
 <ul>
 <li><p><code>wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2</code></p>
@@ -301,7 +301,7 @@
 <li><p>```<br>$(MAKE) -C $(KDIR) M=$(PWD) modules</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - `-C` 表示进入到指定的内核目录</span><br><span class="line">  - `M` 指定驱动源码的环境，M 并不是 Makefile 的选项，而是内核根目录下 Makefile 中使用的变量。这会使得该 Makefile 在构造模块之前返回到 M 指定的目录，并在指定的目录中生成驱动模块。</span><br><span class="line"></span><br><span class="line">最后```make```编译驱动即可。</span><br><span class="line"></span><br><span class="line">**加载驱动**</span><br><span class="line"></span><br><span class="line">将生成的.ko文件复制到busybox的_install目录下并对init（启动脚本）修改如下：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>#!/bin/sh<br>echo “INIT SCRIPT”<br>mkdir /tmp<br>mount -t proc none /proc<br>mount -t sysfs none /sys<br>mount -t devtmpfs none /dev<br>mount -t debugfs none /sys/kernel/debug<br>mount -t tmpfs none /tmp<br>insmod /first_kerneltest.ko #新增<br>echo -e “Boot took $(cut -d’ ‘ -f1 /proc/uptime) seconds”<br>#为方便调试，改‘1000’为‘0’，即可获得root权限<br>setsid /bin/cttyhack setuidgid 0 /bin/sh<br>poweroff -f</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**重新打包rootfs.img**并启动qemu，加载成功</span><br><span class="line"></span><br><span class="line">![image-20230119162932352](D:\ABf1ag-blog\source\_posts\kernel初探\image-20230119162932352.png)</span><br><span class="line"></span><br><span class="line">**调试**</span><br><span class="line"></span><br><span class="line">使用root权限调试（~~上文提及~~），使用如下命令调试</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**重新打包rootfs.img**并启动qemu，加载成功</span><br><span class="line"></span><br><span class="line">![image-20230119162932352](image-20230119162932352.png)</span><br><span class="line"></span><br><span class="line">**调试**</span><br><span class="line"></span><br><span class="line">使用root权限调试（~~上文提及~~），使用如下命令调试</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>qemu-system-x86_64 </p>
 </li>
 <li><p>kernel ../linux-5.4.98/linux-5.4.98/arch/x86/boot/bzImage </p>
@@ -319,7 +319,7 @@
 </ul>
 <p>另起终端，执行命令 <code>gdb -q -ex &quot;target remote localhost:1234&quot;</code> 即可</p>
 <p>执行后如下，会发现有些命令无法执行</p>
-<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20230130162722386.png" alt="image-20230130162722386"></p>
+<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130162722386.png" alt="image-20230130162722386"></p>
 <p><strong>解决方案：使用gef-remote</strong></p>
 <p>关于使用gef-remote可把我坑惨了，[大佬博客]( <a target="_blank" rel="noopener" href="https://kiprey.github.io/2021/10/kernel_pwn_introduction/#%E4%B8%89%E3%80%81%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%B0%83%E8%AF%95">Kernel pwn CTF 入门 | Kiprey’s Blog</a> )写的是<code>gef-remote --qemu-mode loaclhost:1234</code>,由于gef的更新原因在我这却怎么也执行不了，于是查了gef手册最新的语句为<code>gef-remote --qemu-user --qemu-binary vmlinux_path ip port</code>在使用前一定要先<code>set architecture</code></p>
 <p>为了方便调试，可以添加一些符号文件</p>
@@ -336,10 +336,10 @@
 </blockquote>
 </li>
 </ul>
-<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20230130170107355.png" alt="image-20230130170107355"></p>
+<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170107355.png" alt="image-20230130170107355"></p>
 <p>添加完符号文件后，就可以对驱动里的函数下断点，如下</p>
-<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20230130170219834.png" alt="image-20230130170219834"></p>
-<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20230130170344639.png" alt="image-20230130170344639"></p>
+<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170219834.png" alt="image-20230130170219834"></p>
+<p><img src="/2023/01/18/kernel%E5%88%9D%E6%8E%A2/image-20230130170344639.png" alt="image-20230130170344639"></p>
 <p>如想要断在ko_test_exit处，在qemu启动的内核shell输入<code>rmmod terget_mode_name</code>即可。</p>
 <h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><p> <a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/build-kernel/">内核下载与编译 - CTF Wiki (ctf-wiki.org)</a> </p>
 <p> <a target="_blank" rel="noopener" href="https://kiprey.github.io/2021/10/kernel_pwn_introduction/#%E4%B8%89%E3%80%81%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%B0%83%E8%AF%95">Kernel pwn CTF 入门 | Kiprey’s Blog</a> </p>
