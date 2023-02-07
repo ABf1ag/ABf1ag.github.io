@@ -6,7 +6,7 @@
   <link href="http://abf1ag.github.io/atom.xml" rel="self"/>
   
   <link href="http://abf1ag.github.io/"/>
-  <updated>2023-02-07T07:27:44.913Z</updated>
+  <updated>2023-02-07T09:20:34.640Z</updated>
   <id>http://abf1ag.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://abf1ag.github.io/2099/06/11/ri-zhi/"/>
     <id>http://abf1ag.github.io/2099/06/11/ri-zhi/</id>
     <published>2099-06-11T14:34:06.000Z</published>
-    <updated>2023-02-07T07:27:44.913Z</updated>
+    <updated>2023-02-07T09:20:34.640Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;日志&quot;&gt;&lt;a href=&quot;#日志&quot; class=&quot;headerlink&quot; title=&quot;日志&quot;&gt;&lt;/a&gt;日志&lt;/h1&gt;</summary>
@@ -36,7 +36,7 @@
     <link href="http://abf1ag.github.io/2023/01/18/kernel-chu-tan/"/>
     <id>http://abf1ag.github.io/2023/01/18/kernel-chu-tan/</id>
     <published>2023-01-18T10:02:33.000Z</published>
-    <updated>2023-01-31T08:04:12.280Z</updated>
+    <updated>2023-02-07T10:52:12.103Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;kernel初探&quot;&gt;&lt;a href=&quot;#kernel初探&quot; class=&quot;headerlink&quot; title=&quot;kernel初探&quot;&gt;&lt;/a&gt;kernel初探&lt;/h2&gt;</summary>
@@ -51,7 +51,7 @@
     <link href="http://abf1ag.github.io/2023/01/06/llvmpass-chu-tan/"/>
     <id>http://abf1ag.github.io/2023/01/06/llvmpass-chu-tan/</id>
     <published>2023-01-06T07:25:02.000Z</published>
-    <updated>2023-01-30T09:24:26.236Z</updated>
+    <updated>2023-02-07T10:48:26.982Z</updated>
     
     
       
@@ -61,7 +61,7 @@
     <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
 
 &lt;p&gt;后续补充&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/.io//image-20230106152539976.png&quot; class=&quot;lazyload placeholder&quot;</summary>
+&lt;p&gt;&lt;img src=&quot;https://img.le1a.com/2023/02/07/639458b8f2f0e.png&quot;</summary>
         
       
     
@@ -75,7 +75,7 @@
     <link href="http://abf1ag.github.io/2022/12/30/nian-zhong-zong-jie-2022/"/>
     <id>http://abf1ag.github.io/2022/12/30/nian-zhong-zong-jie-2022/</id>
     <published>2022-12-30T02:55:26.000Z</published>
-    <updated>2022-12-30T11:55:52.002Z</updated>
+    <updated>2023-02-07T10:48:02.786Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;年终总结（2022）&quot;&gt;&lt;a href=&quot;#年终总结（2022）&quot; class=&quot;headerlink&quot; title=&quot;年终总结（2022）&quot;&gt;&lt;/a&gt;年终总结（2022）&lt;/h3&gt;</summary>
@@ -90,7 +90,7 @@
     <link href="http://abf1ag.github.io/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/"/>
     <id>http://abf1ag.github.io/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/</id>
     <published>2022-01-19T02:39:04.000Z</published>
-    <updated>2022-03-03T12:31:00.524Z</updated>
+    <updated>2023-02-07T10:45:47.981Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;异构pwn学习记录&quot;&gt;&lt;a href=&quot;#异构pwn学习记录&quot; class=&quot;headerlink&quot; title=&quot;异构pwn学习记录&quot;&gt;&lt;/a&gt;异构pwn学习记录&lt;/h3&gt;</summary>
@@ -105,7 +105,7 @@
     <link href="http://abf1ag.github.io/2022/01/12/webpwn-chu-tan/"/>
     <id>http://abf1ag.github.io/2022/01/12/webpwn-chu-tan/</id>
     <published>2022-01-12T10:23:08.000Z</published>
-    <updated>2022-07-10T04:49:15.592Z</updated>
+    <updated>2023-02-07T10:44:32.058Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;webpwn初探&quot;&gt;&lt;a href=&quot;#webpwn初探&quot; class=&quot;headerlink&quot; title=&quot;webpwn初探&quot;&gt;&lt;/a&gt;webpwn初探&lt;/h3&gt;</summary>
@@ -135,7 +135,7 @@
     <link href="http://abf1ag.github.io/2022/01/07/an-xun-final/"/>
     <id>http://abf1ag.github.io/2022/01/07/an-xun-final/</id>
     <published>2022-01-07T09:09:33.000Z</published>
-    <updated>2022-01-08T05:54:02.246Z</updated>
+    <updated>2023-02-07T10:35:45.826Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;安洵final&quot;&gt;&lt;a href=&quot;#安洵final&quot; class=&quot;headerlink&quot; title=&quot;安洵final&quot;&gt;&lt;/a&gt;安洵final&lt;/h3&gt;</summary>
@@ -165,7 +165,7 @@
     <link href="http://abf1ag.github.io/2021/12/17/pwnwaf/"/>
     <id>http://abf1ag.github.io/2021/12/17/pwnwaf/</id>
     <published>2021-12-17T13:17:19.000Z</published>
-    <updated>2022-06-19T03:12:56.068Z</updated>
+    <updated>2023-02-07T10:47:21.559Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;pwnwaf&quot;&gt;&lt;a href=&quot;#pwnwaf&quot; class=&quot;headerlink&quot; title=&quot;pwnwaf&quot;&gt;&lt;/a&gt;pwnwaf&lt;/h3&gt;</summary>
@@ -180,7 +180,7 @@
     <link href="http://abf1ag.github.io/2021/12/06/house-of-banana/"/>
     <id>http://abf1ag.github.io/2021/12/06/house-of-banana/</id>
     <published>2021-12-06T12:16:22.000Z</published>
-    <updated>2021-12-07T14:59:25.743Z</updated>
+    <updated>2023-02-07T10:30:07.519Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;house-of-banana学习笔记&quot;&gt;&lt;a href=&quot;#house-of-banana学习笔记&quot; class=&quot;headerlink&quot; title=&quot;house-of-banana学习笔记&quot;&gt;&lt;/a&gt;house-of-banana学习笔记&lt;/h3&gt;</summary>
@@ -210,7 +210,7 @@
     <link href="http://abf1ag.github.io/2021/11/28/di-si-jie-an-xun-bei/"/>
     <id>http://abf1ag.github.io/2021/11/28/di-si-jie-an-xun-bei/</id>
     <published>2021-11-28T07:33:21.000Z</published>
-    <updated>2021-11-29T03:00:34.223Z</updated>
+    <updated>2023-02-07T10:29:21.159Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;house-of-orange&quot;&gt;&lt;a href=&quot;#house-of-orange&quot; class=&quot;headerlink&quot; title=&quot;house-of-orange&quot;&gt;&lt;/a&gt;house-of-orange&lt;/h3&gt;</summary>
@@ -225,7 +225,7 @@
     <link href="http://abf1ag.github.io/2021/11/16/2021-hu-xiang-bei-xian-shang/"/>
     <id>http://abf1ag.github.io/2021/11/16/2021-hu-xiang-bei-xian-shang/</id>
     <published>2021-11-16T13:34:28.000Z</published>
-    <updated>2021-11-25T13:53:14.607Z</updated>
+    <updated>2023-02-07T10:22:59.579Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;2021湖湘杯pwn&quot;&gt;&lt;a href=&quot;#2021湖湘杯pwn&quot; class=&quot;headerlink&quot; title=&quot;2021湖湘杯pwn&quot;&gt;&lt;/a&gt;2021湖湘杯pwn&lt;/h3&gt;</summary>
@@ -240,7 +240,7 @@
     <link href="http://abf1ag.github.io/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/"/>
     <id>http://abf1ag.github.io/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/</id>
     <published>2021-11-01T08:32:46.000Z</published>
-    <updated>2021-11-01T09:32:04.745Z</updated>
+    <updated>2023-02-07T10:18:52.603Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;ida动态调试-pwntools输入&quot;&gt;&lt;a href=&quot;#ida动态调试-pwntools输入&quot; class=&quot;headerlink&quot; title=&quot;ida动态调试+pwntools输入&quot;&gt;&lt;/a&gt;ida动态调试+pwntools输入&lt;/h3&gt;</summary>
@@ -255,7 +255,7 @@
     <link href="http://abf1ag.github.io/2021/11/01/dong-hua-bei/"/>
     <id>http://abf1ag.github.io/2021/11/01/dong-hua-bei/</id>
     <published>2021-11-01T02:04:18.000Z</published>
-    <updated>2021-11-01T03:38:47.162Z</updated>
+    <updated>2023-02-07T10:15:46.920Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;JIT类型初探&quot;&gt;&lt;a href=&quot;#JIT类型初探&quot; class=&quot;headerlink&quot; title=&quot;JIT类型初探&quot;&gt;&lt;/a&gt;JIT类型初探&lt;/h3&gt;</summary>
@@ -285,7 +285,7 @@
     <link href="http://abf1ag.github.io/2021/10/18/xi-you-di-er-jie-xiao-sai/"/>
     <id>http://abf1ag.github.io/2021/10/18/xi-you-di-er-jie-xiao-sai/</id>
     <published>2021-10-18T07:59:46.000Z</published>
-    <updated>2021-12-27T07:26:36.197Z</updated>
+    <updated>2023-02-07T10:08:45.102Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;西邮第二届校赛&quot;&gt;&lt;a href=&quot;#西邮第二届校赛&quot; class=&quot;headerlink&quot; title=&quot;西邮第二届校赛&quot;&gt;&lt;/a&gt;西邮第二届校赛&lt;/h3&gt;</summary>
@@ -300,7 +300,7 @@
     <link href="http://abf1ag.github.io/2021/10/14/chang-cheng-bei-final/"/>
     <id>http://abf1ag.github.io/2021/10/14/chang-cheng-bei-final/</id>
     <published>2021-10-14T08:18:22.000Z</published>
-    <updated>2021-10-14T09:14:13.941Z</updated>
+    <updated>2023-02-07T09:56:05.963Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;长城杯final&quot;&gt;&lt;a href=&quot;#长城杯final&quot; class=&quot;headerlink&quot; title=&quot;长城杯final&quot;&gt;&lt;/a&gt;长城杯final&lt;/h3&gt;</summary>
@@ -315,7 +315,7 @@
     <link href="http://abf1ag.github.io/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/"/>
     <id>http://abf1ag.github.io/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/</id>
     <published>2021-10-01T06:46:10.000Z</published>
-    <updated>2021-10-07T14:50:16.105Z</updated>
+    <updated>2023-02-07T09:55:03.443Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;tcache-stashing-unlink-attack学习笔记&quot;&gt;&lt;a href=&quot;#tcache-stashing-unlink-attack学习笔记&quot; class=&quot;headerlink&quot; title=&quot;tcache_stashing_unlink_attack学习笔记&quot;&gt;&lt;/a&gt;tcache_stashing_unlink_attack学习笔记&lt;/h3&gt;</summary>

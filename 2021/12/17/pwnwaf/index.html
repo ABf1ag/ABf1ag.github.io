@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -605,7 +605,7 @@
 <p>回去后在darry师傅的帮助下，终于成功了。因此记录下该如何使用这个waf。</p>
 <p>首先我们要找到程序的main函数地址，然后修改hpwnwaf.py文件的main_addr。patch成功后托入ida中，因为我们需要进行手动修改。</p>
 <p>在main函数处我们先修改jmp的地址为最初main函数的入口指令，即在沙箱指令之后的某个位置（为了能最大程度的保护栈帧）。比如下面这个地方</p>
-<p><img src="/.io//image-20211217215702845.png" class="lazyload placeholder" data-srcset="/.io//image-20211217215702845.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211217215702845"></p>
+<p><img src="https://img.le1a.com/2023/02/07/84e9f4b3b26fd.png" alt="image-20211217215702845"></p>
 <p>然后紧接着改这个函数的jmp地址为沙箱地址（0x402000），最后再将沙箱函数的leave|ret改为jmp到程序的主函数处的地址。（写的比较绕，因为是写给我自己看的😁）。</p>
 <p>发现这个工具可以自定义规则，<a target="_blank" rel="noopener" href="http://homura.cc/blog/archives/145">参考这篇博客</a></p>
 <p>简单来说就是将下面的代码gcc编译运行一下,规则自行添加和修改</p>
@@ -619,11 +619,11 @@
 
 <p>补：对于开了pie的程序操作过程相似，先将hpwnwaf.py的main_addr改成主函数地址，运行./patch。</p>
 <p>接着将主函数地址处后的jmp地址改为程序最后多出的已<code>push esp</code>开头的地址如0x4030c6</p>
-<p><img src="/.io//image-20220619110559353.png" class="lazyload placeholder" data-srcset="/.io//image-20220619110559353.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220619110559353"></p>
-<p><img src="/.io//image-20220619110630291.png" class="lazyload placeholder" data-srcset="/.io//image-20220619110630291.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220619110630291"></p>
+<p><img src="https://img.le1a.com/2023/02/07/d947ed8b1ede8.png" alt="image-20220619110559353"></p>
+<p><img src="https://img.le1a.com/2023/02/07/92c9afc5d899c.png" alt="image-20220619110630291"></p>
 <p>接着将0x4030cf处的jmp后地址改为沙箱函数地址0x403000，最后将沙箱函数最后的leave ret改为jmp到主函数被改后的第一条指令地址</p>
-<p><img src="/.io//image-20220619111006341.png" class="lazyload placeholder" data-srcset="/.io//image-20220619111006341.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220619111006341"></p>
-<p><img src="/.io//image-20220619111109368.png" class="lazyload placeholder" data-srcset="/.io//image-20220619111109368.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220619111109368"></p>
+<p><img src="https://img.le1a.com/2023/02/07/c4f63d30502b2.png" alt="image-20220619111006341"></p>
+<p><img src="https://img.le1a.com/2023/02/07/7b2084ecbadb0.png" alt="image-20220619111109368"></p>
 
       </div>
       <div class="post-tags-categories">
@@ -659,7 +659,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/9.jpg" class="lazyload placeholder" data-srcset="/medias/9.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/9.jpg" alt="">
     </div>
     <a href="/2021/12/30/nian-zhong-zong-jie/" class="post-nav-link">
       <div class="title">
@@ -683,7 +683,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/6.jpg" src="" alt="">
     </div>
     <a href="/2021/12/06/house-of-banana/" class="post-nav-link">
       <div class="title">
@@ -740,10 +740,10 @@
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -954,7 +954,7 @@
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -975,7 +975,7 @@
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -996,7 +996,7 @@
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1017,7 +1017,7 @@
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1038,7 +1038,7 @@
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

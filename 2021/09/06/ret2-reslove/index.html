@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -568,7 +568,7 @@
       
         <div class="post-detail-header_wordcount">
           <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 2.4k |
+            <i class="fas fa-file-text-o"></i> 字数统计: 2.3k |
           </span>
   
           <span class="min2read">
@@ -606,13 +606,13 @@
 <p>具体的，动态链接器在解析符号地址时所使用的重定位表项、动态符号表、动态字符串表都是从目标文件中的动态节 <code>.dynamic</code> 索引得到的。所以如果我们能够修改其中的某些内容使得最后动态链接器解析的符号是我们想要解析的符号，那么攻击就达成了。</p>
 <p>我们看一下<code>.dynamic</code> 的内容：</p>
 <p>DT_STRTAB =&gt; .dynstr DT_SYMTAB =&gt; .dynsym DT_JMPREL =&gt; .rel.plt</p>
-<p><img src="/.io//ABf1ag-blog\source_posts\ret2-reslove\image-20210906094913872.png" class="lazyload placeholder" data-srcset="/.io//ABf1ag-blog\source_posts\ret2-reslove\image-20210906094913872.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20210906094913872"></p>
-<figure class="highlight plaintext"><figcaption><span>:</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![image-20210906095627014](D:\ABf1ag-blog\source\_posts\ret2-reslove\image-20210906095627014.png)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://img.le1a.com/2023/02/07/9fec624dd4fc5.png" alt="image-20210906094913872"></p>
+<figure class="highlight plaintext"><figcaption><span>:</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![image-20210906095627014]( https://img.le1a.com/2023/02/07/b9d68697a3237.png )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>typedef struct<br>{<br>    Elf32_Addr    r_offset; //指向GOT表的指针,用于拿到真实地址后填入<br>    Elf32_Word    r_info;<br>    //一些关于导入符号的信息，我们只关心从第二个字节开始的值((val)&gt;&gt;8)，忽略那个07<br>    //1和3是这个导入函数的符号在.dynsym中的下标，.dynsym+(r_info&gt;&gt;8)即可得到函数对应的dynsym结构体<br>} Elf32_Rel;</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```.dymsym```</span><br><span class="line"></span><br><span class="line">![image-20210906100407603](D:\ABf1ag-blog\source\_posts\ret2-reslove\image-20210906100407603.png)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```.dymsym```</span><br><span class="line"></span><br><span class="line">![image-20210906100407603]( https://img.le1a.com/2023/02/07/f635fcc7816d3.png )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>typedef struct elf32_sym<br>{<br>    Elf32_Word    st_name; //符号名，是相对.dynstr起始的偏移,.dynstr+st_name即可得到函数名<br>    Elf32_Addr    st_value;<br>    Elf32_Word    st_size;<br>    unsigned char st_info; //对于导入函数符号而言，它是0x12<br>    unsigned char st_other;<br>    Elf32_Section st_shndx;<br>}Elf32_Sym; //对于导入函数符号而言，其他字段都是0</p>
 <p>typedef struct elf64_sym<br>{<br>    Elf64_Word st_name;          // 符号名称，字符串表中的索引<br>    // STT_OBJECT表示符号关联到一个数据对象，如变量、数组或指针；<br>    // STT_FUNC表示符号关联到一个函数；<br>    // STT_NOTYPE表示符号类型未指定，用于未定义引用<br>    unsigned char st_info;         // 类型和绑定属性：STB_LOCAL/STB_GLOBAL/STB_WEAK；<br>    unsigned char st_other;      // 语义未定义，0<br>    Elf64_Half st_shndx;           // 相关节的索引，符号将绑定到该节，此外SHN_ABS指定符号是绝对值，不因重定位而改变，SHN_UNDEF标识未定义符号。<br>    Elf64_Addr st_value;           // 符号的值<br>    Elf64_Xword st_size;          // 符号的长度，如一个指针的长度或struct对象中包含的字节数。<br>}Elf64_Sym;</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```.dynstr``` :存放着导入函数的函数名，依据函数名获得函数真实地址。</span><br><span class="line"></span><br><span class="line">![image-20210906101152393](D:\ABf1ag-blog\source\_posts\ret2-reslove\image-20210906101152393.png)</span><br><span class="line"></span><br><span class="line">### _dl_runtime_resolve 会干什么？</span><br><span class="line"></span><br><span class="line">_dl_runtime_resolve 会</span><br><span class="line"></span><br><span class="line">1. 用 link_map (第一个参数) 访问.dynamic，取出.dynstr, .dynsym, .rel.plt 的指针</span><br><span class="line">2. .rel.plt + Offset (第二个参数)，求出当前函数的在重定位表项 (.rel.plt) 中 Elf32_Rel 具体位置 (指针)，记作 rel</span><br><span class="line">3. rel-&gt;r_info &gt;&gt; 8 作为.dynsym 的下标，求出当前函数在符号表项 (.dynsym) 中 Elf32_Sym 的具体位置 (指针)，记作 sym</span><br><span class="line">4. .dynstr + sym-&gt;st_name，得到符号名字符串指针</span><br><span class="line">5. 在动态链接库查找这个字符串对应的函数的地址，并且把地址赋值给 * rel-&gt;r_offset，即 GOT 表</span><br><span class="line">6. 调用这个函数</span><br><span class="line"></span><br><span class="line">### 利用</span><br><span class="line"></span><br><span class="line"> **1.(No RELRO) 直接改写.dynstr**</span><br><span class="line">直接改写.dynstr 中对应函数字符串内容为我们想要的内容。比如修改 free 为 system，这样 free (buf) 的时候，如果 buf 的内容是 &quot;/bin/sh&quot;， 那么就实现了 system (&quot;/bin/sh&quot;)。</span><br><span class="line"></span><br><span class="line">**2.（开启但不完全开启），伪造reloc_index**</span><br><span class="line"></span><br><span class="line"> 修改_dl_runtime_resolve第二个参数的值，其第二个参数reloc_index是用来确定对应函数的.rel.plt的地址，因此我们可以将其改为我们伪造的.rel.plt的地址，又因为.rel.plt结构体包含两个变量```r_offset``` 和```r_info``` ,因此我们在```r_offset``` 处填上要修改的函数的got地址， ```r_info``` 填入```(r_sym&lt;&lt;8)+(r_type&amp;0xff)``` ,其中r_sym又可以确定对应函数的.dynsym的地址，其中包含st_name可以确定.dynstr的地址，在.dynstr的地址上写入system这样\_dl_runtime_solve可以根据’system‘字符串找到system函数的地址填入到got表中，这样就改变了函数的got表。</span><br><span class="line"></span><br><span class="line">exp：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```.dynstr``` :存放着导入函数的函数名，依据函数名获得函数真实地址。</span><br><span class="line"></span><br><span class="line">![image-20210906101152393]( https://img.le1a.com/2023/02/07/a306a135dc082.png )</span><br><span class="line"></span><br><span class="line">### _dl_runtime_resolve 会干什么？</span><br><span class="line"></span><br><span class="line">_dl_runtime_resolve 会</span><br><span class="line"></span><br><span class="line">1. 用 link_map (第一个参数) 访问.dynamic，取出.dynstr, .dynsym, .rel.plt 的指针</span><br><span class="line">2. .rel.plt + Offset (第二个参数)，求出当前函数的在重定位表项 (.rel.plt) 中 Elf32_Rel 具体位置 (指针)，记作 rel</span><br><span class="line">3. rel-&gt;r_info &gt;&gt; 8 作为.dynsym 的下标，求出当前函数在符号表项 (.dynsym) 中 Elf32_Sym 的具体位置 (指针)，记作 sym</span><br><span class="line">4. .dynstr + sym-&gt;st_name，得到符号名字符串指针</span><br><span class="line">5. 在动态链接库查找这个字符串对应的函数的地址，并且把地址赋值给 * rel-&gt;r_offset，即 GOT 表</span><br><span class="line">6. 调用这个函数</span><br><span class="line"></span><br><span class="line">### 利用</span><br><span class="line"></span><br><span class="line"> **1.(No RELRO) 直接改写.dynstr**</span><br><span class="line">直接改写.dynstr 中对应函数字符串内容为我们想要的内容。比如修改 free 为 system，这样 free (buf) 的时候，如果 buf 的内容是 &quot;/bin/sh&quot;， 那么就实现了 system (&quot;/bin/sh&quot;)。</span><br><span class="line"></span><br><span class="line">**2.（开启但不完全开启），伪造reloc_index**</span><br><span class="line"></span><br><span class="line"> 修改_dl_runtime_resolve第二个参数的值，其第二个参数reloc_index是用来确定对应函数的.rel.plt的地址，因此我们可以将其改为我们伪造的.rel.plt的地址，又因为.rel.plt结构体包含两个变量```r_offset``` 和```r_info``` ,因此我们在```r_offset``` 处填上要修改的函数的got地址， ```r_info``` 填入```(r_sym&lt;&lt;8)+(r_type&amp;0xff)``` ,其中r_sym又可以确定对应函数的.dynsym的地址，其中包含st_name可以确定.dynstr的地址，在.dynstr的地址上写入system这样\_dl_runtime_solve可以根据’system‘字符串找到system函数的地址填入到got表中，这样就改变了函数的got表。</span><br><span class="line"></span><br><span class="line">exp：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>from pwn import *<br>io = process(‘./pwn200’)<br>elf=ELF(‘./pwn200’)<br>context.log_level=’debug’<br>read_plt=elf.plt[‘read’]<br>strlen_plt=elf.plt[‘strlen’]<br>strlen_got=elf.got[‘strlen’]<br>pppr=0x08048609<br>pop_ebp=0x0804860b<br>leaver=0x804851D<br>plt_0=elf.get_section_by_name(‘.plt’).header.sh_addr<br>rel_plt=elf.get_section_by_name(‘.rel.plt’).header.sh_addr<br>dynsym=elf.get_section_by_name(‘.dynsym’).header.sh_addr<br>dynstr=elf.get_section_by_name(‘.dynstr’).header.sh_addr<br>bss_addr=elf.get_section_by_name(‘.bss’).header.sh_addr+0x600<br>def exp():<br>    io.recvuntil(‘Gleaf!\n’)<br>    payload=’a’*0x6c+p32(bss_addr)+p32(read_plt)+p32(pppr)+p32(0)+p32(bss_addr)+p32(100)<br>    payload+=p32(pop_ebp)+p32(bss_addr)+p32(leaver)<br>    io.send(payload)</p>
 <pre><code>reloc_index=bss_addr+0x14-rel_plt
 r_sym=(bss_addr+0x38-dynsym)/0x10
@@ -699,7 +699,7 @@ io.interactive()
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/11.jpg" alt="">
     </div>
     <a href="/2021/09/12/storm/" class="post-nav-link">
       <div class="title">
@@ -721,7 +721,7 @@ io.interactive()
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/4.jpg" src="" alt="">
     </div>
     <a href="/2021/09/03/xiangyuncup/" class="post-nav-link">
       <div class="title">
@@ -776,10 +776,10 @@ io.interactive()
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -990,7 +990,7 @@ io.interactive()
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1011,7 +1011,7 @@ io.interactive()
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1032,7 +1032,7 @@ io.interactive()
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1053,7 +1053,7 @@ io.interactive()
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1074,7 +1074,7 @@ io.interactive()
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

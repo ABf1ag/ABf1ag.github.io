@@ -204,7 +204,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
       <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
       <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
     </div>
@@ -342,7 +342,7 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" alt="logo">
         </div>
       
       <a href="/" class="logo">ABf1ag&#39;s blog</a>
@@ -610,7 +610,7 @@
 </li>
 </ul>
 <h3 id="1-劫持-ns-loaded"><a href="#1-劫持-ns-loaded" class="headerlink" title="1.劫持_ns_loaded"></a>1.劫持_ns_loaded</h3><p>我们先来看一下<code>fini_array</code>这个数组是如何被调用的。</p>
-<p><img src="/.io//image-20211206202855123.png" class="lazyload placeholder" data-srcset="/.io//image-20211206202855123.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="image-20211206202855123"></p>
+<p><img src="https://img.le1a.com/2023/02/07/91d4de1330e41.png" alt="image-20211206202855123"></p>
 <p>因此我们直接分析源码,只看其中的一个for循环</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">  /*ns = 0*/</span><br><span class="line">  for (Lmid_t ns = GL(dl_nns) - 1; ns &gt;= 0; --ns)</span><br><span class="line">    &#123;</span><br><span class="line">      __rtld_lock_lock_recursive (GL(dl_load_lock));</span><br><span class="line">	  /*nloaded = 4*/</span><br><span class="line">      unsigned int nloaded = GL(dl_ns)[ns]._ns_nloaded;</span><br><span class="line">      if (nloaded == 0</span><br><span class="line">#ifdef SHARED</span><br><span class="line">	  || GL(dl_ns)[ns]._ns_loaded-&gt;l_auditing != do_audit</span><br><span class="line">#endif</span><br><span class="line">	  )</span><br><span class="line">	__rtld_lock_unlock_recursive (GL(dl_load_lock));</span><br><span class="line">      else</span><br><span class="line">	&#123;</span><br><span class="line">	  struct link_map *maps[nloaded];</span><br><span class="line"></span><br><span class="line">	  unsigned int i;</span><br><span class="line">	  struct link_map *l;</span><br><span class="line">	  assert (nloaded != 0 || GL(dl_ns)[ns]._ns_loaded == NULL);</span><br><span class="line">	  for (l = GL(dl_ns)[ns]._ns_loaded, i = 0; l != NULL; l = l-&gt;l_next)</span><br><span class="line">	    if (l == l-&gt;l_real)</span><br><span class="line">	      &#123;</span><br><span class="line">		assert (i &lt; nloaded);</span><br><span class="line"></span><br><span class="line">		maps[i] = l;</span><br><span class="line">		l-&gt;l_idx = i;</span><br><span class="line">		++i;</span><br><span class="line"></span><br><span class="line">		++l-&gt;l_direct_opencount;</span><br><span class="line">	      &#125;</span><br><span class="line">	      /*LM_ID_BASE=0*/</span><br><span class="line">	  assert (ns != LM_ID_BASE || i == nloaded);</span><br><span class="line">	  assert (ns == LM_ID_BASE || i == nloaded || i == nloaded - 1);</span><br><span class="line">	  unsigned int nmaps = i;</span><br><span class="line"></span><br><span class="line">	  _dl_sort_maps (maps + (ns == LM_ID_BASE), nmaps - (ns == LM_ID_BASE),</span><br><span class="line">			 NULL, true);</span><br><span class="line"></span><br><span class="line">	  __rtld_lock_unlock_recursive (GL(dl_load_lock));</span><br><span class="line"></span><br><span class="line">	  for (i = 0; i &lt; nmaps; ++i)</span><br><span class="line">	    &#123;</span><br><span class="line">	      struct link_map *l = maps[i];</span><br><span class="line"></span><br><span class="line">	      if (l-&gt;l_init_called)</span><br><span class="line">		&#123;</span><br><span class="line">		  l-&gt;l_init_called = 0;</span><br><span class="line"></span><br><span class="line">		  /*DT_FINI=13  */</span><br><span class="line">		  if (l-&gt;l_info[DT_FINI_ARRAY] != NULL</span><br><span class="line">		      || l-&gt;l_info[DT_FINI] != NULL)</span><br><span class="line">		    &#123;</span><br><span class="line">		      if (__builtin_expect (GLRO(dl_debug_mask)</span><br><span class="line">					    &amp; DL_DEBUG_IMPCALLS, 0))</span><br><span class="line">			_dl_debug_printf (&quot;\ncalling fini: %s [%lu]\n\n&quot;,</span><br><span class="line">					  DSO_FILENAME (l-&gt;l_name),</span><br><span class="line">					  ns);</span><br><span class="line"></span><br><span class="line">		      /* DT_FINI_ARRAY=26，DT_FINI_ARRAYSZ=28*/</span><br><span class="line">		      if (l-&gt;l_info[DT_FINI_ARRAY] != NULL)</span><br><span class="line">			&#123;</span><br><span class="line">			  ElfW(Addr) *array =</span><br><span class="line">			    (ElfW(Addr) *) (l-&gt;l_addr</span><br><span class="line">					    + l-&gt;l_info[DT_FINI_ARRAY]-&gt;d_un.d_ptr);</span><br><span class="line">			  unsigned int i = (l-&gt;l_info[DT_FINI_ARRAYSZ]-&gt;d_un.d_val</span><br><span class="line">					    / sizeof (ElfW(Addr)));</span><br><span class="line">			  while (i-- &gt; 0)</span><br><span class="line">			    ((fini_t) array[i]) ();</span><br><span class="line">			&#125;</span><br><span class="line">			……………</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
@@ -690,7 +690,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/3.jpg" class="lazyload placeholder" data-srcset="/medias/3.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload" src="/medias/3.jpg" alt="">
     </div>
     <a href="/2021/12/17/pwnwaf/" class="post-nav-link">
       <div class="title">
@@ -712,7 +712,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload" src="/medias/6.jpg" src="" alt="">
     </div>
     <a href="/2021/12/02/glibc-yuan-ma-fen-xi/" class="post-nav-link">
       <div class="title">
@@ -769,10 +769,10 @@ glibc-2.27
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/1.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/2.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -983,7 +983,7 @@ glibc-2.27
             <div class="post-img-box">
               <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1004,7 +1004,7 @@ glibc-2.27
             <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1025,7 +1025,7 @@ glibc-2.27
             <div class="post-img-box">
               <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1046,7 +1046,7 @@ glibc-2.27
             <div class="post-img-box">
               <a href="/2022/12/30/nian-zhong-zong-jie-2022/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -1067,7 +1067,7 @@ glibc-2.27
             <div class="post-img-box">
               <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" class="lazyload placeholder" data-srcset="/medias/11.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
