@@ -1,0 +1,8 @@
+/* 动态背景--变暗   1最亮，数值越小越暗*/
+.bubbly-bg-canvas {
+    filter: brightness(0.8);
+}
+/* 暗黑模式下 */
+.darkModel .bubbly-bg-canvas {
+    filter: brightness(0.3);
+}
