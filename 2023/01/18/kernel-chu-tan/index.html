@@ -618,7 +618,7 @@
 <p>安装libelf-devel、dwarves </p>
 </blockquote>
 <p>接着在linux-5.4.98目录下使用<code>make -j3 bzImage</code>命令编译内核镜像。见到下图所示的提示即为编译成功。</p>
-<p><img src="https://img.le1a.com/2023/02/07/88f98ddb8d91e.png" alt="image-20230129173119928"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/88f98ddb8d91e.png" alt="image-20230129173119928"></p>
 <h3 id="构建文件系统"><a href="#构建文件系统" class="headerlink" title="构建文件系统"></a>构建文件系统</h3><p>下载并解压busybox</p>
 <ul>
 <li><p><code>wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2</code></p>
@@ -706,14 +706,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">echo &quot;INIT SCRIPT&quot;</span><br><span class="line">mkdir /tmp</span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sysfs none /sys</span><br><span class="line">mount -t devtmpfs none /dev</span><br><span class="line">mount -t debugfs none /sys/kernel/debug</span><br><span class="line">mount -t tmpfs none /tmp</span><br><span class="line">insmod /first_kerneltest.ko #新增</span><br><span class="line">echo -e &quot;Boot took $(cut -d&#x27; &#x27; -f1 /proc/uptime) seconds&quot;</span><br><span class="line">#为方便调试，改‘1000’为‘0’，即可获得root权限</span><br><span class="line">setsid /bin/cttyhack setuidgid 0 /bin/sh</span><br><span class="line">poweroff -f</span><br></pre></td></tr></table></figure>
 
 <p><strong>重新打包rootfs.img</strong>并启动qemu，加载成功</p>
-<p><img src="https://img.le1a.com/2023/02/07/961ca4d500908.png" alt="image-20230119162932352"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/961ca4d500908.png" alt="image-20230119162932352"></p>
 <p><strong>调试</strong></p>
 <p>使用root权限调试（<del>上文提及</del>），使用如下命令调试</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-x86_64 </span><br><span class="line">-kernel ../linux-5.4.98/linux-5.4.98/arch/x86/boot/bzImage </span><br><span class="line">-initrd ./rootfs.img </span><br><span class="line">-append &quot;console=ttyS0 nokaslr&quot; </span><br><span class="line">-nographic </span><br><span class="line">-gdb tcp::1234 </span><br><span class="line">-S #qemu启动后立即挂起，方便调试</span><br></pre></td></tr></table></figure>
 
 <p>另起终端，执行命令 <code>gdb -q -ex &quot;target remote localhost:1234&quot;</code> 即可</p>
 <p>执行后如下，会发现有些命令无法执行</p>
-<p><img src="https://img.le1a.com/2023/02/07/032482f18bd93.png" alt="image-20230130162722386"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/032482f18bd93.png" alt="image-20230130162722386"></p>
 <p><strong>解决方案：使用gef-remote</strong></p>
 <p>关于使用gef-remote可把我坑惨了，[大佬博客]( <a target="_blank" rel="noopener" href="https://kiprey.github.io/2021/10/kernel_pwn_introduction/#%E4%B8%89%E3%80%81%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%B0%83%E8%AF%95">Kernel pwn CTF 入门 | Kiprey’s Blog</a> )写的是<code>gef-remote --qemu-mode loaclhost:1234</code>,由于gef的更新原因在我这却怎么也执行不了，于是查了gef手册最新的语句为<code>gef-remote --qemu-user --qemu-binary vmlinux_path ip port</code>在使用前一定要先<code>set architecture</code></p>
 <p>为了方便调试，可以添加一些符号文件</p>
@@ -730,10 +730,10 @@
 </blockquote>
 </li>
 </ul>
-<p><img src="https://img.le1a.com/2023/02/07/a832d3e7df556.png" alt="image-20230130170107355"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/a832d3e7df556.png" alt="image-20230130170107355"></p>
 <p>添加完符号文件后，就可以对驱动里的函数下断点，如下</p>
-<p><img src="https://img.le1a.com/2023/02/07/f4078f5b083ca.png" alt="image-20230130170219834"></p>
-<p><img src="https://img.le1a.com/2023/02/07/40f4cebeb5b08.png" alt="image-20230130170344639"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/f4078f5b083ca.png" alt="image-20230130170219834"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/40f4cebeb5b08.png" alt="image-20230130170344639"></p>
 <p>如想要断在ko_test_exit处，在qemu启动的内核shell输入<code>rmmod terget_mode_name</code>即可。</p>
 <h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><p> <a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/build-kernel/">内核下载与编译 - CTF Wiki (ctf-wiki.org)</a> </p>
 <p> <a target="_blank" rel="noopener" href="https://kiprey.github.io/2021/10/kernel_pwn_introduction/#%E4%B8%89%E3%80%81%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E8%B0%83%E8%AF%95">Kernel pwn CTF 入门 | Kiprey’s Blog</a> </p>

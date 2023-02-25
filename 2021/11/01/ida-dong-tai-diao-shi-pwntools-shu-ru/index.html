@@ -606,19 +606,19 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 ./linux_serve/64</span><br></pre></td></tr></table></figure>
 
 <p>在linux上执行./linux_serve/64,如下图</p>
-<p><img src="https://img.le1a.com/2023/02/07/7d2a60f75ed11.png" alt="image-20211101170431707"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/7d2a60f75ed11.png" alt="image-20211101170431707"></p>
 <p>接着我们打开ida，在菜单栏找到debugger</p>
-<p><img src="https://img.le1a.com/2023/02/07/7c6bdb8ccb704.png" alt="image-20211101165937408"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/7c6bdb8ccb704.png" alt="image-20211101165937408"></p>
 <p>我们选择<code>Remote linux debugger</code></p>
-<p><img src="https://img.le1a.com/2023/02/07/f98420d9726cc.png" alt="image-20211101170102888"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/f98420d9726cc.png" alt="image-20211101170102888"></p>
 <p>紧接着我们<strong>在程序中下上断点</strong>。</p>
-<p><img src="https://img.le1a.com/2023/02/07/cdc21521af137.png" alt="image-20211101170351244"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/cdc21521af137.png" alt="image-20211101170351244"></p>
 <p>然后点击debugger中的Start process，会跳出来如下弹窗</p>
-<p><img src="https://img.le1a.com/2023/02/07/14fda3877812f.png" alt="image-20211101170929794"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/14fda3877812f.png" alt="image-20211101170929794"></p>
 <p>然后就会运行到断点处：</p>
-<p><img src="https://img.le1a.com/2023/02/07/031de6f194898.png" alt="image-20211101171050294"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/031de6f194898.png" alt="image-20211101171050294"></p>
 <p><strong>如果断点下在输入函数后，需要我们先进行输入，才能到达断点处。</strong></p>
-<p><img src="https://img.le1a.com/2023/02/07/ac1816d2d6452.png" alt="image-20211101171241305"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/ac1816d2d6452.png" alt="image-20211101171241305"></p>
 <p>但我们有时候需要输入不可显示字符才能使程序继续下去，所以我们需要使用pwntools来输入不可显示字符。</p>
 <h3 id="pwntools输入"><a href="#pwntools输入" class="headerlink" title="pwntools输入"></a>pwntools输入</h3><p>我们需要首先在linux中安装socat、expect、pwntools，使用apt-get即可安装。</p>
 <p>接着创建一个idaIOtool.sh，将如下代码复制到文件中</p>
@@ -626,11 +626,11 @@
 
 <p><strong>代码中 <code>./CrazyVM</code> 需要替换成自己的程序名</strong>。 </p>
 <p>运行linux_server64</p>
-<p><img src="https://img.le1a.com/2023/02/07/ba36aaad16bcf.png" alt="image-20211101172157875"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/ba36aaad16bcf.png" alt="image-20211101172157875"></p>
 <p>运行idaIOtool.sh</p>
-<p><img src="https://img.le1a.com/2023/02/07/265bf037be5e3.png" alt="image-20211101172341129"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/265bf037be5e3.png" alt="image-20211101172341129"></p>
 <p>打开ida在debugger中找到Attach to process，找到运行的程序。点击ok即可调试。</p>
-<p><img src="https://img.le1a.com/2023/02/07/1392d72c489e9.png" alt="image-20211101172858732"></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/1392d72c489e9.png" alt="image-20211101172858732"></p>
 <p>这样我们就可以使用pwntools输入不可显示字符了。</p>
 
       </div>
