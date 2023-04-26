@@ -674,6 +674,8 @@
 <p>特殊寄存器：有3个特殊寄存器：PC（程序计数器）、HI（乘除结果高位寄存器）和LO（乘除结果低位寄存器）。在乘法时，HI保存高32位，LO保存低32位。除法时HI保存余数，LO保存商。</p>
 <h3 id="MIPS常用指令集"><a href="#MIPS常用指令集" class="headerlink" title="MIPS常用指令集"></a>MIPS常用指令集</h3><p><strong>lb/lh/lw</strong>: 从存储器中读取一个byte/half word/word的数据到寄存器中.如lb $1, 0($2)  ($1=$2+0)</p>
 <p><strong>li：</strong>立即数的值给寄存器 li $1,0x1</p>
+<p><strong>move：</strong>将寄存器里的值赋值给寄存器</p>
+<p><strong>la：</strong>将地址传递给寄存器</p>
 <p><strong>lui</strong>:把一个16位的立即数填入到寄存器的高16位，低16位补零。</p>
 <p><strong>sb/sh/sw</strong>: 把一个byte/half word/word的数据从寄存器存储到存储器中.如 sb $1, 0($2) ($2+0=$1)</p>
 <p><strong>add/addu</strong>:把两个定点寄存器的内容相加add $1,$2,$3($1=$2+$3);u为不带符号加。</p>
@@ -1196,6 +1198,27 @@
             
 
             <div class="post-img-box">
+              <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/5.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">04-13</span>
+                
+              </div>
+              <a class="post-title" href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/">D-Link-DIR-815栈溢出漏洞复现</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
               <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
                 <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
@@ -1250,27 +1273,6 @@
                 
               </div>
               <a class="post-title" href="/2022/12/30/nian-zhong-zong-jie-2022/">年终总结-2022</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">01-19</span>
-                
-              </div>
-              <a class="post-title" href="/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/">异构pwn学习记录</a>
             </div>
           </div>
         

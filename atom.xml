@@ -32,6 +32,21 @@
   </entry>
   
   <entry>
+    <title>D-Link-DIR-815栈溢出漏洞复现</title>
+    <link href="http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/"/>
+    <id>http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/</id>
+    <published>2023-04-13T14:08:43.000Z</published>
+    <updated>2023-04-26T02:21:58.015Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;a href=&quot;#D-Link-DIR-815栈溢出漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;/a&gt;D-Link-DIR-815栈溢出漏洞复现&lt;/h3&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>kernel初探</title>
     <link href="http://abf1ag.github.io/2023/01/18/kernel-chu-tan/"/>
     <id>http://abf1ag.github.io/2023/01/18/kernel-chu-tan/</id>
@@ -90,7 +105,7 @@
     <link href="http://abf1ag.github.io/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/"/>
     <id>http://abf1ag.github.io/2022/01/19/yi-gou-pwn-xue-xi-ji-lu/</id>
     <published>2022-01-19T02:39:04.000Z</published>
-    <updated>2023-02-25T08:20:57.967Z</updated>
+    <updated>2023-04-23T13:47:31.803Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;异构pwn学习记录&quot;&gt;&lt;a href=&quot;#异构pwn学习记录&quot; class=&quot;headerlink&quot; title=&quot;异构pwn学习记录&quot;&gt;&lt;/a&gt;异构pwn学习记录&lt;/h3&gt;</summary>
@@ -304,21 +319,6 @@
     
     
     <summary type="html">&lt;h3 id=&quot;长城杯final&quot;&gt;&lt;a href=&quot;#长城杯final&quot; class=&quot;headerlink&quot; title=&quot;长城杯final&quot;&gt;&lt;/a&gt;长城杯final&lt;/h3&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>tcache_stashing_unlink_attack学习笔记</title>
-    <link href="http://abf1ag.github.io/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/"/>
-    <id>http://abf1ag.github.io/2021/10/01/tcache-stashing-unlink-attack-xue-xi-bi-ji/</id>
-    <published>2021-10-01T06:46:10.000Z</published>
-    <updated>2023-02-25T08:23:53.315Z</updated>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;tcache-stashing-unlink-attack学习笔记&quot;&gt;&lt;a href=&quot;#tcache-stashing-unlink-attack学习笔记&quot; class=&quot;headerlink&quot; title=&quot;tcache_stashing_unlink_attack学习笔记&quot;&gt;&lt;/a&gt;tcache_stashing_unlink_attack学习笔记&lt;/h3&gt;</summary>
     
     
     
