@@ -568,11 +568,11 @@
       
         <div class="post-detail-header_wordcount">
           <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 1.7k |
+            <i class="fas fa-file-text-o"></i> 字数统计: 1.8k |
           </span>
   
           <span class="min2read">
-            <i class="fas fa-clock"></i> 阅读时长: 6分钟 |
+            <i class="fas fa-clock"></i> 阅读时长: 7分钟 |
           </span>
   
           
@@ -647,6 +647,7 @@
 <p><del>本来准备使用qemu配置真实的环境，但奈何找不到供qemu使用的arm内核镜像，其他人博客里的链接也都失效了，找了一天没找到，放弃，差点就准备自己买个摄像头emmmm</del></p>
 <h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>该漏洞分析较为简单，因strncpy()的第三个参数是我们输入的长度，并且没有对长度进行检查，因此会造成溢出。但仔细一想为啥会这样写，<code>Content-Length:</code>后一般都是数字，而数字一般的长度都很短，本以为后面会有对<code>dest</code>进行处理的函数如，atoi()等，但并没有发现。</p>
 <p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/05/07/d01ca23f9292a.png" alt="image-20230506180344020"></p>
+<p>虽然说漏洞处的逻辑简单，但确保从<code>_start()</code>执行到该漏洞函数处的过程却是十分复杂的，跟剥洋葱差不多，分析起来也十分的头疼，函数套函数套函数套函数……</p>
 <h3 id="漏洞调试"><a href="#漏洞调试" class="headerlink" title="漏洞调试"></a>漏洞调试</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#第一个终端中输入</span><br><span class="line">sudo chroot . ./qemu -g 1234 /usr/sbin/httpd</span><br><span class="line">#第二个终端中输入</span><br><span class="line">gdb-multiarch ./usr/sbin/httpd</span><br></pre></td></tr></table></figure>
 
 <p>调试发现程序会执行到exit()，发现该程序需要我们输入参数，必须要包括<code>-d</code>在内，这样<code>dword_31930</code>才会被置为0，才能不执行exit()。</p>
