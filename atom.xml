@@ -32,17 +32,36 @@
   </entry>
   
   <entry>
+    <title>vivotek摄像头溢出漏洞复现</title>
+    <link href="http://abf1ag.github.io/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/"/>
+    <id>http://abf1ag.github.io/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/</id>
+    <published>2023-05-02T08:29:47.000Z</published>
+    <updated>2023-05-07T08:14:51.136Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;vivotek&quot;&gt;&lt;a href=&quot;#vivotek&quot; class=&quot;headerlink&quot; title=&quot;vivotek&quot;&gt;&lt;/a&gt;vivotek&lt;/h3&gt;</summary>
+    
+    
+    
+    
+    <category term="iot" scheme="http://abf1ag.github.io/tags/iot/"/>
+    
+  </entry>
+  
+  <entry>
     <title>D-Link-DIR-645溢出漏洞复现</title>
     <link href="http://abf1ag.github.io/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/"/>
     <id>http://abf1ag.github.io/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/</id>
     <published>2023-04-28T08:13:39.000Z</published>
-    <updated>2023-04-30T03:21:26.031Z</updated>
+    <updated>2023-05-02T08:30:31.335Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;D-Link-DIR-645溢出漏洞复现&quot;&gt;&lt;a href=&quot;#D-Link-DIR-645溢出漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;D-Link-DIR-645溢出漏洞复现&quot;&gt;&lt;/a&gt;D-Link-DIR-645溢出漏洞复现&lt;/h3&gt;</summary>
     
     
     
+    
+    <category term="iot" scheme="http://abf1ag.github.io/tags/iot/"/>
     
   </entry>
   
@@ -51,13 +70,15 @@
     <link href="http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/"/>
     <id>http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/</id>
     <published>2023-04-13T14:08:43.000Z</published>
-    <updated>2023-04-26T02:21:58.015Z</updated>
+    <updated>2023-05-02T08:30:23.622Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;a href=&quot;#D-Link-DIR-815栈溢出漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;/a&gt;D-Link-DIR-815栈溢出漏洞复现&lt;/h3&gt;</summary>
     
     
     
+    
+    <category term="iot" scheme="http://abf1ag.github.io/tags/iot/"/>
     
   </entry>
   
@@ -304,21 +325,6 @@
     
     
     <summary type="html">&lt;h2 id=&quot;pwnable-tw刷题记录&quot;&gt;&lt;a href=&quot;#pwnable-tw刷题记录&quot; class=&quot;headerlink&quot; title=&quot;pwnable.tw刷题记录&quot;&gt;&lt;/a&gt;pwnable.tw刷题记录&lt;/h2&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>西邮第二届校赛</title>
-    <link href="http://abf1ag.github.io/2021/10/18/xi-you-di-er-jie-xiao-sai/"/>
-    <id>http://abf1ag.github.io/2021/10/18/xi-you-di-er-jie-xiao-sai/</id>
-    <published>2021-10-18T07:59:46.000Z</published>
-    <updated>2023-02-25T08:20:52.289Z</updated>
-    
-    
-    <summary type="html">私聊找我要密码哟~。</summary>
     
     
     
