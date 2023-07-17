@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>pwnwaf | ABf1ag&#39;s blog</title>
+  <title>VxWorks固件解包 | ABf1ag&#39;s blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -545,21 +545,21 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/3.jpg')">
+  background-position: center center;position: relative;background-image:url('/medias/13.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        pwnwaf
+        VxWorks固件解包
       </span>
     </div>
     
     
       
         <span class="post-detail-header_date">
-          <i class="fas fa-calendar"></i> 发表于：2021-12-17 |
+          <i class="fas fa-calendar"></i> 发表于：2023-07-17 |
         </span>
       
 
@@ -568,11 +568,11 @@
       
         <div class="post-detail-header_wordcount">
           <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 798 |
+            <i class="fas fa-file-text-o"></i> 字数统计: 1.6k |
           </span>
   
           <span class="min2read">
-            <i class="fas fa-clock"></i> 阅读时长: 3分钟 |
+            <i class="fas fa-clock"></i> 阅读时长: 8分钟 |
           </span>
   
           
@@ -599,31 +599,37 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h3 id="pwnwaf"><a href="#pwnwaf" class="headerlink" title="pwnwaf"></a>pwnwaf</h3><span id="more"></span>
+        <span id="more"></span>
 
-<p>起因还得从第五空间线下赛说起，那时候darry师傅给我发了个github上的一个<a target="_blank" rel="noopener" href="https://github.com/wjbsyc/homura_pwn_waf">pwnwaf工具</a>，当时一直装不上去，装上去后也没打过几次线下赛，所以也没怎么用过。准备在赣网杯上试试，结果早上一直没调好，也没用成。</p>
-<p>回去后在darry师傅的帮助下，终于成功了。因此记录下该如何使用这个waf。</p>
-<p>首先我们要找到程序的main函数地址，然后修改hpwnwaf.py文件的main_addr。patch成功后托入ida中，因为我们需要进行手动修改。</p>
-<p>在main函数处我们先修改jmp的地址为最初main函数的入口指令，即在沙箱指令之后的某个位置（为了能最大程度的保护栈帧）。比如下面这个地方</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/84e9f4b3b26fd.png" alt="image-20211217215702845"></p>
-<p>然后紧接着改这个函数的jmp地址为沙箱地址（0x402000），最后再将沙箱函数的leave|ret改为jmp到程序的主函数处的地址。（写的比较绕，因为是写给我自己看的😁）。</p>
-<p>发现这个工具可以自定义规则，<a target="_blank" rel="noopener" href="http://homura.cc/blog/archives/145">参考这篇博客</a></p>
-<p>简单来说就是将下面的代码gcc编译运行一下,规则自行添加和修改</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//gcc -g simple_syscall_seccomp.c -o simple_syscall_seccomp -lseccomp</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;seccomp.h&gt;</span><br><span class="line">#include &lt;linux/seccomp.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">int main(void)&#123;</span><br><span class="line">  scmp_filter_ctx ctx;</span><br><span class="line">  ctx = seccomp_init(SCMP_ACT_ALLOW); </span><br><span class="line"></span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(socket), 0);</span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(connect), 0);</span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(bind), 0);</span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(listen), 0);</span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(clone), 0);  </span><br><span class="line">  seccomp_rule_add(ctx, SCMP_ACT_KILL, SCMP_SYS(execve), 0); </span><br><span class="line">  int fd = open(&quot;./bpf.out&quot;,O_WRONLY|O_CREAT);</span><br><span class="line">  seccomp_export_bpf(ctx,fd);</span><br><span class="line">  close(fd);</span><br><span class="line">  seccomp_load(ctx);</span><br><span class="line">  system(&quot;/bin/sh&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h3><p>闲来无聊，便想着玩玩家里的两个闲置的路由器，第一个是烽火的SR1041H，奈何网上无法免费获得该固件，便拆开看看能不能提取，但家里没有设备，也不会焊接，因此放弃了。另一个是TP-link的TL-WDR5620，官网上有固件的[下载]( <a target="_blank" rel="noopener" href="https://service.tp-link.com.cn/detail_download_8672.html">TL-WDR5620珍珠白 V6.0升级软件20190830_1.0.10 - TP-LINK 服务支持</a> )。</p>
+<h3 id="2-固件提取"><a href="#2-固件提取" class="headerlink" title="2.固件提取"></a>2.固件提取</h3><p>使用binwalk跑一下固件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">binwalk TL-WDR5620珍珠白\ V6.0_1.0.10\ Build\ 190830\ Rel.56944n.bin </span><br><span class="line"></span><br><span class="line">DECIMAL       HEXADECIMAL     DESCRIPTION</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">43984         0xABD0          U-Boot version string, &quot;U-Boot 1.1.3 (Aug 30 2019 - 10:09:42)&quot;</span><br><span class="line">62464         0xF400          LZMA compressed data, properties: 0x6E, dictionary size: 8388608 bytes, uncompressed size: 3885424 bytes</span><br><span class="line">1287232       0x13A440        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 95491 bytes</span><br><span class="line">1310631       0x13FFA7        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 94952 bytes</span><br><span class="line">1337998       0x146A8E        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 94669 bytes</span><br><span class="line">1360409       0x14C219        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 94659 bytes</span><br><span class="line">1380297       0x150FC9        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 94148 bytes</span><br><span class="line">1399946       0x155C8A        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 91853 bytes</span><br><span class="line">1420189       0x15AB9D        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 89711 bytes</span><br><span class="line">1442119       0x160147        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 85890 bytes</span><br><span class="line">1461740       0x164DEC        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 42500 bytes</span><br><span class="line">1472706       0x1678C2        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 7170 bytes</span><br><span class="line">1474229       0x167EB5        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 200 bytes</span><br><span class="line">1474456       0x167F98        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 253 bytes</span><br><span class="line">1474721       0x1680A1        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 14751 bytes</span><br><span class="line">1476674       0x168842        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 493 bytes</span><br><span class="line">1477125       0x168A05        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 2823 bytes</span><br><span class="line">1478639       0x168FEF        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 221476 bytes</span><br><span class="line">1550818       0x17A9E2        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 1111 bytes</span><br><span class="line">1551723       0x17AD6B        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 1356 bytes</span><br><span class="line">1552122       0x17AEFA        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 384 bytes</span><br><span class="line">1552357       0x17AFE5        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 1535 bytes</span><br><span class="line">1552729       0x17B159        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 607 bytes</span><br><span class="line">1553032       0x17B288        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 438 bytes</span><br><span class="line">1553275       0x17B37B        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 949 bytes</span><br><span class="line">1553612       0x17B4CC        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 566 bytes</span><br><span class="line">1553908       0x17B5F4        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 2536 bytes</span><br><span class="line">1554359       0x17B7B7        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 731 bytes</span><br><span class="line">1554680       0x17B8F8        LZMA compressed data, properties: 0x5A, dictionary size: 8388608 bytes, uncompressed size: 217 bytes</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
 
-<p>然后用下面这个命令,导出数据</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$hexdump bpf.out -C</span><br><span class="line">00000000  20 00 00 00 04 00 00 00  15 00 00 09 3e 00 00 c0  | ...........&gt;...| //A = arch if (A != ARCH_X86_64)</span><br><span class="line">00000010  20 00 00 00 00 00 00 00  35 00 07 00 00 00 00 40  | .......5......@| //A = sys_number </span><br><span class="line">00000020  15 00 06 00 29 00 00 00  15 00 05 00 2a 00 00 00  |....).......*...|</span><br><span class="line">00000030  15 00 04 00 31 00 00 00  15 00 03 00 32 00 00 00  |....1.......2...|</span><br><span class="line">00000040  15 00 02 00 38 00 00 00  15 00 01 00 3b 00 00 00  |....8.......;...|</span><br><span class="line">00000050  06 00 00 00 00 00 ff 7f  06 00 00 00 00 00 00 00  |................| //return ALLOW return KILL</span><br><span class="line">00000060</span><br></pre></td></tr></table></figure>
-
-<p>然后根据这些数据将其改为汇编指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">   push rbp;</span><br><span class="line">mov rbp,rsp;</span><br><span class="line">mov r15,6;</span><br><span class="line">push r15;</span><br><span class="line">mov r15,7FFF000000000006H;</span><br><span class="line">push r15;	</span><br><span class="line">mov r15,3B00010015H;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 3800020015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 3200030015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 3100040015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 2A00050015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 2900060015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 4000000000070035h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 20h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 0C000003E09000015h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 400000020h;</span><br><span class="line">push r15;</span><br><span class="line">mov r15,rsp;</span><br><span class="line">push r15;</span><br><span class="line">mov r15 , 0ch;//这里表示的是有多少行指令</span><br><span class="line">push r15;</span><br><span class="line">mov r15,rsp;	</span><br><span class="line">push r15;</span><br><span class="line">mov rdi,38;</span><br><span class="line">mov rsi,1;</span><br><span class="line">mov rdx,0;</span><br><span class="line">mov rcx,0;</span><br><span class="line">mov r8,0;</span><br><span class="line">mov rax,157;</span><br><span class="line">syscall;</span><br><span class="line">mov rdi,22;</span><br><span class="line">mov rsi,2;</span><br><span class="line">mov rdx,r15;</span><br><span class="line">mov rax,157;</span><br><span class="line">syscall;</span><br><span class="line">leave;	</span><br><span class="line">ret;</span><br></pre></td></tr></table></figure>
-
-<p>补：对于开了pie的程序操作过程相似，先将hpwnwaf.py的main_addr改成主函数地址，运行./patch。</p>
-<p>接着将主函数地址处后的jmp地址改为程序最后多出的已<code>push esp</code>开头的地址如0x4030c6</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/d947ed8b1ede8.png" alt="image-20220619110559353"></p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/92c9afc5d899c.png" alt="image-20220619110630291"></p>
-<p>接着将0x4030cf处的jmp后地址改为沙箱函数地址0x403000，最后将沙箱函数最后的leave ret改为jmp到主函数被改后的第一条指令地址</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/c4f63d30502b2.png" alt="image-20220619111006341"></p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/7b2084ecbadb0.png" alt="image-20220619111109368"></p>
+<p>可以看到是由u-boot(引导操作系统启动)和一堆LZMA格式压缩的数据所得，我们把重点放在最大的那块LZMA也就是第二块上，它包含了我们需要的主程序，可以看见偏移为0xF400。</p>
+<figure class="highlight plaintext"><figcaption><span>-e```提取整个固件，得到一堆以数字(偏移)命名的文件和压缩包。binwalk跑一下F400</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p>$ binwalk F400                                                           </p>
+<h2 id="DECIMAL-HEXADECIMAL-DESCRIPTION"><a href="#DECIMAL-HEXADECIMAL-DESCRIPTION" class="headerlink" title="DECIMAL       HEXADECIMAL     DESCRIPTION"></a>DECIMAL       HEXADECIMAL     DESCRIPTION</h2><p>1043412       0xFEBD4         MySQL MISAM index file Version 8<br>3295696       0x3249D0        VxWorks operating system version “5.5.1” , compiled: “Aug 30 2019, 15:49:04”<br>3369842       0x336B72        Neighborly text, “NeighborReq)ble; 1:reload with bs enable)”<br>3370320       0x336D50        Neighborly text, “NeighborReq ignore. dbglvl to Default.”<br>3376794       0x33869A        Neighborly text, “neighbor[%d]: %d”<br>3376923       0x33871B        Neighborly text, “neighbor info of %02X:%02X:%02X:%02X:%02X:%02X”<br>3415248       0x341CD0        Neighborly text, “Neighbor Response Frame/common/wss.c:%d assert binfo-&gt;apchanrpt_opclass_num &lt;= IEEE80211_RRM_NUM_CHANRPT_MAXfailed”<br>3529296       0x35DA50        Neighborly text, “neighbor report framel check failed “<br>3529425       0x35DAD1        Neighborly text, “neighbor report frame failed:%02x) not support rrm”<br>3531312       0x35E230        Neighborly text, “Neighbor RSP”<br>3574248       0x3689E8        Unix path: /etc/Wireless/RT2860AP/RT2860AP.dat<br>3580496       0x36A250        Copyright string: “Copyright(C) 2001-2011 by TP-LINK TECHNOLOGIES CO., LTD.”<br>3607395       0x370B63        Neighborly text, “neighbor(%s)fault router list contains a non-linklocal address(%s)”<br>3625056       0x375060        VxWorks WIND kernel version “2.6”<br>3651625       0x37B829        StuffIt Deluxe Segment (data): fDomain<br>3651641       0x37B839        StuffIt Deluxe Segment (data): fPort<br>3668168       0x37F8C8        HTML document header<br>3668233       0x37F909        HTML document footer<br>3691320       0x385338        PEM certificate<br>3691376       0x385370        PEM RSA private key<br>3697077       0x3869B5        StuffIt Deluxe Segment (data): f<br>3698768       0x387050        Base64 standard index table<br>3710203       0x389CFB        Neighborly text, “NeighborReq”<br>3736104       0x390228        AES Inverse S-Box<br>3736360       0x390328        AES Inverse S-Box<br>3738680       0x390C38        AES S-Box<br>3738936       0x390D38        AES S-Box<br>3741040       0x391570        SHA256 hash constants, little endian<br>3741296       0x391670        SHA256 hash constants, little endian<br>3774436       0x3997E4        XML document, version: “1.0”<br>3794196       0x39E514        SHA256 hash constants, little endian<br>3805349       0x3A10A5        StuffIt Deluxe Segment (data): f<br>3805380       0x3A10C4        StuffIt Deluxe Segment (data): fError<br>3820948       0x3A4D94        XML document, version: “1.0”<br>3832816       0x3A7BF0        CRC32 polynomial table, little endian<br>3855272       0x3AD3A8        CRC32 polynomial table, little endian</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">可以看见它是Vxworks操作系统，```binwalk -A F400 | grep head```发现是mipsel架构。</span><br><span class="line"></span><br><span class="line">### 3.确定主程序入口</span><br><span class="line"></span><br><span class="line">使用16进制编辑器打开之前的.bin文件，搜索字符串MyFirmware(从[大佬]( [分类 RTOS 下的文章 - 赤道企鹅的博客 | Eqqie&#x27;s Blog](https://eqqie.cn/index.php/category/RTOS) )那获得的经验),往上找到两个相同的地址就是主程序的入口，因此这里的入口是**0x80001000**。(~~还有其他几种确定主程序入口地址的方法，等遇见了再补充~~)</span><br><span class="line"></span><br><span class="line">![image-20230717202425154](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/81370ffb8a41b.png)</span><br><span class="line"></span><br><span class="line">使用ida打开F400文件，选择mipsel，开始和加载地址填入刚刚找到的程序入口地址</span><br><span class="line"></span><br><span class="line">![image-20230717202802019](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/0eb2b6677ae02.png)</span><br><span class="line"></span><br><span class="line">![image-20230717202829633](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/69b18dcb958a7.png)</span><br><span class="line"></span><br><span class="line">### 4.恢复符号表</span><br><span class="line"></span><br><span class="line">Bzero是VxWorks中的一个函数，系统在启动过程中会使用bzero函数对bss段的数据进行清0，因此一定会使用该函数，利用该函数名搜索提取的文件中是否存在该函数名字符串。</span><br><span class="line"></span><br><span class="line">![image-20230717203718843](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/88b8476b00b0f.png)</span><br><span class="line"></span><br><span class="line">使用16进制编辑器查看该文件</span><br><span class="line"></span><br><span class="line">![image-20230717204208404](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/a6fae390c0091.png)</span><br><span class="line"></span><br><span class="line">从第8个字节开始是符号表，也就是说8+0x21ad*8=0x10d70为函数对应的函数名位置。</span><br><span class="line"></span><br><span class="line">![image-20230717204511468](https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/9b87c86788e49.png)</span><br><span class="line"></span><br><span class="line">每个函数名以``\x00``结尾，利用如下脚本恢复符号表</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>import idautils<br>import idc<br>import ida_ua<br>import ida_funcs<br>import idaapi</p>
+<p>symfile_path = ‘./168FEF’    #symbols_file path<br>symbols_table_start = 8      #symbols_table_satrt<br>strings_table_start = 0x10d70#strings_table_start</p>
+<p>with open(symfile_path, ‘rb’) as f:<br>    symfile_contents = f.read()</p>
+<p>symbols_table = symfile_contents[symbols_table_start:strings_table_start]<br>strings_table = symfile_contents[strings_table_start:]</p>
+<p>def get_string_by_offset(offset):<br>    index = 0<br>    while True:<br>        if strings_table[offset+index] != 0:<br>            index += 1<br>        else:<br>            break<br>    return strings_table[offset:offset+index]</p>
+<p>def get_symbols_metadata():<br>    symbols = []<br>    for offset in range(0, len(symbols_table),8):<br>        symbol_item = symbols_table[offset:offset+8]<br>        flag = symbol_item[0]<br>        string_offset = int(symbol_item[1:4].hex(), 16)<br>        string_name = str(get_string_by_offset(string_offset))[2:-1]<br>        target_address = int(symbol_item[-4:].hex(), 16)<br>        symbols.append((flag, string_name, target_address))<br>    return symbols</p>
+<p>def add_symbols(symbols_meta_data):<br>    for flag, string_name, target_address in symbols_meta_data:<br>        idc.set_name(target_address, string_name)<br>        if flag == 84:<br>            ida_ua.create_insn(target_address)<br>            ida_funcs.add_func(target_address)</p>
+<p>if <strong>name</strong> == “<strong>main</strong>“:<br>    symbols_metadata = get_symbols_metadata()<br>    add_symbols(symbols_metadata)</p>
+<p>```</p>
+<p>不能完全恢复。</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/64cb720e8ba88.png" alt="image-20230717204747970"></p>
+<p>在修改恢复脚本时，参考了如下api</p>
+<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/07/17/e498fd58ec2b9.png" alt="image-20230717205007893"></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p> <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1671088-1-1.html">TP-LINK WDR 7660 固件浅析 - 『软件调试区』 - 吾爱破解 - LCG - LSG |安卓破解|病毒分析|www.52pojie.cn</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/320491.html">Vxworks固件分析 - FreeBuf网络安全行业门户</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Mira_Hu/article/details/104563921">(18条消息) 基于VxWorks的嵌入式设备固件分析——PLC NOE-771_vxworks 固件分析_Mira1127的博客-CSDN博客</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/hac425/p/9706815.html">vxworks固件分析 - hac425 - 博客园 (cnblogs.com)</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://eqqie.cn/index.php/category/RTOS">分类 RTOS 下的文章 - 赤道企鹅的博客 | Eqqie’s Blog</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/yangmzh3/p/11214451.html">VxWorks固件分析方法总结 - 燕麦粥 - 博客园 (cnblogs.com)</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Mira_Hu/article/details/104563921">(18条消息) 基于VxWorks的嵌入式设备固件分析——PLC NOE-771_vxworks 固件分析_Mira1127的博客-CSDN博客</a> </p>
 
       </div>
       <div class="post-tags-categories">
@@ -637,7 +643,7 @@
     </li>
     <li class="post-copyright-link">
     <strong>文章链接:  </strong>
-    <a href="/2021/12/17/pwnwaf/" target="_blank" title="pwnwaf">http://abf1ag.github.io/2021/12/17/pwnwaf/</a>
+    <a href="/2023/07/17/vxworks-gu-jian-jie-bao/" target="_blank" title="VxWorks固件解包">http://abf1ag.github.io/2023/07/17/vxworks-gu-jian-jie-bao/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明:   </strong>
@@ -659,20 +665,17 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload" src="/medias/9.jpg" alt="">
+      <img class="lazyload" src="/medias/11.jpg" alt="">
     </div>
-    <a href="/2021/12/30/nian-zhong-zong-jie/" class="post-nav-link">
+    <a href="/2099/06/11/ri-zhi/" class="post-nav-link">
       <div class="title">
         <i class="fas fa-angle-left"></i> 上一篇:
-        <div class="title-text">年终总结</div>
+        <div class="title-text">日志</div>
       </div>
       
       <!-- <div class="content">
-        2021-12-30(年终小结)
-
-2021年就剩一天了，回想整个2021，应该算是充实的一年。
-一月
-吃了两顿烤肉，学
+        
+  095b7e92f0aa22f6bd640c7b7674aef9f3ae98839ba9085cfd09349a9
       </div> -->
     </a>
   </div>
@@ -683,19 +686,19 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload" src="/medias/6.jpg" src="" alt="">
+      <img class="lazyload" src="/medias/9.jpg" src="" alt="">
     </div>
-    <a href="/2021/12/06/house-of-banana/" class="post-nav-link">
+    <a href="/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/" class="post-nav-link">
       <div class="title">
         下一篇: <i class="fas fa-angle-right"></i>
-        <div class="title-text">house-of-banana</div>
+        <div class="title-text">vivotek摄像头溢出漏洞复现</div>
       </div>
       <!-- <div class="content">
-        house-of-banana学习笔记
+        vivotek
 
-早就听闻banana的强大，今天来学习一波。
-使用条件（满足任一条件即可）：
-
+这次换个口味，试试arm的摄像头。
+固件下载及提取固件下载
+123unzip CC8160-VVTK-
       </div> -->
     </a>
   </div>
@@ -836,7 +839,7 @@
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnwaf"><span class="toc-text">pwnwaf</span></a></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-text">1.前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96"><span class="toc-text">2.固件提取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DECIMAL-HEXADECIMAL-DESCRIPTION"><span class="toc-text">DECIMAL       HEXADECIMAL     DESCRIPTION</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>

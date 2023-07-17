@@ -32,6 +32,29 @@
   </entry>
   
   <entry>
+    <title>VxWorks固件解包</title>
+    <link href="http://abf1ag.github.io/2023/07/17/vxworks-gu-jian-jie-bao/"/>
+    <id>http://abf1ag.github.io/2023/07/17/vxworks-gu-jian-jie-bao/</id>
+    <published>2023-07-17T10:28:36.000Z</published>
+    <updated>2023-07-17T12:58:16.583Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
+
+&lt;h3 id=&quot;1-前言&quot;&gt;&lt;a href=&quot;#1-前言&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>vivotek摄像头溢出漏洞复现</title>
     <link href="http://abf1ag.github.io/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/"/>
     <id>http://abf1ag.github.io/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/</id>
@@ -310,21 +333,6 @@
     
     
     <summary type="html">&lt;h3 id=&quot;JIT类型初探&quot;&gt;&lt;a href=&quot;#JIT类型初探&quot; class=&quot;headerlink&quot; title=&quot;JIT类型初探&quot;&gt;&lt;/a&gt;JIT类型初探&lt;/h3&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>pwnable.tw刷题记录</title>
-    <link href="http://abf1ag.github.io/2021/10/21/pwnable-tw-shua-ti-ji-lu/"/>
-    <id>http://abf1ag.github.io/2021/10/21/pwnable-tw-shua-ti-ji-lu/</id>
-    <published>2021-10-21T13:56:20.000Z</published>
-    <updated>2023-05-08T13:04:36.000Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;pwnable-tw刷题记录&quot;&gt;&lt;a href=&quot;#pwnable-tw刷题记录&quot; class=&quot;headerlink&quot; title=&quot;pwnable.tw刷题记录&quot;&gt;&lt;/a&gt;pwnable.tw刷题记录&lt;/h2&gt;</summary>
     
     
     
