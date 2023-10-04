@@ -32,6 +32,21 @@
   </entry>
   
   <entry>
+    <title>cgi调试</title>
+    <link href="http://abf1ag.github.io/2023/10/04/cgi-diao-shi/"/>
+    <id>http://abf1ag.github.io/2023/10/04/cgi-diao-shi/</id>
+    <published>2023-10-04T04:23:24.000Z</published>
+    <updated>2023-10-04T05:07:28.738Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;cgi调试&quot;&gt;&lt;a href=&quot;#cgi调试&quot; class=&quot;headerlink&quot; title=&quot;cgi调试&quot;&gt;&lt;/a&gt;cgi调试&lt;/h3&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>VxWorks固件解包</title>
     <link href="http://abf1ag.github.io/2023/07/17/vxworks-gu-jian-jie-bao/"/>
     <id>http://abf1ag.github.io/2023/07/17/vxworks-gu-jian-jie-bao/</id>
@@ -93,7 +108,7 @@
     <link href="http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/"/>
     <id>http://abf1ag.github.io/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/</id>
     <published>2023-04-13T14:08:43.000Z</published>
-    <updated>2023-05-02T08:30:24.000Z</updated>
+    <updated>2023-09-17T08:21:12.684Z</updated>
     
     
     <summary type="html">&lt;h3 id=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;a href=&quot;#D-Link-DIR-815栈溢出漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;D-Link-DIR-815栈溢出漏洞复现&quot;&gt;&lt;/a&gt;D-Link-DIR-815栈溢出漏洞复现&lt;/h3&gt;</summary>
@@ -318,21 +333,6 @@
     
     
     <summary type="html">&lt;h3 id=&quot;ida动态调试-pwntools输入&quot;&gt;&lt;a href=&quot;#ida动态调试-pwntools输入&quot; class=&quot;headerlink&quot; title=&quot;ida动态调试+pwntools输入&quot;&gt;&lt;/a&gt;ida动态调试+pwntools输入&lt;/h3&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>JIT类型初探</title>
-    <link href="http://abf1ag.github.io/2021/11/01/dong-hua-bei/"/>
-    <id>http://abf1ag.github.io/2021/11/01/dong-hua-bei/</id>
-    <published>2021-11-01T02:04:18.000Z</published>
-    <updated>2023-03-14T13:27:32.000Z</updated>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;JIT类型初探&quot;&gt;&lt;a href=&quot;#JIT类型初探&quot; class=&quot;headerlink&quot; title=&quot;JIT类型初探&quot;&gt;&lt;/a&gt;JIT类型初探&lt;/h3&gt;</summary>
     
     
     

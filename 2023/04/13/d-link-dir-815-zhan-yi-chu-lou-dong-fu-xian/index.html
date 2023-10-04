@@ -602,7 +602,7 @@
         <h3 id="D-Link-DIR-815栈溢出漏洞复现"><a href="#D-Link-DIR-815栈溢出漏洞复现" class="headerlink" title="D-Link-DIR-815栈溢出漏洞复现"></a>D-Link-DIR-815栈溢出漏洞复现</h3><span id="more"></span>
 
 <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>binwalk安装</p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/devttys0/binwalk.git </span><br><span class="line">cd binwalk</span><br><span class="line">sudo python3 setup.py install</span><br><span class="line"># Install standard extraction utilities（必选）  </span><br><span class="line">sudo apt-get install mtd-utils gzip bzip2 tar arj lhasa p7zip p7zip-full cabextract cramfsprogs cramfsswap squashfs-tools</span><br><span class="line"># Install sasquatch to extract non-standard SquashFS images（必选）  </span><br><span class="line">sudo apt-get install zlib1g-dev liblzma-dev liblzo2-dev  </span><br><span class="line">sudo git clone https://github.com/devttys0/sasquatch  </span><br><span class="line">(cd sasquatch &amp;&amp; sudo CFLAGS=-fcommon ./build.sh)</span><br><span class="line"># Install jefferson to extract JFFS2 file systems（可选）  </span><br><span class="line">sudo pip install cstruct  </span><br><span class="line">git clone https://github.com/sviehb/jefferson  </span><br><span class="line">(cd jefferson &amp;&amp; sudo python setup.py install)</span><br><span class="line"></span><br><span class="line"># Install ubi_reader to extract UBIFS file systems（可选）  </span><br><span class="line">sudo apt-get install liblzo2-dev python-lzo  </span><br><span class="line">git clone https://github.com/jrspruitt/ubi_reader  </span><br><span class="line">(cd ubi_reader &amp;&amp; sudo python setup.py install)</span><br><span class="line"></span><br><span class="line"># Install yaffshiv to extract YAFFS file systems（可选）  </span><br><span class="line">git clone https://github.com/devttys0/yaffshiv  </span><br><span class="line">(cd yaffshiv &amp;&amp; sudo python setup.py install)</span><br><span class="line"></span><br><span class="line"># Install unstuff (closed source) to extract StuffIt archive files（可选） </span><br><span class="line"> </span><br><span class="line">wget -O - http://my.smithmicro.com/downloads/files/stuffit520.611linux-i386.tar.gz | tar -zxv  </span><br><span class="line">sudo cp bin/unstuff /usr/local/bin/</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/devttys0/binwalk.git </span><br><span class="line">cd binwalk</span><br><span class="line">sudo python3 setup.py install</span><br><span class="line"># Install standard extraction utilities（必选）  </span><br><span class="line">sudo apt-get install mtd-utils gzip bzip2 tar arj lhasa p7zip p7zip-full cabextract cramfsprogs cramfsswap squashfs-tools</span><br><span class="line"># Install sasquatch to extract non-standard SquashFS images（必选）  </span><br><span class="line">sudo apt-get install zlib1g-dev liblzma-dev liblzo2-dev  </span><br><span class="line">sudo git clone https://github.com/devttys0/sasquatch  </span><br><span class="line">(cd sasquatch &amp;&amp; sudo CFLAGS=-fcommon ./build.sh)</span><br><span class="line"># Install jefferson to extract JFFS2 file systems（可选）  </span><br><span class="line">sudo pip install cstruct  </span><br><span class="line">git clone https://github.com/sviehb/jefferson  </span><br><span class="line">(cd jefferson &amp;&amp; sudo python setup.py install)</span><br><span class="line"></span><br><span class="line"># Install ubi_reader to extract UBIFS file systems（可选）  </span><br><span class="line">#sudo apt-get install liblzo2-dev python-lzo  </span><br><span class="line">#git clone https://github.com/jrspruitt/ubi_reader  </span><br><span class="line">#(cd ubi_reader &amp;&amp; sudo python setup.py install)</span><br><span class="line">//安装依赖</span><br><span class="line">$ sudo apt-get install liblzo2-dev</span><br><span class="line">$ sudo pip install python-lzo</span><br><span class="line">//安装ubi_reader</span><br><span class="line">$ sudo pip install ubi_reader</span><br><span class="line"></span><br><span class="line"># Install yaffshiv to extract YAFFS file systems（可选）  </span><br><span class="line">git clone https://github.com/devttys0/yaffshiv  </span><br><span class="line">(cd yaffshiv &amp;&amp; sudo python setup.py install)</span><br><span class="line"></span><br><span class="line"># Install unstuff (closed source) to extract StuffIt archive files（可选） </span><br><span class="line"> </span><br><span class="line">wget -O - http://my.smithmicro.com/downloads/files/stuffit520.611linux-i386.tar.gz | tar -zxv  </span><br><span class="line">sudo cp bin/unstuff /usr/local/bin/</span><br></pre></td></tr></table></figure>
 
 <p>在安装cramfsprogs时发生错误</p>
 <p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/04/26/196ac491d4f5a.png" alt="image-20230413220646210"></p>
@@ -954,6 +954,27 @@
             
 
             <div class="post-img-box">
+              <a href="/2023/10/04/cgi-diao-shi/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/8.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">10-04</span>
+                
+              </div>
+              <a class="post-title" href="/2023/10/04/cgi-diao-shi/">cgi调试</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
               <a href="/2023/07/17/vxworks-gu-jian-jie-bao/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
                 <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/13.jpg" alt="">
@@ -1008,27 +1029,6 @@
                 
               </div>
               <a class="post-title" href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/">D-Link-DIR-645溢出漏洞复现</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/5.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">04-13</span>
-                
-              </div>
-              <a class="post-title" href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/">D-Link-DIR-815栈溢出漏洞复现</a>
             </div>
           </div>
         
