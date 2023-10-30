@@ -568,7 +568,7 @@
       
         <div class="post-detail-header_wordcount">
           <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 2.2k |
+            <i class="fas fa-file-text-o"></i> 字数统计: 2.3k |
           </span>
   
           <span class="min2read">
@@ -897,43 +897,30 @@
 <p><del>不需要保存的寄存器：X0<del>X7,X9</del>X15</del></p>
 <p><del>只用低 32bit的w0-w30</del> </p>
 <h3 id="Arm64常用指令集"><a href="#Arm64常用指令集" class="headerlink" title="Arm64常用指令集"></a>Arm64常用指令集</h3><ul>
-<li><p>MOV x1，x0; 将寄存器x0的值传送到寄存器x1</p>
-</li>
-<li><p>ADD x0，x1，x2; 寄存器x1和x2的值相加后传送到x0</p>
-</li>
-<li><p>SUB x0，x1，x2; 寄存器x1和x2的值相减后传送到x0</p>
-</li>
-<li><p>AND x0，x0，#0xF; x0的值与0xF相位与后的值传送到x0</p>
-</li>
-<li><p>ORR x0，x0，#9; x0的值与9相位或后的值传送到x0</p>
-</li>
-<li><p>EOR x0，x0，#0xF; x0的值与0xF相异或后的值传送到x0</p>
-</li>
-<li><p>LDR x5，[x6，#0x8]; x6寄存器加0x8地址的内容传送到x5</p>
-</li>
-<li><p>STR x0, [SP, #0x8]; x0寄存器的数据传送到SP+0x8地址值指向的存储空间</p>
-</li>
-<li><p>STP x29, x30, [sp, #0x10]; 入栈指令</p>
-</li>
-<li><p>LDP x29, x30, [sp, #0x10]; 出栈指令</p>
-</li>
-<li><p>CBZ x19, 0x10; 比较，如果结果为零（Zero）就转移（只能跳到后面的指令）</p>
-</li>
-<li><p>CBNZ x19, 0x10; 比较，如果结果非零（Non Zero）就转移（只能跳到后面的指令）</p>
-</li>
-<li><p>B/BL ; 绝对跳转#imm，返回地址保存到LR(x30)</p>
-</li>
-<li><p>b ffff000008283b80</p>
-</li>
-<li><p>bl ffff000008dc566c</p>
-</li>
+<li>MOV x1，x0; 将寄存器x0的值传送到寄存器x1</li>
+<li>ADD x0，x1，x2; 寄存器x1和x2的值相加后传送到x0</li>
+<li>SUB x0，x1，x2; 寄存器x1和x2的值相减后传送到x0</li>
+<li>AND x0，x0，#0xF; x0的值与0xF相位与后的值传送到x0</li>
+<li>ORR x0，x0，#9; x0的值与9相位或后的值传送到x0</li>
+<li>EOR x0，x0，#0xF; x0的值与0xF相异或后的值传送到x0</li>
+<li>LDR x5，[x6，#0x8]; x6寄存器加0x8地址的内容传送到x5</li>
+<li>STR x0, [SP, #0x8]; x0寄存器的数据传送到SP+0x8地址值指向的存储空间</li>
+<li>STR x0, [x1], #8  将x0中的字数据写入以x1为地址的存储器中，并将新地址x1＋8写入x1 </li>
+<li>STP x29, x30, [sp, #0x10]; 入栈指令</li>
+<li>LDP x29, x30, [sp, #0x10]; 出栈指令，将sp-0x10 前8bytes给x29，后8bytes给x30</li>
+<li>CBZ x19, 0x10; 比较，如果结果为零（Zero）就转移（只能跳到后面的指令）</li>
+<li>CBNZ x19, 0x10; 比较，如果x19非零（Non Zero）就转移PC+0x10（只能跳到后面的指令）</li>
+<li>B/BL ; 绝对跳转#imm，返回地址保存到LR(x30)</li>
+<li> B.NE <label>  指令的含义是：如果上一个指令的结果不等于零（即条件<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A0%87%E5%BF%97%E4%BD%8D&spm=1001.2101.3001.7020">标志位</a>Z为0），那么跳转到指定的地址 </label></li>
+<li>b ffff000008283b80</li>
+<li>bl ffff000008dc566c</li>
 </ul>
 <p><del>MOV 指令只能用于寄存器之间传值，寄存器和内存之间传值通过 LDR 和 STR.</del></p>
 <p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/1ef1d87d96c6f.png" alt="image-20220119104702625"></p>
 <p>example:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">000000000003a150 &lt;example_test&gt;:</span><br><span class="line"> 3a150: a9be7bfd  stp x29, x30, [sp,#-32]! //把x29 x30 的值存到sp-32的地址后，sp=sp-32</span><br><span class="line"> 3a154: 910003fd  mov x29, sp              //把 x29的值放在sp中</span><br><span class="line"> 3a158: a90153f3  stp x19, x20, [sp,#16]   //把x19 x20 的值存到sp+16的地址中后sp=sp+16</span><br><span class="line"> 3a15c: 2a0003f3  mov w19, w0              //把w19 的值存到w0 中</span><br><span class="line"> 3a160: aa1e03e0  mov x0, x30              //把x0 的值放在x30</span><br><span class="line"> 3a164: aa0103f4  mov x20, x1              //把x20的值放在x1</span><br><span class="line"> 3a168: 94000000  bl 0 &lt;_mcount&gt;           //跳转到地址0，这里还不太清楚，我理解是需要加载ko后，跳转到某些符号对应的地址上</span><br><span class="line"> 3a16c: 6b1f027f  cmp w19, wzr             //比较w19 和 0</span><br><span class="line"> 3a170: 540000ed  b.le 3a18c &lt;example_test+0x3c&gt; //如果小于 就跳转到&lt;example_test+0x3c&gt;这个地址</span><br><span class="line"> 3a174: 52800020  mov w0, #0x1             // 写w0 为1</span><br><span class="line"> 3a178: b9000280  str w0, [x20]            //w0的值写到x20内</span><br><span class="line"> 3a17c: 52800000  mov w0, #0x0             // w0 清零</span><br><span class="line"> 3a180: a94153f3  ldp x19, x20, [sp,#16]   // sp+16 地址的值分别放回x19 x20</span><br><span class="line"> 3a184: a8c27bfd  ldp x29, x30, [sp],#32   //sp地址取的值分别放回x29 x30后sp=sp+32</span><br><span class="line"> 3a188: d65f03c0  ret                      //返回</span><br><span class="line"> 3a18c: 52800200  mov w0, #0x10            //w0 的值写成0x10</span><br><span class="line"> 3a190: b9000280  str w0, [x20]            //w0 的值存到 x20</span><br><span class="line"> 3a194: 52800000  mov w0, #0x0             // w0 清零</span><br><span class="line"> 3a198: a94153f3  ldp x19, x20, [sp,#16]   // sp+16 地址的值分别放回x19 x20</span><br><span class="line"> 3a19c: a8c27bfd  ldp x29, x30, [sp],#32   //sp地址取的值分别放回x29 x30后sp=sp+32</span><br><span class="line"> 3a1a0: d65f03c0  ret                      //返回</span><br><span class="line"> 3a1a4: d503201f  nop                      //空操作</span><br></pre></td></tr></table></figure>
 
-<h3 id="Aarch64函数调用过程"><a href="#Aarch64函数调用过程" class="headerlink" title="Aarch64函数调用过程"></a>Aarch64函数调用过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#进入函数</span><br><span class="line">   0x4009a8    stp    x29, x30, [sp, #-0x20]!#将x29、x30的值存入sp-0x20地址中</span><br><span class="line">   0x4009ac    mov    x29, sp</span><br><span class="line">#返回函数</span><br><span class="line">   0x400a04    ldp    x29, x30, [sp], #0x20 #将sp的内容放入x29、x30后，sp=sp-0x20</span><br><span class="line">   0x400a08    ret  </span><br></pre></td></tr></table></figure>
+<h3 id="Aarch64函数调用过程"><a href="#Aarch64函数调用过程" class="headerlink" title="Aarch64函数调用过程"></a>Aarch64函数调用过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#进入函数</span><br><span class="line">   0x4009a8    stp    x29, x30, [sp, #-0x20]!#将x29、x30的值存入sp-0x20地址中，同时sp=sp-0x20</span><br><span class="line">   0x4009ac    mov    x29, sp</span><br><span class="line">#返回函数</span><br><span class="line">   0x400a04    ldp    x29, x30, [sp], #0x20 #将sp的内容放入x29、x30后，sp=sp-0x20</span><br><span class="line">   0x400a08    ret  </span><br></pre></td></tr></table></figure>
 
 <h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p><del>异构pwn的栈题与x86架构的题差别挺大，主要是理解其函数调用的过程以及寄存器的作用。例题都是两个月前做的，现在也忘的差不多了，准备这里是放2022的hws的题，结果他没有出异构题，等到下次遇见好的题再放吧。</del></p>
 
