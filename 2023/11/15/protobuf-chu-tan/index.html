@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>ABf1ag&#39;s blog</title>
+  <title>protobuf初探 | ABf1ag&#39;s blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -532,1236 +532,228 @@
 </header>
         <!-- 内容区域 -->
         
-  <!-- 首页轮播 -->
+ <!-- prismjs 代码高亮 -->
+ 
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('/medias/4.jpg')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
-
-  <link href="/js/vue-typed-js/index.css" rel="stylesheet">
-
-
-
-
-
-
-<div class="swiper-length" style="display: none;">0</div>
-<div id="appSwiper"
-  class="swiper-no-swiping"
-  @mouseenter="stopAutoPlay()" 
-  @mouseleave="startAutoPlay()"
->
-  <swiper v-cloak ref="mySwiper" :options="swiperOptions" @slideChangeTransitionEnd="slideChangeTransitionEnd">
-    
-      <swiper-slide>
-        <div class="item swiper-lazy" data-background="https://pic2.zhimg.com/80/v2-b72c5a1840b763674a5a1744cb49f08b_1440w.jpg" style="background-size: 300000px; 
-          background-position: left center;" style="position: relative;">
-          <div class="swiper-bgmask" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"></div>
-            <div class="flag">
-              
-              <div class="img-mask swiper-lazy swiper-default-bgImg" data-background="https://pic2.zhimg.com/80/v2-b72c5a1840b763674a5a1744cb49f08b_1440w.jpg" style="height: 100%; background-size: cover; 
-                background-position: center center;">
-                <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>   
-              </div>
-              <div class="flag-text">
-                <div class="flag-text-content">
-                  <div class="title ani animated" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.2s" swiper-animate-delay="0.1s">The blog of ABf1ag</div>
-                  
-                    <div class="ani animated default-excerpt" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.2s" swiper-animate-delay="0.1s">
-                      <vue-typed-js :strings="defaultDesc" :loop="defaultDescTypedLoop" :type-speed="100" :back-speed="50">
-                        <h1 class="typing"></h1>
-                      </vue-typed-js>
-                    </div>
-                    
-                </div>
-                <div style="display: flex;" class="flag-text-btns">
-                  
-                    <div class="ani animated" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.2s" swiper-animate-delay="0.1s"><a target="_blank" rel="noopener" href="https://yuang01.gitee.io/2021/02/08/hexo-theme-bamboo-new/" class="read-more swiper-btn-color" style="display: inline-block; z-index:1;">阅读文档</a></div>
-                  
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-      </swiper-slide>
-    
-  </swiper>
-  
-    <div id="scroll-down" @click="toPostContent()">
-      <a href="javascript:;">
-        <i class="fas fa-angle-down scroll-down-effects"></i>
-      </a>
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
+      <span class="title">
+        protobuf初探
+      </span>
     </div>
-  
-  <canvas id="header_canvas"style="position:absolute;bottom:0;width:100%;pointer-events:none;"></canvas>
-  
-    <svg class="hans-container" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none"><defs><path id="hans-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path></defs><g class="hans-parallax"><use xlink:href="#hans-wave" x="50" y="0" fill="rgba(224,233,239,.5)"></use><use xlink:href="#hans-wave" x="50" y="3" fill="rgba(224,233,239,.5)"></use><use xlink:href="#hans-wave" x="50" y="6" fill="rgba(224,233,239,.5)"></use></g></svg>
     
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> 发表于：2023-11-15 |
+        </span>
+      
+
+      
+
+      
+        <div class="post-detail-header_wordcount">
+          <span class="totalcount">
+            <i class="fas fa-file-text-o"></i> 字数统计: 787 |
+          </span>
+  
+          <span class="min2read">
+            <i class="fas fa-clock"></i> 阅读时长: 4分钟 |
+          </span>
+  
+          
+            <span class="reading">
+              <i class="fas fa-eye"></i> 阅读量：<span id="busuanzi_value_page_pv"></span>
+            </span>
+          
+        </div>
+      
+    
+  </div>
+  
+  
+    <script src="/js/bubble/bubble.js"></script>
+  
 </div>
 
 
-<style>.hans-parallax>use{animation:hans-wave-move 12s linear infinite}.hans-parallax>use:nth-child(1){animation-delay:-2s}.hans-parallax>use:nth-child(2){animation-delay:-2s;animation-duration:5s}.hans-parallax>use:nth-child(3){animation-delay:-4s;animation-duration:3s}@keyframes hans-wave-move{0%{transform:translate(-90px,0)}100%{transform:translate(85px,0)}}</style>
-<style>
-  .hans-container {
-    position: absolute!important;
-    bottom: 0;
-    width: 100%;
-    height: 120px;
-    z-index: 100;
-    pointer-events:none;
-  }
-</style>
 
 
-<script>
-  var autoplay = JSON.parse('true');
-  var delay = '5000';
-  var loop = JSON.parse('true') ? false : JSON.parse('true');
-  var effect = 'slide';
-  var swiperLength = parseInt(document.querySelector(".swiper-length").innerText);
-  var defaultDesc = '身体和灵魂总有一个要在路上，要么旅游，要么读书';
-  defaultDesc = defaultDesc.split(',');
-  var defaultDescTypedLoop = JSON.parse('true');
-  var vm = new Vue({
-    el: '#appSwiper',
-    data: {
-      defaultDesc: defaultDesc,
-      defaultDescTypedLoop,
-      swiperOptions: {
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true // 允许点击小圆点跳转
-        },
-        loop: loop ? true : false,
-        effect, // fade
-        autoplay: (autoplay && swiperLength > 1) ? {
-  　　　　delay,
-  　　　　disableOnInteraction: false // 手动切换之后继续自动轮播
-    　　} : false,
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        lazy: {
-          loadPrevNext: true,
-        },
-        on:{
-          init: function() {
-            swiperAnimateCache(this); //隐藏动画元素 
-            swiperAnimate(this); //初始化完成开始动画
-          }, 
-          slideChangeTransitionEnd: function(){ 
-            swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
-          } 
-        }
-        // Some Swiper option/callback...
-      }
-    },
-    computed: {
-      swiper() {
-        return this.$refs.mySwiper.$swiper
-      }
-    },
-    mounted() {
-      // console.log('Current Swiper instance object', this.swiper)
-      // this.swiper.slideTo(0, 1000, false)
-    },
-    methods: {
-      stopAutoPlay() {
-        (autoplay && swiperLength > 1) && this.swiper.autoplay.stop();
-      },
-      startAutoPlay() {
-        (autoplay && swiperLength > 1) && this.swiper.autoplay.start();
-      },
-      slideChangeTransitionEnd() {
-        console.log('1');
-      },
-      toPostContent() {
-        const fullHeight = $(window).height() - 60;
-        $('html,body').animate({scrollTop: fullHeight},500);
-      }
-    },
-    created() {}
-  })
+
+<div class="post-detail-content post-row" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <span id="more"></span>
+
+<h3 id="protobuf安装"><a href="#protobuf安装" class="headerlink" title="protobuf安装"></a>protobuf安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install protobuf</span><br></pre></td></tr></table></figure>
+
+<h3 id="protobuf-c安装"><a href="#protobuf-c安装" class="headerlink" title="protobuf-c安装"></a>protobuf-c安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/protobuf-c/protobuf-c.git</span><br><span class="line">sudo apt install autoconf, automake, libtool,libprotobuf-dev,libprotoc-dev,protobuf-compiler</span><br><span class="line">./autogen.sh </span><br><span class="line">./configure --prefix=/usr/local/protobuf-c --libdir=/usr/lib </span><br><span class="line">make -j8 &amp;&amp; make install</span><br><span class="line">sudo cp -r /usr/local/protobuf-c/include/protobuf-c /usr/include</span><br><span class="line">sudo ln -s /usr/local/protobuf-c/bin/protoc-gen-c /usr/local/bin/protoc-c</span><br></pre></td></tr></table></figure>
+
+<h3 id="protobuf关键结构逆向"><a href="#protobuf关键结构逆向" class="headerlink" title="protobuf关键结构逆向"></a>protobuf关键结构逆向</h3><p>首先编写一个devicemsg.proto</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">syntax = &quot;proto2&quot;;</span><br><span class="line"></span><br><span class="line">message devicemsg&#123;</span><br><span class="line">    int64 choice = 1;</span><br><span class="line">    sint64 money = 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行命令，生成devicemsg.pb-c.h/c</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc-c --c_out=. devicemsg.proto</span><br></pre></td></tr></table></figure>
+
+<p>发现.c文件中存在下列函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Devicemsg *</span><br><span class="line">devicemsg__unpack(ProtobufCAllocator *allocator,</span><br><span class="line">                  size_t len,</span><br><span class="line">                  const uint8_t *data)</span><br><span class="line">&#123;</span><br><span class="line">  return (Devicemsg *)</span><br><span class="line">      protobuf_c_message_unpack(&amp;devicemsg__descriptor,</span><br><span class="line">                                allocator, len, data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>&amp;devicemsg__descriptor</code>就是我们需要着重分析的结构体</p>
+<p>查看结构体定义</p>
+<ul>
+<li>magic，一般为0x28AAEEF9</li>
+<li>n_fields， 关系到原始的message结构内有几条记录 </li>
+<li>fields， 这个指向message内所有记录类型组成的一个数组，可以借此逆向分析message结构 </li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">struct ProtobufCMessageDescriptor &#123;</span><br><span class="line">	/** Magic value checked to ensure that the API is used correctly. */</span><br><span class="line">	uint32_t			magic;</span><br><span class="line"></span><br><span class="line">	/** The qualified name (e.g., &quot;namespace.Type&quot;). */</span><br><span class="line">	const char			*name;</span><br><span class="line">	/** The unqualified name as given in the .proto file (e.g., &quot;Type&quot;). */</span><br><span class="line">	const char			*short_name;</span><br><span class="line">	/** Identifier used in generated C code. */</span><br><span class="line">	const char			*c_name;</span><br><span class="line">	/** The dot-separated namespace. */</span><br><span class="line">	const char			*package_name;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * Size in bytes of the C structure representing an instance of this</span><br><span class="line">	 * type of message.</span><br><span class="line">	 */</span><br><span class="line">	size_t				sizeof_message;</span><br><span class="line"></span><br><span class="line">	/** Number of elements in `fields`. */</span><br><span class="line">	unsigned			n_fields;</span><br><span class="line">	/** Field descriptors, sorted by tag number. */</span><br><span class="line">	const ProtobufCFieldDescriptor	*fields;</span><br><span class="line">	/** Used for looking up fields by name. */</span><br><span class="line">	const unsigned			*fields_sorted_by_name;</span><br><span class="line"></span><br><span class="line">	/** Number of elements in `field_ranges`. */</span><br><span class="line">	unsigned			n_field_ranges;</span><br><span class="line">	/** Used for looking up fields by id. */</span><br><span class="line">	const ProtobufCIntRange		*field_ranges;</span><br><span class="line"></span><br><span class="line">	/** Message initialisation function. */</span><br><span class="line">	ProtobufCMessageInit		message_init;</span><br><span class="line"></span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	void				*reserved1;</span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	void				*reserved2;</span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	void				*reserved3;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>name,变量名</li>
+<li>id， 在message结构体中的顺序 </li>
+<li>label， 前面标记的required等，这里是proto2的语法 </li>
+<li>type， 数据类型，string还是int64等 </li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">struct ProtobufCFieldDescriptor &#123;</span><br><span class="line">	/** Name of the field as given in the .proto file. */</span><br><span class="line">	const char		*name;</span><br><span class="line"></span><br><span class="line">	/** Tag value of the field as given in the .proto file. */</span><br><span class="line">	uint32_t		id;</span><br><span class="line"></span><br><span class="line">	/** Whether the field is `REQUIRED`, `OPTIONAL`, or `REPEATED`. */</span><br><span class="line">	ProtobufCLabel		label;</span><br><span class="line"></span><br><span class="line">	/** The type of the field. */</span><br><span class="line">	ProtobufCType		type;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * The offset in bytes of the message&#x27;s C structure&#x27;s quantifier field</span><br><span class="line">	 * (the `has_MEMBER` field for optional members or the `n_MEMBER` field</span><br><span class="line">	 * for repeated members or the case enum for oneofs).</span><br><span class="line">	 */</span><br><span class="line">	unsigned		quantifier_offset;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * The offset in bytes into the message&#x27;s C structure for the member</span><br><span class="line">	 * itself.</span><br><span class="line">	 */</span><br><span class="line">	unsigned		offset;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * A type-specific descriptor.</span><br><span class="line">	 *</span><br><span class="line">	 * If `type` is `PROTOBUF_C_TYPE_ENUM`, then `descriptor` points to the</span><br><span class="line">	 * corresponding `ProtobufCEnumDescriptor`.</span><br><span class="line">	 *</span><br><span class="line">	 * If `type` is `PROTOBUF_C_TYPE_MESSAGE`, then `descriptor` points to</span><br><span class="line">	 * the corresponding `ProtobufCMessageDescriptor`.</span><br><span class="line">	 *</span><br><span class="line">	 * Otherwise this field is NULL.</span><br><span class="line">	 */</span><br><span class="line">	const void		*descriptor; /* for MESSAGE and ENUM types */</span><br><span class="line"></span><br><span class="line">	/** The default value for this field, if defined. May be NULL. */</span><br><span class="line">	const void		*default_value;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * A flag word. Zero or more of the bits defined in the</span><br><span class="line">	 * `ProtobufCFieldFlag` enum may be set.</span><br><span class="line">	 */</span><br><span class="line">	uint32_t		flags;</span><br><span class="line"></span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	unsigned		reserved_flags;</span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	void			*reserved2;</span><br><span class="line">	/** Reserved for future use. */</span><br><span class="line">	void			*reserved3;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>type枚举如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">typedef enum &#123;</span><br><span class="line">	PROTOBUF_C_TYPE_INT32,      /**&lt; int32 */</span><br><span class="line">	PROTOBUF_C_TYPE_SINT32,     /**&lt; signed int32 */</span><br><span class="line">	PROTOBUF_C_TYPE_SFIXED32,   /**&lt; signed int32 (4 bytes) */</span><br><span class="line">	PROTOBUF_C_TYPE_INT64,      /**&lt; int64 */</span><br><span class="line">	PROTOBUF_C_TYPE_SINT64,     /**&lt; signed int64 */</span><br><span class="line">	PROTOBUF_C_TYPE_SFIXED64,   /**&lt; signed int64 (8 bytes) */</span><br><span class="line">	PROTOBUF_C_TYPE_UINT32,     /**&lt; unsigned int32 */</span><br><span class="line">	PROTOBUF_C_TYPE_FIXED32,    /**&lt; unsigned int32 (4 bytes) */</span><br><span class="line">	PROTOBUF_C_TYPE_UINT64,     /**&lt; unsigned int64 */</span><br><span class="line">	PROTOBUF_C_TYPE_FIXED64,    /**&lt; unsigned int64 (8 bytes) */</span><br><span class="line">	PROTOBUF_C_TYPE_FLOAT,      /**&lt; float */</span><br><span class="line">	PROTOBUF_C_TYPE_DOUBLE,     /**&lt; double */</span><br><span class="line">	PROTOBUF_C_TYPE_BOOL,       /**&lt; boolean */</span><br><span class="line">	PROTOBUF_C_TYPE_ENUM,       /**&lt; enumerated type */</span><br><span class="line">	PROTOBUF_C_TYPE_STRING,     /**&lt; UTF-8 or ASCII string */</span><br><span class="line">	PROTOBUF_C_TYPE_BYTES,      /**&lt; arbitrary byte sequence */</span><br><span class="line">	PROTOBUF_C_TYPE_MESSAGE,    /**&lt; nested message */</span><br><span class="line">&#125; ProtobufCType;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成python模块"><a href="#生成python模块" class="headerlink" title="生成python模块"></a>生成python模块</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">protoc --python_out=. devicemsg.proto</span><br><span class="line">#######################################</span><br><span class="line">    msg = bank_pb2.devicemsg()</span><br><span class="line">    msg.choice = 1</span><br><span class="line">    msg.money = 0x3F</span><br><span class="line">    io.sendafter(</span><br><span class="line">        b&quot;4.show me flag\n&quot;, msg.SerializeToString()</span><br><span class="line">    ) </span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/JmpCliff/articles/17595397.html">pwn题中的protobuf逆向 - Jmp·Cliff - 博客园 (cnblogs.com)</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://loora1n.github.io/2022/11/01/[%E7%A5%A5%E4%BA%91%E6%9D%AF2022]PWN-WriteUp-protocol/">Loora1N’s Blog | 鹭雨 |</a> </p>
+<p> [<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-270004.htm">原创] 2021第五空间 pb WP-CTF对抗-看雪-安全社区|安全招聘|kanxue.com</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/w5941B/article/details/115771236">Linux protobuf以及protobuf-c的安装与使用说明_protobuf c-CSDN博客</a> </p>
+<p> <a target="_blank" rel="noopener" href="https://cv196082.gitee.io/2023/05/30/protobuf/">关于protobuf的解题步骤 | 196082’s blog (gitee.io)</a> </p>
+
+      </div>
+      <div class="post-tags-categories">
+        
+      </div>
+      
+        <div class="copyright">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>作者:  </strong>ABf1ag</a>
+    </li>
+    <li class="post-copyright-link">
+    <strong>文章链接:  </strong>
+    <a href="/2023/11/15/protobuf-chu-tan/" target="_blank" title="protobuf初探">http://abf1ag.github.io/2023/11/15/protobuf-chu-tan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明:   </strong>
+      本网站所有文章除特别声明外,均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+      许可协议。转载请注明出处!
+    </li>
+  </ul>
+<div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload" src="/medias/11.jpg" alt="">
+    </div>
+    <a href="/2099/06/11/ri-zhi/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> 上一篇:
+        <div class="title-text">日志</div>
+      </div>
+      
+      <!-- <div class="content">
+        
+  095b7e92f0aa22f6bd640c7b7674aef9f3ae98839ba9085cfd09349a9
+      </div> -->
+    </a>
+  </div>
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload" src="/medias/8.jpg" src="" alt="">
+    </div>
+    <a href="/2023/10/04/cgi-diao-shi/" class="post-nav-link">
+      <div class="title">
+        下一篇: <i class="fas fa-angle-right"></i>
+        <div class="title-text">cgi调试</div>
+      </div>
+      <!-- <div class="content">
+        cgi调试
+
+在第二届华为杯上遇到一道cgi题，虽然逻辑很简单，但是输入一直有问题，最后还是赵哥用burp逐字节加的才打
+      </div> -->
+    </a>
+  </div>
+
+</div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+
+    <!-- 分享 -->
+    
+      <!-- https://github.com/overtrue/share.js -->
+<!-- 文章详情页的分享 -->
+<div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+
+<script src="/js/shareJs/social-share.min.js"></script>
 </script>
 
-  <script src="/js/bubble/homeBubble.js"></script>
-
 <style>
-#appSwiper {
-  position: relative;
-  user-select: none;
-  overflow: hidden;
-}
-.default-excerpt {
-  font-size: 1.6rem;
-  margin-top: 1rem;
-  font-family: Titillium Web,'PingFang SC','Hiragino Sans GB','Microsoft JhengHei','Microsoft YaHei',sans-serif;
-}
-.bottom-one-btn {
-  margin-top: 15px;
-}
-.swiper-container {
-  overflow: hidden;
-  z-index: 0;
-}
-.swiper-slide {
-  height: 350px;
-  position: relative;
-}
-.swiper-button-prev,
-.swiper-button-next {
-  padding: 10px 10px;
-  transition: background 0.2s;
-}
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-.swiper-slide .item {
-  width: 100%;
-  height: 100%;
-}
-.flag {
-  position: relative;
-  width: 70%;
-  margin: 0 auto;
-  color: #ffffff;
-  height: 100%;
-  background: #000;
-}
-.flag img {
-  min-height: 100%;
-}
-.flag-text {
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  width: 80%;
-  height: 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  z-index: 9999;
-}
-.flag-text .title {
-  font-size: 1.8rem;
-  font-family: Long Cang,cursive;
-}
-.flag-text .title a {
-  color: #fff;
-  transition: color 0.3s;
-}
-.flag-text .title a:hover {
-  color: #42b983;
-}
-.flag-text .excerpt {
-  color: #eee;
-  font-family: Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-  width: 70%;
-  line-height: 30px;
-  height: 150px;
-  margin-top: 2%;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  overflow: hidden;
-}
-.swiper-pagination-bullet-active {
-  opacity: 1;
-  background-color: #42b983;
-}
-.img-mask {
-  opacity:0.6; filter: alpha(opacity=60);
-}
-.flag-text .read-more {
-  margin-bottom: 30px;
-  padding: 5px 15px;
-  color: #ffffff;
-  border-radius: 20px;
-}
-#scroll-down {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.5rem;
-  color: #fff;
-  cursor: pointer;
-  z-index: 2;
-}
-#scroll-down a {
-  color: #fff;
-}
-@-webkit-keyframes rightan
-  {
-  
-  0%
-  {
-    transform: translateY(0);
-    opacity: 0.5;
+  .social-share {
+    margin: 20px 0;
   }
-  50% {
-    transform: translateY(-30px);
-    opacity: 1;
-  }
-  100%
-  {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-}
-.scroll-down-effects {
-  animation: rightan 1.5s infinite;
-}
-/* 当头部导航设置为背景透明的时候 */
-
-  .swiper-slide {
-    height: 400px;
-  }
-  .flag-text {
-    top: 80px;
-  }
-
-
-@media (min-width: 992px) {
-  .swiper-button-prev {
-    margin-left: 15%;
-    transform: translateX(-180%);
-  }
-  .swiper-button-next {
-    margin-right: 15%;
-    transform: translateX(180%);
-  }
-  .flag-text .title {
-    width: 80%;
-    line-height: 35px;
-    max-height: 70px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-}
-@media screen and (max-width: 1200px) { 
-  .flag {
-    width: 80%;
-  }
-  .swiper-button-prev {
-    margin-left: 10%;
-    transform: translateX(-180%);
-  }
-  .swiper-button-next {
-    margin-right: 10%;
-    transform: translateX(180%);
-  }
-}
-@media (max-width: 992px) {
-  .flag {
-    width: 100%;
-  }
-  .flag-text .title {
-    font-size: 1.5rem;
-    margin-top: 50px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .flag-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 80%;
-    height: 100%;
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
-  .flag-text .excerpt {
-    width: 100%;
-    line-height: 25px;
-    height: 125px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-    overflow: hidden;
-  }
-  .flag-text .read-more {
-    margin-bottom: 80px;
-  }
-}
-@media (max-width: 992px) and (min-width: 551px) {
-  .flag-text .excerpt {
-    width: 70%;
-  }
-}
-@media (max-width: 551px) {
-  .swiper-slide {
-    height: 250px;
-  }
-  .flag-text .title {
-    line-height: 30px;
-    max-height: 60px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    margin-top: 20px;
-  }
-  .flag-text .excerpt {
-    font-size: 1rem;
-    line-height: 20px;
-    height: 80px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-  }
-  .flag-text .excerpt { 
-    margin-top: 10px;
-  }
-  .flag-text .read-more {
-    margin-top: 10px;
-    margin-bottom: 50px;
-  }
-  .swiper-button-prev,
-  .swiper-button-next {
-    transform: scale(0.5);
-  }
-  .swiper-button-prev {
-    left: 0;
-  }
-  .swiper-button-next {
-    right: 0;
-  }
-}
-/* 当头部导航设置为背景透明的时候 */
-
-  @media (max-width: 992px) {
-    .flag-text {
-      top: 60px;
-      height: 80%;
-    }
-  }
-  @media (max-width: 551px) {
-    .swiper-slide {
-      height: 310px;
-    }
-  }
-
-
-/* 文字或者按钮居中显示 */
-
-  .flag-text {
-    left: 10%;
-  }
-  .flag-text .flag-text-content {
-    width: 100%;
-    text-align: center;
-  }
-  .flag-text .title {
-    width: 100%;
-    text-align: center;
-  }
-  .flag-text .excerpt { 
-    width: 100%;
-    text-align: center;
-  }
-  .bottom-one-btn {
-    display: flex;
-    justify-content: center;
-  }
-  .default-excerpt {
-    display: flex;
-    justify-content: center;
-    font-size: 1.6rem;
-    font-family: Titillium Web,'PingFang SC','Hiragino Sans GB','Microsoft JhengHei','Microsoft YaHei',sans-serif;
-  }
-  .flag-text-btns {
-    justify-content: center;
-  }
-  @media (min-width: 992px) {
-    .flag-text .excerpt {
-      line-height: 30px;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-      overflow: hidden;
-    }
-  }
-  @media (max-width: 992px) {
-    .flag-text {
-      margin-left: 0;
-      transform: translateX(0);
-    }
-  }
-
-
-
-
-/* 全屏显示 */
-
-  .flag {
-    width: 100%;
-  }
-  .swiper-slide {
-    height: calc(100vh - 60px);
-    
-      height: 100vh;
-    
-  }
-  .flag-text {
-    top: 50%;
-    left: 15%;
-    transform: translateY(-50%);
-    width: 70%;
-    height: auto;
-  }
-  .flag-text .title {
-    font-size: 2.8rem;
-    line-height: 1.5em;
-    max-height: none;
-    /* overflow: visible; */
-  }
-  .flag-text .excerpt {
-    font-size: 1.25rem;
-    height: 150px;
-  }
-  .flag-text .read-more {
-    margin-top: 10px;
-  }
-  .swiper-button-prev,
-  .swiper-button-next {
-    margin-top: -60px!important;
-  }
-  .swiper-btn-color,
-  .swiper-btn-color2 {
-    background-color: transparent;
-    border: 1px solid #fff;
-  }
-  .swiper-btn-color:hover,
-  .swiper-btn-color2:hover {
-    background-color: #42b983;
-    border: 1px solid #42b983!important;
-  }
-  .flag-text-btns {
-    justify-content: center;
-  }
-  .swiper-button-prev {
-    margin-left: 10px;
-    transform: translateX(0);
-    border-radius: 50%;
-    padding: 0;
-    width: 50px;
-    height: 50px;
-  }
-  .swiper-button-next {
-    margin-right: 10px;
-    transform: translateX(0);
-    border-radius: 50%;
-    padding: 0;
-    width: 50px;
-    height: 50px;
-  }
-  .swiper-button-next:after, .swiper-button-prev:after {
-    font-size: 1.2rem;
-  }
-  @media (min-width: 992px) {
-    .flag-text .excerpt {
-      line-height: 35px;
-      height: 175px;
-    }
-    .default-excerpt {
-      min-height: 150px;
-    }
-    .typed-element {
-      align-items: unset;
-    }
-  }
-  @media (max-width: 992px) {
-    .flag-text {
-      margin-left: 0;
-      height: 60%;
-      top: 55%;
-    }
-    .flag-text .title {
-      font-size: 2.4rem;
-      margin-top: 0;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-    }
-    .flag-text .excerpt {
-      line-height: 35px;
-      height: 185px;
-    }
-    .flag-text .read-more {
-      margin-top: 20px;
-    }
-  }
-  @media (max-width: 551px) {
-    .flag-text {
-      height: 60%;
-    }
-    .flag-text .title {
-      font-size: 2.2rem;
-    }
-    .flag-text .excerpt {
-      line-height: 30px;
-    }
-    .flag-text .read-more {
-      margin-top: 50px;
-      padding: 10px 30px;
-    }
-    .swiper-button-prev {
-      margin-left: 0;
-    }
-    .swiper-button-next {
-      margin-right: 0;
-    }
-    .default-excerpt {
-      margin-top: 1rem;
-    }
-  }
-
-
-/* video */
-.swiper-video {
-  width: 100%;
-  height: 100%;
-}
-.swiper-video video {
-  pointer-events: none;
-}
-.swiper-video-maskBox{
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #000;
-  opacity: 0.2;
-  z-index: 1;
-}
-@media (min-width: 992px) {
-  
-    .swiper-video {
-      display: none;
-    }
-    .swiper-default-bgImg {
-      display: block;  
-    }
-  
-}
-@media (max-width: 992px) {
-  .swiper-video {
-    display: none;
-  }
-  .swiper-default-bgImg {
-    display: block;  
-  }
-}
-/* video-end */
 </style>
 
 
-<div id="l_main">
-  <div class="l_content">
-    <!-- 自定义的内容 -->
     
-    <!-- 首页座右铭 -->
     
-    <!-- 首页公告 -->
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
     
-    <!-- 首页文章置顶 -->
+      <div id="gitment-container"></div>
+
     
-
-
-<div class="topArticle reveal">
-	<h3><i class="fas fa-thumbs-o-up" aria-hidden="true"></i>推荐文章</h3>
-	<div class="articles">
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-			
-		
-	</div>
-</div>
-
-
-    <div class="bg-floor" id="home-bg-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"></div>
-    <!-- 每一篇文章卡片 -->
-    <!-- hash算法 -->
-
-<section class="posts">
-  
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2099-06-11</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2099/06/11/ri-zhi/">日志</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2099/06/11/ri-zhi/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/11.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            私聊找我要密码哟~😁
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2099/06/11/ri-zhi/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2099/06/11/ri-zhi/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/11.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-11-15</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/11/15/protobuf-chu-tan/">protobuf初探</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/11/15/protobuf-chu-tan/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/4.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            
-
-protobuf安装1python3 -m pip install protobuf
-
-protobuf-c安装1234567git clone https://github.com/protobuf-c/protobuf-c.gits
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/11/15/protobuf-chu-tan/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/11/15/protobuf-chu-tan/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/4.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-10-04</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/10/04/cgi-diao-shi/">cgi调试</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/10/04/cgi-diao-shi/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/8.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h3 id="cgi调试"><a href="#cgi调试" class="headerlink" title="cgi调试"></a>cgi调试</h3>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/10/04/cgi-diao-shi/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/10/04/cgi-diao-shi/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/8.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-07-17</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/07/17/vxworks-gu-jian-jie-bao/">VxWorks固件解包</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/07/17/vxworks-gu-jian-jie-bao/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/13.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            
-
-1.前言闲来无聊，便想着玩玩家里的两个闲置的路由器，第一个是烽火的SR1041H，奈何网上无法免费获得该固件，便拆开看看能不能提取，但家里没有设备，也不会焊接，因此放弃了。另一个是TP-link的TL-WDR5620，官网上有固件的[下
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/07/17/vxworks-gu-jian-jie-bao/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/07/17/vxworks-gu-jian-jie-bao/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/13.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-05-02</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/">vivotek摄像头溢出漏洞复现</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-    <i class="iconfont icontag"></i>
-    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iot/" rel="tag">iot</a></li></ul>
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/9.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h3 id="vivotek"><a href="#vivotek" class="headerlink" title="vivotek"></a>vivotek</h3>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/05/02/vivotek-she-xiang-tou-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/9.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-04-28</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/">D-Link-DIR-645溢出漏洞复现</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-    <i class="iconfont icontag"></i>
-    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iot/" rel="tag">iot</a></li></ul>
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/8.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h3 id="D-Link-DIR-645溢出漏洞复现"><a href="#D-Link-DIR-645溢出漏洞复现" class="headerlink" title="D-Link-DIR-645溢出漏洞复现"></a>D-Link-DIR-645溢出漏洞复现</h3>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/04/28/d-link-dir-645-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/8.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-04-13</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/">D-Link-DIR-815栈溢出漏洞复现</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-    <i class="iconfont icontag"></i>
-    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iot/" rel="tag">iot</a></li></ul>
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/5.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h3 id="D-Link-DIR-815栈溢出漏洞复现"><a href="#D-Link-DIR-815栈溢出漏洞复现" class="headerlink" title="D-Link-DIR-815栈溢出漏洞复现"></a>D-Link-DIR-815栈溢出漏洞复现</h3>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/04/13/d-link-dir-815-zhan-yi-chu-lou-dong-fu-xian/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/5.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-01-18</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/01/18/kernel-chu-tan/">kernel初探</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/01/18/kernel-chu-tan/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/7.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h2 id="kernel初探"><a href="#kernel初探" class="headerlink" title="kernel初探"></a>kernel初探</h2>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/01/18/kernel-chu-tan/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/01/18/kernel-chu-tan/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/7.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2023-01-06</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2023/01/06/llvmpass-chu-tan/">llvmpass初探</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2023/01/06/llvmpass-chu-tan/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/1.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            
-
-后续补充
-
-
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2023/01/06/llvmpass-chu-tan/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2023/01/06/llvmpass-chu-tan/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/1.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2022-12-30</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2022/12/30/nian-zhong-zong-jie-2022/">年终总结-2022</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2022/12/30/nian-zhong-zong-jie-2022/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload" src="/medias/15.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            <h3 id="年终总结（2022）"><a href="#年终总结（2022）" class="headerlink" title="年终总结（2022）"></a>年终总结（2022）</h3>
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2022/12/30/nian-zhong-zong-jie-2022/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2022/12/30/nian-zhong-zong-jie-2022/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload" src="/medias/15.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-</section>
-    <!-- 翻页 -->
-    
-  <!-- <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
-  </nav> -->
-  <div class="page-nav">
-    
-    <div class="page-info">
-        <div class="page-info-text">1 / 4</div>
-    </div>
-    
-      <a href="/page/2/"
-         class="page-nav-next">
-          <span class="mr-5">下一页</span><i class="fas fa-angle-right"></i>
-      </a>
-      
   </div>
+
+<!-- comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
 
   </div>
 
+  <!-- 目录 -->
   
 <aside id='l_side'>
   
@@ -1844,27 +836,29 @@ protobuf-c安装1234567git clone https://github.com/protobuf-c/protobuf-c.gits
   <div class="layout_sticky">    
     
       
-        
+<section class="widget side_toc">
   
-      
-      
-        
-<section class="widget side_tagcloud">
-    
   <header>
     
-      <a style="color: " href='/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
-    <div class='content'>
-    <a href="/tags/iot/" style="font-size: 14px; color: #999">iot</a>
+  <div class='content'>
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#protobuf%E5%AE%89%E8%A3%85"><span class="toc-text">protobuf安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#protobuf-c%E5%AE%89%E8%A3%85"><span class="toc-text">protobuf-c安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#protobuf%E5%85%B3%E9%94%AE%E7%BB%93%E6%9E%84%E9%80%86%E5%90%91"><span class="toc-text">protobuf关键结构逆向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90python%E6%A8%A1%E5%9D%97"><span class="toc-text">生成python模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">参考链接</span></a></li></ol> -->
+        <div class="toc"></div>
+      </div>
     </div>
+  </div>
 </section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
 
-  
-      
       
   <section class="widget side_recent_post">
     
@@ -1990,150 +984,164 @@ protobuf-c安装1234567git clone https://github.com/protobuf-c/protobuf-c.gits
     </div>
   </section>
 
-      
-  <section class="widget side_archives">
-    
-    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2099/06/"><span class="card-archive-list-date">六月 2099</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/01/"><span class="card-archive-list-date">一月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/12/"><span class="card-archive-list-date">十二月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div>
-  </section>
-
-      <section class="widget side_webinfo">
-  
-  <header>
-    
-      <i style="color: " class="fas fa-chart-line fa-fw" aria-hidden="true"></i><span class='name'>站点信息</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="webinfo">
-      
-        <div class="webinfo-item">
-          <div>文章数目：</div>
-          <div>37 篇</div>
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>已运行时间：</div>
-          <div id="webinfo-runtime-count" publish_date="03/24/2020 21:34:09"></div>
-        </div>
-        <script>
-          var BirthDay = new Date(new Date('2021/06/11'));
-          var today = new Date();
-          var timeold = (today.getTime() - BirthDay.getTime());
-          var daysold = Math.floor(timeold / (24 * 60 * 60 * 1000));
-          document.getElementById('webinfo-runtime-count').innerHTML = daysold + ' 天';
-        </script>
-      
-
-
-      
-        <div class="webinfo-item">
-          <div>本站总字数：</div>
-          <div>66.4k 字</div>
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>本站访客数：</div>
-          
-          <div><span id="busuanzi_value_site_uv"><i class="fas fa-fan fa-spin fa-fw" aria-hidden="true"></i></span> 人</div>
-          
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>本站总访问量：</div>
-          
-          <div><span id="busuanzi_value_site_pv"><i class="fas fa-fan fa-spin fa-fw" aria-hidden="true"></i></span> 次</div>
-          
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>最后活动时间：</div>
-          
-            <div id="last-update" style="display: none;">Wed Nov 15 2023 18:33:44 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2023-11-15 日</div>
-          
-        </div>
-        
-        <script>
-          function timeago(dateTimeStamp) {
-              var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
-              var hour = minute * 60;
-              var day = hour * 24;
-              var week = day * 7;
-              var month = day * 30;
-              var now = new Date().getTime(); //获取当前时间毫秒
-              var diffValue = now - dateTimeStamp; //时间差
-              if (diffValue < 0) {
-                  return;
-              }
-              var minC = diffValue / minute; //计算时间差的分，时，天，周，月
-              var hourC = diffValue / hour;
-              var dayC = diffValue / day;
-              var weekC = diffValue / week;
-              var monthC = diffValue / month;
-              if (monthC >= 1 && monthC <= 3) {
-                  result = " " + parseInt(monthC) + " 月前"
-              } else if (weekC >= 1 && weekC <= 3) {
-                  result = " " + parseInt(weekC) + " 周前"
-              } else if (dayC >= 1 && dayC <= 6) {
-                  result = " " + parseInt(dayC) + " 天前"
-              } else if (hourC >= 1 && hourC <= 23) {
-                  result = " " + parseInt(hourC) + " 小时前"
-              } else if (minC >= 1 && minC <= 59) {
-                  result = " " + parseInt(minC) + " 分钟前"
-              } else if (diffValue >= 0 && diffValue <= minute) {
-                  result = "刚刚"
-              } else {
-                  var datetime = new Date();
-                  datetime.setTime(dateTimeStamp);
-                  var Nyear = datetime.getFullYear();
-                  var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-                  var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                  var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-                  var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-                  var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
-                  result = Nyear + "-" + Nmonth + "-" + Ndate
-              }
-              return result;
-          }
-          var lastUpDate = document.getElementById('last-update').innerHTML;
-          try {
-            document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
-          } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2023-11-15 日';
-          }
-        </script>
-        
-      
-    </div>
-  </div>
-</section>
-      
     
   </div>
 </aside>
 
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script src="/js/wrapImage.js"></script>
 </div>
-<!-- 花瓣和雪花飘落 -->
-<!-- 雪花和花瓣特效 -->
 
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+
+
+  <script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
   
-    <script src="/js/falling/snow.js"></script>
-  
-
-
-
-<!-- 灯笼 -->
-
+</script>
 
 
       </main>

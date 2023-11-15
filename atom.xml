@@ -32,6 +32,29 @@
   </entry>
   
   <entry>
+    <title>protobuf初探</title>
+    <link href="http://abf1ag.github.io/2023/11/15/protobuf-chu-tan/"/>
+    <id>http://abf1ag.github.io/2023/11/15/protobuf-chu-tan/</id>
+    <published>2023-11-15T09:38:40.000Z</published>
+    <updated>2023-11-15T10:33:25.599Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
+
+&lt;h3 id=&quot;protobuf安装&quot;&gt;&lt;a href=&quot;#protobuf安装&quot; class=&quot;headerlink&quot; title=&quot;protobuf安装&quot;&gt;&lt;/a&gt;protobuf安装&lt;/h3&gt;&lt;figure</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>cgi调试</title>
     <link href="http://abf1ag.github.io/2023/10/04/cgi-diao-shi/"/>
     <id>http://abf1ag.github.io/2023/10/04/cgi-diao-shi/</id>
@@ -318,21 +341,6 @@
     
     
     <summary type="html">&lt;h3 id=&quot;2021湖湘杯pwn&quot;&gt;&lt;a href=&quot;#2021湖湘杯pwn&quot; class=&quot;headerlink&quot; title=&quot;2021湖湘杯pwn&quot;&gt;&lt;/a&gt;2021湖湘杯pwn&lt;/h3&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>ida动态调试+pwntools输入</title>
-    <link href="http://abf1ag.github.io/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/"/>
-    <id>http://abf1ag.github.io/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/</id>
-    <published>2021-11-01T08:32:46.000Z</published>
-    <updated>2023-02-25T08:22:40.000Z</updated>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;ida动态调试-pwntools输入&quot;&gt;&lt;a href=&quot;#ida动态调试-pwntools输入&quot; class=&quot;headerlink&quot; title=&quot;ida动态调试+pwntools输入&quot;&gt;&lt;/a&gt;ida动态调试+pwntools输入&lt;/h3&gt;</summary>
     
     
     
