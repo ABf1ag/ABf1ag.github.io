@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>ida动态调试+pwntools输入 | ABf1ag&#39;s blog</title>
+  <title>归档: 2024 | ABf1ag&#39;s blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -531,610 +531,106 @@
     
 </header>
         <!-- 内容区域 -->
-        
- <!-- prismjs 代码高亮 -->
- 
-
-
-<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
-
-
-  <!-- 文章详情页顶部图片和标题 -->
-
-
-
-
-<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/15.jpg')">
-  <div class="post-detail-header-mask"></div>
-  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
-  
-  <div class="post-detail-header_info-box">
-    <div class="title-box">
-      <span class="title">
-        ida动态调试+pwntools输入
-      </span>
-    </div>
-    
-    
-      
-        <span class="post-detail-header_date">
-          <i class="fas fa-calendar"></i> 发表于：2021-11-01 |
-        </span>
-      
-
-      
-
-      
-        <div class="post-detail-header_wordcount">
-          <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 408 |
-          </span>
-  
-          <span class="min2read">
-            <i class="fas fa-clock"></i> 阅读时长: 1分钟 |
-          </span>
-  
-          
-            <span class="reading">
-              <i class="fas fa-eye"></i> 阅读量：<span id="busuanzi_value_page_pv"></span>
-            </span>
-          
-        </div>
-      
-    
+        <div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"></div>
+<div class="bg-light-floor-archive" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -3;"></div>
+<div class="archive-header" style="background-image:url('https://pic1.zhimg.com/80/v2-1414b3a4b205e19060db18a20d08723a_1440w.jpg?source=1940ef5c')">
+  <div class="archive-header-title">
+    archive
   </div>
+  <div class="archive-header-desc">
   
-  
-    <script src="/js/bubble/bubble.js"></script>
-  
-</div>
-
-
-
-
-
-<div class="post-detail-content post-row" 
-  style="padding-top: 0px;">
-  <div class="main-content">
-    <article class="post post-detail">
-      <div class="post-content">
-        <h3 id="ida动态调试-pwntools输入"><a href="#ida动态调试-pwntools输入" class="headerlink" title="ida动态调试+pwntools输入"></a>ida动态调试+pwntools输入</h3><span id="more"></span>
-
-<p>因为网上没有太多关于这方面的博客并且也都有些简单了(<del>对于我这种人来说并不算太友好</del>)，所以本篇记录了我一些踩坑的地方，同时也会写的尽量详细一点。</p>
-<h3 id="ida远程调试"><a href="#ida远程调试" class="headerlink" title="ida远程调试"></a>ida远程调试</h3><p>首先在找到dbgsrv文件夹，将其中的linux_server/64放入到linux中。在linux中查看linux_serve/64有无执行权限，如果没有使用如下命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 ./linux_serve/64</span><br></pre></td></tr></table></figure>
-
-<p>在linux上执行./linux_serve/64,如下图</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/7d2a60f75ed11.png" alt="image-20211101170431707"></p>
-<p>接着我们打开ida，在菜单栏找到debugger</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/7c6bdb8ccb704.png" alt="image-20211101165937408"></p>
-<p>我们选择<code>Remote linux debugger</code></p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/f98420d9726cc.png" alt="image-20211101170102888"></p>
-<p>紧接着我们<strong>在程序中下上断点</strong>。</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/cdc21521af137.png" alt="image-20211101170351244"></p>
-<p>然后点击debugger中的Start process，会跳出来如下弹窗</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/14fda3877812f.png" alt="image-20211101170929794"></p>
-<p>然后就会运行到断点处：</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/031de6f194898.png" alt="image-20211101171050294"></p>
-<p><strong>如果断点下在输入函数后，需要我们先进行输入，才能到达断点处。</strong></p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/ac1816d2d6452.png" alt="image-20211101171241305"></p>
-<p>但我们有时候需要输入不可显示字符才能使程序继续下去，所以我们需要使用pwntools来输入不可显示字符。</p>
-<h3 id="pwntools输入"><a href="#pwntools输入" class="headerlink" title="pwntools输入"></a>pwntools输入</h3><p>我们需要首先在linux中安装socat、expect、pwntools，使用apt-get即可安装。</p>
-<p>接着创建一个idaIOtool.sh，将如下代码复制到文件中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -f</span><br><span class="line">spawn socat tcp-listen:10001,reuseaddr,fork EXEC:./CrazyVM,pty,raw,echo=0</span><br><span class="line">spawn python2</span><br><span class="line">send &quot;from pwn import *\n&quot;</span><br><span class="line">send &quot;io=remote(&#x27;127.0.0.1&#x27;,10001)\n&quot;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
-
-<p><strong>代码中 <code>./CrazyVM</code> 需要替换成自己的程序名</strong>。 </p>
-<p>运行linux_server64</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/ba36aaad16bcf.png" alt="image-20211101172157875"></p>
-<p>运行idaIOtool.sh</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/265bf037be5e3.png" alt="image-20211101172341129"></p>
-<p>打开ida在debugger中找到Attach to process，找到运行的程序。点击ok即可调试。</p>
-<p><img src="https://le1a-1308465514.cos.ap-shanghai.myqcloud.com/2023/02/07/1392d72c489e9.png" alt="image-20211101172858732"></p>
-<p>这样我们就可以使用pwntools输入不可显示字符了。</p>
-
-      </div>
-      <div class="post-tags-categories">
-        
-      </div>
-      
-        <div class="copyright">
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-    <strong>作者:  </strong>ABf1ag</a>
-    </li>
-    <li class="post-copyright-link">
-    <strong>文章链接:  </strong>
-    <a href="/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/" target="_blank" title="ida动态调试+pwntools输入">http://abf1ag.github.io/2021/11/01/ida-dong-tai-diao-shi-pwntools-shu-ru/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong>版权声明:   </strong>
-      本网站所有文章除特别声明外,均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
-      许可协议。转载请注明出处!
-    </li>
-  </ul>
-<div>
-      
-    </article>
-    <!-- 上一篇文章和下一篇文章 -->
-    
-      <!-- 文章详情页的上一页和下一页 -->
-<div class="post-nav">
-
-
-
-  
-  <div class="post-nav-prev post-nav-item">
-    <div class="post-nav-img" style="background-size: cover; 
-      background-position: center center;">
-      <img class="lazyload" src="/medias/3.jpg" alt="">
-    </div>
-    <a href="/2021/11/16/2021-hu-xiang-bei-xian-shang/" class="post-nav-link">
-      <div class="title">
-        <i class="fas fa-angle-left"></i> 上一篇:
-        <div class="title-text">2021湖湘杯线上</div>
-      </div>
-      
-      <!-- <div class="content">
-        2021湖湘杯pwn
-
-1.tiny_httpd这个题直接给出了源码，分析源码可以发现他会将两个连续的’.’变成一个，并
-      </div> -->
-    </a>
-  </div>
-
-
-
-  
-  <div class="post-nav-next post-nav-item">
-    <div class="post-nav-img" style="background-size: cover; 
-      background-position: center center;">
-      <img class="lazyload" src="/medias/11.jpg" src="" alt="">
-    </div>
-    <a href="/2021/11/01/dong-hua-bei/" class="post-nav-link">
-      <div class="title">
-        下一篇: <i class="fas fa-angle-right"></i>
-        <div class="title-text">JIT类型初探</div>
-      </div>
-      <!-- <div class="content">
-        JIT类型初探
-
-这种题目也碰过好几次了，但因为自己太懒加静不下心去分析这种类型(其实是因为太菜，分析不了这么多代码)。
-      </div> -->
-    </a>
-  </div>
-
-</div>
-
-    
-    
-
-    <!-- 打赏 -->
-    
-
-    <!-- 分享 -->
-    
-      <!-- https://github.com/overtrue/share.js -->
-<!-- 文章详情页的分享 -->
-<div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-
-<script src="/js/shareJs/social-share.min.js"></script>
-</script>
-
-<style>
-  .social-share {
-    margin: 20px 0;
+  <span class="title" id="archive-header-desc"></span>
+  <script>
+  function typedFn() {
+    const el = '#archive-header-desc';
+    const type = 'archive';
+    let desc = '愿你如风，被人温柔以待'
+    var typed = new Typed(el, {
+      strings: [desc],
+      startDelay: 100,
+      typeSpeed: 100,
+      loop: true,
+      backSpeed: 50,
+      showCursor: true
+    });
   }
-</style>
-
-
-    
-    
-    <!-- 评论 -->
-    <!-- 评论 -->
-
-  <div id="myComment">
-    
-      <div id="gitment-container"></div>
-
-    
+  typedFn();
+</script>
+  
   </div>
-
-<!-- comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
-
-
-  </div>
-
-  <!-- 目录 -->
-  
-<aside id='l_side'>
-  
-    
-      
-        <section class="widget side_blogger">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img src='https://s1.ax1x.com/2023/02/06/pScRfqH.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-          <h2>ABf1ag</h2>
-        
-        
-          <p>永远学不明白的胖儿</p>
-
-        
-        
-          <p><span id="jinrishici-sentence">ABf1ag's blog</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml"
-              class="social fas fa-rss flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="mailto:me@xxx.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/yuang01/hexo-theme-bamboo"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2685356508"
-              class="social fab fa-qq flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-      
-    
-  
-  
-  
-
-  <div class="layout_sticky">    
-    
-      
-<section class="widget side_toc">
-  
-  <header>
-    
-      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="toc-main">
-      <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-pwntools%E8%BE%93%E5%85%A5"><span class="toc-text">ida动态调试+pwntools输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ida%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95"><span class="toc-text">ida远程调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwntools%E8%BE%93%E5%85%A5"><span class="toc-text">pwntools输入</span></a></li></ol> -->
-        <div class="toc"></div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- 手机端目录按钮 -->
-<div id="toc-mobile-btn">
-  <i class="fas fa-list-ul" aria-hidden="true"></i>
+  <div class="mask-box"></div>
 </div>
 
+<div class="archive-video">
+  <video class="full-video" autoplay loop muted>
+      <source style="width: 100%;height: 100vh;" src="/">
+  </video>
+  <div class="video-header-title">
+    archive
+  </div>
+  <div class="video-header-desc">
+  
+      <span class="title" id="archive-video-header-desc"></span>
+      <script>
+  function typedFn() {
+    const el = '#archive-video-header-desc';
+    const type = 'archive';
+    let desc = '愿你如风，被人温柔以待'
+    var typed = new Typed(el, {
+      strings: [desc],
+      startDelay: 100,
+      typeSpeed: 100,
+      loop: true,
+      backSpeed: 50,
+      showCursor: true
+    });
+  }
+  typedFn();
+</script>
       
-  <section class="widget side_recent_post">
-    
-  <header>
-    
-      <a style="color: " href='/tags/'><i class="fas fa-book fa-fw" aria-hidden="true"></i><span class='name'>最新文章</span></a>
-    
-  </header>
+  </div>
+  <div class="mask-box"></div>
+</div>
+
+<!-- hash算法 -->
 
 
-    <div class='content'>
-      
-      <!-- hash算法 -->
-      
-      <div class="aside-list">
+<div class="archive-main">
+  <section class="archive">
+    <div class="archive-content">
+      <ul class="post-archive">
         
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2099/06/11/ri-zhi/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/11.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">06-11</span>
-                
-              </div>
-              <a class="post-title" href="/2099/06/11/ri-zhi/">日志</a>
-            </div>
-          </div>
         
-          <div class="aside-list-item">
+          
             
+            <div class="year" data-aos="zoom-in-up">
+                <div class="bullet"></div>
+                <a href="/archives/2024">2024</a>
+            </div>
+          
+          <li class="post-item" data-aos="fade-left">
             
-            
-
             <div class="post-img-box">
               <a href="/2024/04/01/cve-2022-1040-fu-xian-bi-ji/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/9.jpg" alt="">
+                <img class="lazyload" src="/medias/9.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
               <div>
-                
-                  <span class="post-date">04-01</span>
-                
+                <span class="post-date">04-01</span>
               </div>
               <a class="post-title" href="/2024/04/01/cve-2022-1040-fu-xian-bi-ji/">CVE-2022-1040复现笔记</a>
             </div>
-          </div>
+          </li>
         
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2023/12/31/nian-zhong-zong-jie-2023/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/4.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">12-31</span>
-                
-              </div>
-              <a class="post-title" href="/2023/12/31/nian-zhong-zong-jie-2023/">年终回忆-2023</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2023/11/15/protobuf-chu-tan/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/4.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">11-15</span>
-                
-              </div>
-              <a class="post-title" href="/2023/11/15/protobuf-chu-tan/">protobuf初探</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2023/10/04/cgi-diao-shi/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/8.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">10-04</span>
-                
-              </div>
-              <a class="post-title" href="/2023/10/04/cgi-diao-shi/">cgi调试</a>
-            </div>
-          </div>
-        
-      </div>
+      </ul>
     </div>
   </section>
-
+  <div class="w-70">
     
   </div>
-</aside>
-
-
-  <!-- 图片放大 Wrap images with fancybox support -->
-  <script src="/js/wrapImage.js"></script>
 </div>
-
-<!-- 文章详情页背景图 -->
-<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
-	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
-	<transition-group tag="ul" :name="names">
-		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
-			<img :src="image" class="bg-swiper-img no-lazy">
-		</li>
-	</transition-group>
-</div>
-<script>
-	var vm = new Vue({
-		el: '#appBgSwiper',
-		data: {
-			names: '' || 'fade' || 'fade', // translate-fade fade
-			mark: 0,
-			img: [],
-			bgColor: '',
-			time: null
-		},
-		methods: {   //添加方法
-			change(i, m) {
-				if (i > m) {
-					// this.names = 'fade';
-				} else if (i < m) {
-					// this.names = 'fade';
-				} else {
-					return;
-				}
-				this.mark = i;
-			},
-			prev() {
-				// this.names = 'fade';
-				this.mark--;
-				if (this.mark === -1) {
-					this.mark = 3;
-					return
-				}
-			},
-			next() {
-				// this.names = 'fade';
-				this.mark++;
-				if (this.mark === this.img.length) {
-					this.mark = 0;
-					return
-				}
-			},
-			autoPlay() {
-				// this.names = 'fade';
-				this.mark++;
-				if (this.mark === this.img.length) {
-					this.mark = 0;
-					return
-				}
-			},
-			play() {
-				let bgImgDelay = '' || '180000'
-				let delay = parseInt(bgImgDelay) || 180000;
-				this.time = setInterval(this.autoPlay, delay);
-			},
-			enter() {
-				clearInterval(this.time);
-			},
-			leave() {
-				this.play();
-			}
-		},
-		created() {
-			this.play()
-		},
-		beforeDestroy() {
-			clearInterval(this.time);
-		},
-		mounted() {
-			let prop = '' || '';
-			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
-			if (isImg) {
-				let img = prop.split(',');
-				let configRoot = '/'
-				let arrImg = [];
-				img.forEach(el => {
-					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-					var objExp = new RegExp(Expression);
-
-					if (objExp.test(el)) {
-						// http or https
-						arrImg.push(el);
-					} else {
-						// 非http or https开头
-						// 本地文件
-						let firstStr = el.charAt(0);
-						if (firstStr == '/') {
-							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
-						}
-						el = configRoot + el;
-						arrImg.push(el);
-					}
-				})
-				this.img = arrImg;
-			} else {
-				this.bgColor = prop;
-			}
-		}
-	})
-</script>
-
-<style>
-	.bg-swiper-box {
-		position: absolute;
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
-
-	.bg-swiper-img {
-		object-fit: cover;
-		width: 100%;
-		height: 100%;
-	}
-</style>
-
-
-
-
-  <script>
-  function loadMermaid() {
-    if (document.getElementsByClassName('mermaid').length) {
-      if (window.mermaidJsLoad) mermaid.init()
-      else {
-        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
-          window.mermaidJsLoad = true
-          mermaid.initialize({
-            theme: 'default',
-          })
-          if ('true') {
-            mermaid.init();
-          }
-        })
-      }
-    }
-  };
-  document.addEventListener("DOMContentLoaded", function () {
-    loadMermaid();
-  })
-
-  document.addEventListener('pjax:complete', function () {
-    loadMermaid();
-  })
-  
-</script>
-
 
       </main>
     </div>
