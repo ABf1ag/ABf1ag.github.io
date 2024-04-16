@@ -568,11 +568,11 @@
       
         <div class="post-detail-header_wordcount">
           <span class="totalcount">
-            <i class="fas fa-file-text-o"></i> 字数统计: 2.3k |
+            <i class="fas fa-file-text-o"></i> 字数统计: 3.4k |
           </span>
   
           <span class="min2read">
-            <i class="fas fa-clock"></i> 阅读时长: 9分钟 |
+            <i class="fas fa-clock"></i> 阅读时长: 13分钟 |
           </span>
   
           
@@ -922,6 +922,296 @@
 
 <h3 id="Aarch64函数调用过程"><a href="#Aarch64函数调用过程" class="headerlink" title="Aarch64函数调用过程"></a>Aarch64函数调用过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#进入函数</span><br><span class="line">   0x4009a8    stp    x29, x30, [sp, #-0x20]!#将x29、x30的值存入sp-0x20地址中，同时sp=sp-0x20</span><br><span class="line">   0x4009ac    mov    x29, sp</span><br><span class="line">#返回函数</span><br><span class="line">   0x400a04    ldp    x29, x30, [sp], #0x20 #将sp的内容放入x29、x30后，sp=sp-0x20</span><br><span class="line">   0x400a08    ret  </span><br></pre></td></tr></table></figure>
 
+<h2 id="PowerPC"><a href="#PowerPC" class="headerlink" title="PowerPC"></a>PowerPC</h2><h3 id="PowerPC寄存器"><a href="#PowerPC寄存器" class="headerlink" title="PowerPC寄存器"></a>PowerPC寄存器</h3><ul>
+<li><p>r0　　　在函数開始（function prologs）时使用。</p>
+</li>
+<li><p>r1　　　堆栈指针，相当于ia32架构中的esp寄存器，idapro把这个寄存器反汇编标识为sp。</p>
+</li>
+<li><p>r2　　　内容表（toc）指针，idapro把这个寄存器反汇编标识为rtoc。系统调用时。它包括系统调用号（这个好像跟系统有关吧）。</p>
+</li>
+<li><p>r3　　　作为第一个參数和返回值。</p>
+</li>
+<li><p>r4-r10　函数或系统调用開始的參数。</p>
+</li>
+<li><p>r11　　 用在指针的调用和当作一些语言的环境指针。</p>
+</li>
+<li><p>r12　　 它用在异常处理和glink（动态连接器）代码。</p>
+</li>
+<li><p>r13　　 保留作为系统线程ID。</p>
+</li>
+<li><p>r14-r31 作为本地变量。非易失性。</p>
+</li>
+<li><p>lr　　　链接寄存器，它用来存放函数调用结束处的返回地址。</p>
+</li>
+<li><p>ctr　　 计数寄存器，它用来当作循环计数器，会随特定转移操作而递减。</p>
+</li>
+<li><p>xer　　 定点异常寄存器。存放整数运算操作的进位以及溢出信息。</p>
+</li>
+<li><p>msr　　 机器状态寄存器，用来配置微处理器的设定。</p>
+</li>
+<li><p>cr　　　条件寄存器。它分成8个4位字段，cr0-cr7。它反映了某个算法操作的结果而且提供条件分支的机制。</p>
+</li>
+</ul>
+<h3 id="PowerPC指令"><a href="#PowerPC指令" class="headerlink" title="PowerPC指令"></a>PowerPC指令</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>助记符</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字节存储（偏移地址寻址）</td>
+<td>stb</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>字节存储（寄存器寻址）</td>
+<td>stbx</td>
+<td>rS, rA, rB</td>
+</tr>
+<tr>
+<td>记录有效地址的字节存储（偏移地址寻址）</td>
+<td>stbu</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>记录有效地址的字节存储（寄存器寻址）</td>
+<td>stbux</td>
+<td>rS, rA, rB</td>
+</tr>
+<tr>
+<td>半字存储（偏移地址寻址）</td>
+<td>sth</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>半字存储（寄存器寻址）</td>
+<td>sthx</td>
+<td>rS, rA, rB</td>
+</tr>
+<tr>
+<td>记录有效地址的半字存储（偏移地址寻址）</td>
+<td>sthu</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>记录有效地址的半字存储（寄存器寻址）</td>
+<td>sthux</td>
+<td>rS, rA, rB</td>
+</tr>
+<tr>
+<td>字存储（偏移地址寻址）</td>
+<td>stw</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>字存储（寄存器寻址）</td>
+<td>stwx</td>
+<td>rS, rA, rB</td>
+</tr>
+<tr>
+<td>记录有效地址的字存储（偏移地址寻址）</td>
+<td>stwu</td>
+<td>rS, d(rA)</td>
+</tr>
+<tr>
+<td>记录有效地址的字存储（寄存器寻址）</td>
+<td>stwux</td>
+<td>rS, rA, rB</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>助记符</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高位清零载入字节指令（偏移地址寻址）</td>
+<td>lbz</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>高位清零的载入字节指令（寄存器寻址）</td>
+<td>lbzx</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>高位清零的载入字节并记录有效地址指令（偏移地址寻址）</td>
+<td>lbzu</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>高位清零的载入字节并记录有效地址指令（寄存器寻址）</td>
+<td>lbzux</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>高位清零的载入半字指令（偏移地址寻址）</td>
+<td>lhz</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>高位清零的载入半字指令（寄存器寻址）</td>
+<td>lhzx</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>高位清零的载入半字并记录有效地址指令（偏移地址寻址）</td>
+<td>lhzu</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>高位清零的载入半字并记录有效地址指令（寄存器寻址）</td>
+<td>lhzux</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>载入半字指令（偏移地址寻址）</td>
+<td>lha</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>载入半字指令（寄存器寻址）</td>
+<td>lhax</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>载入半字并记录有效地址指令（偏移地址寻址）</td>
+<td>lhau</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>载入半字并记录有效地址指令（寄存器寻址）</td>
+<td>lhaux</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>载入字指令（偏移地址寻址）</td>
+<td>lwz</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>载入字指令（寄存器寻址）</td>
+<td>lwzx</td>
+<td>rD, rA, rB</td>
+</tr>
+<tr>
+<td>载入字并记录有效地址指令（偏移地址寻址）</td>
+<td>lwzu</td>
+<td>rD, d(rA)</td>
+</tr>
+<tr>
+<td>载入字并记录有效地址指令（寄存器寻址）</td>
+<td>lwzux</td>
+<td>rD, rA, rB</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>助记符</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多字载入</td>
+<td>lmw</td>
+<td>rD，d（rA）</td>
+</tr>
+<tr>
+<td>多字存储</td>
+<td>stmw</td>
+<td>rS，d（rA）</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>助记符</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无条件转移</td>
+<td>b( ba bl bla)</td>
+<td>target_addr</td>
+</tr>
+<tr>
+<td>条件转移</td>
+<td>bc( bca bcl bcla)</td>
+<td>BO,BI,target_addr</td>
+</tr>
+<tr>
+<td>条件转移（转移目标地址由LR指出）</td>
+<td>bclr(bclrl)</td>
+<td>BO,BI</td>
+</tr>
+<tr>
+<td>条件转移（转移目标地址由CTR指出）</td>
+<td>bcctr(bcctrl)</td>
+<td>BO,BI</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>助记符</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读取机器状态寄存器</td>
+<td>mfmsr</td>
+<td>rD</td>
+</tr>
+<tr>
+<td>写入机器状态寄存器</td>
+<td>mtmsr</td>
+<td>rS</td>
+</tr>
+<tr>
+<td>读取特殊功能寄存器</td>
+<td>mfspr</td>
+<td>rD, SPR</td>
+</tr>
+<tr>
+<td>写入特殊功能寄存器</td>
+<td>mtspr</td>
+<td>SPR, rS</td>
+</tr>
+<tr>
+<td>读取段寄存器</td>
+<td>mfsr</td>
+<td>rD, SR</td>
+</tr>
+<tr>
+<td>写入段寄存器</td>
+<td>mtsr</td>
+<td>SR, rS</td>
+</tr>
+<tr>
+<td>间接读取段寄存器</td>
+<td>mfsrin</td>
+<td>rD, rB</td>
+</tr>
+<tr>
+<td>间接写入段寄存器</td>
+<td>mtsrin</td>
+<td>rS, rB</td>
+</tr>
+<tr>
+<td>读取时基寄存器</td>
+<td>mftb</td>
+<td>rD, TBR</td>
+</tr>
+</tbody></table>
 <h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p><del>异构pwn的栈题与x86架构的题差别挺大，主要是理解其函数调用的过程以及寄存器的作用。例题都是两个月前做的，现在也忘的差不多了，准备这里是放2022的hws的题，结果他没有出异构题，等到下次遇见好的题再放吧。</del></p>
 
       </div>
@@ -1131,7 +1421,7 @@
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%9E%84pwn%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="toc-text">异构pwn学习记录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIPS"><span class="toc-text">MIPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mips%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Mips寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">MIPS常用指令集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mips%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">Mips函数调用过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arm"><span class="toc-text">Arm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Arm寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">Arm常用指令集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aarch64%EF%BC%88Arm64%EF%BC%89"><span class="toc-text">Aarch64（Arm64）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Aarch64%EF%BC%88Arm64%EF%BC%89%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Aarch64（Arm64）寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm64%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">Arm64常用指令集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aarch64%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">Aarch64函数调用过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-text">例题</span></a></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%9E%84pwn%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="toc-text">异构pwn学习记录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIPS"><span class="toc-text">MIPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mips%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Mips寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">MIPS常用指令集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mips%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">Mips函数调用过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arm"><span class="toc-text">Arm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Arm寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">Arm常用指令集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aarch64%EF%BC%88Arm64%EF%BC%89"><span class="toc-text">Aarch64（Arm64）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Aarch64%EF%BC%88Arm64%EF%BC%89%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">Aarch64（Arm64）寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arm64%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">Arm64常用指令集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aarch64%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">Aarch64函数调用过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PowerPC"><span class="toc-text">PowerPC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PowerPC%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">PowerPC寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PowerPC%E6%8C%87%E4%BB%A4"><span class="toc-text">PowerPC指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-text">例题</span></a></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
