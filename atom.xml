@@ -32,21 +32,6 @@
   </entry>
   
   <entry>
-    <title>CVE-2022-3236复现笔记</title>
-    <link href="http://abf1ag.github.io/2024/04/04/cve-2022-3236-fu-xian-bi-ji/"/>
-    <id>http://abf1ag.github.io/2024/04/04/cve-2022-3236-fu-xian-bi-ji/</id>
-    <published>2024-04-04T10:22:11.000Z</published>
-    <updated>2024-04-16T07:51:34.488Z</updated>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;CVE-2022-3236复现笔记&quot;&gt;&lt;a href=&quot;#CVE-2022-3236复现笔记&quot; class=&quot;headerlink&quot; title=&quot;CVE-2022-3236复现笔记&quot;&gt;&lt;/a&gt;CVE-2022-3236复现笔记&lt;/h3&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>CVE-2022-1040复现笔记</title>
     <link href="http://abf1ag.github.io/2024/04/01/cve-2022-1040-fu-xian-bi-ji/"/>
     <id>http://abf1ag.github.io/2024/04/01/cve-2022-1040-fu-xian-bi-ji/</id>
@@ -347,6 +332,21 @@
     
     
     <summary type="html">&lt;h3 id=&quot;house-of-banana学习笔记&quot;&gt;&lt;a href=&quot;#house-of-banana学习笔记&quot; class=&quot;headerlink&quot; title=&quot;house-of-banana学习笔记&quot;&gt;&lt;/a&gt;house-of-banana学习笔记&lt;/h3&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>glibc源码分析</title>
+    <link href="http://abf1ag.github.io/2021/12/02/glibc-yuan-ma-fen-xi/"/>
+    <id>http://abf1ag.github.io/2021/12/02/glibc-yuan-ma-fen-xi/</id>
+    <published>2021-12-02T13:34:11.000Z</published>
+    <updated>2023-02-25T08:21:58.000Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;glibc&quot;&gt;&lt;a href=&quot;#glibc&quot; class=&quot;headerlink&quot; title=&quot;glibc&quot;&gt;&lt;/a&gt;glibc&lt;/h3&gt;</summary>
     
     
     
